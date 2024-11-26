@@ -1,0 +1,1005 @@
+﻿@using FE_JobWeb.Others
+@inject ApplicationUser user
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- META -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="" />
+    <meta name="author" content="" />
+    <meta name="robots" content="" />
+    <meta name="description" content="" />
+
+    <!-- FAVICONS ICON -->
+    <link rel="icon" href="~/Content/images/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="~/Content/images/job_seeker_logo.png" />
+
+    <!-- PAGE TITLE HERE -->
+    <title>Grabwork | Tài khoản</title>
+
+    <!-- MOBILE SPECIFIC -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="~/Content/css/bootstrap.min.css"><!-- BOOTSTRAP STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/font-awesome.min.css"><!-- FONTAWESOME STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/feather.css"><!-- FEATHER ICON SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/owl.carousel.min.css"><!-- OWL CAROUSEL STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/magnific-popup.min.css"><!-- MAGNIFIC POPUP STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/lc_lightbox.css"><!-- Lc light box popup -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/bootstrap-select.min.css"><!-- BOOTSTRAP SLECT BOX STYLE SHEET  -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/dataTables.bootstrap5.min.css"><!-- DATA table STYLE SHEET  -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/select.bootstrap5.min.css">
+    <!-- DASHBOARD select bootstrap  STYLE SHEET  -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/dropzone.css"><!-- DROPZONE STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/scrollbar.css"><!-- CUSTOM SCROLL BAR STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/datepicker.css"><!-- DATEPICKER STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/flaticon.css"> <!-- Flaticon -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/swiper-bundle.min.css"><!-- Swiper Slider -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/style.css"><!-- MAIN STYLE SHEET -->
+    <!-- THEME COLOR CHANGE STYLE SHEET -->
+    @* <link rel="stylesheet" class="skin" type="text/css" href="~/Content/css/skins-type/skin-6.css"> *@
+    <!-- SIDE SWITCHER STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/switcher.css">
+
+    <!-- TinyMCE Script in the <head> (but without initialization) -->
+    <script src="https://cdn.tiny.cloud/1/vlo148eycnsp1nucnzqsfxbdb0lwzc6zw91mzu151pqirqza/tinymce/7/tinymce.min.js"
+            referrerpolicy="origin"></script>
+
+</head>
+
+<body>
+
+    <!-- LOADING AREA START ===== -->
+    <div class="loading-area">
+        <div class="loading-box"></div>
+        <div class="loading-pic">
+            <div class="wrapper">
+                <div class="~/Content/cssload-loader"></div>
+            </div>
+        </div>
+    </div>
+    <!-- LOADING AREA  END ====== -->
+
+    <div class="page-wraper">
+        @if(user.User.RoleId == 3)
+        {
+            <header id="header-admin-wrap" class="header-admin-fixed">
+                <!-- Header Start -->
+                <div id="header-admin">
+                    <div class="container">
+
+                        <!-- Left Side Content -->
+                        <div class="header-left">
+                            <div class="nav-btn-wrap">
+                                <a class="nav-btn-admin" id="sidebarCollapse">
+                                    <span class="fa fa-angle-left"></span>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- Left Side Content End -->
+                        <!-- Right Side Content -->
+                        <div class="header-right">
+                            <ul class="header-widget-wrap">
+                                <!--Message-->
+                                <li class="header-widget dashboard-message-dropdown">
+
+                                    <div class="dropdown">
+                                        <a href="javascript:;" class="dropdown-toggle jobzilla-admin-messange"
+                                           id="ID-MSG_dropdown" data-bs-toggle="dropdown">
+                                            <i class="far fa-envelope"></i>
+                                            <span class="notification-animate">4</span>
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="ID-MSG_dropdown">
+                                            <div class="message-list dashboard-widget-scroll">
+                                                <ul>
+                                                    <li class="clearfix">
+                                                        <span class="msg-avtar">
+                                                            <img src="~/Content/images/user-avtar/pic1.jpg" alt="">
+                                                        </span>
+
+                                                        <div class="msg-texting">
+                                                            <strong>Alexa Johnson</strong>
+                                                            <small class="msg-time">
+                                                                <span class="far fa-clock p-r-5"></span>12 mins ago
+                                                            </small>
+                                                            <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="clearfix">
+                                                        <span class="msg-avtar">
+                                                            <img src="~/Content/images/user-avtar/pic2.jpg" alt="">
+                                                        </span>
+
+                                                        <div class="msg-texting">
+                                                            <strong>Johan Smith</strong>
+                                                            <small class="msg-time">
+                                                                <span class="far fa-clock p-r-5"></span>2 hours ago
+                                                            </small>
+                                                            <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="clearfix">
+                                                        <span class="msg-avtar">
+                                                            <img src="~/Content/images/user-avtar/pic3.jpg" alt="">
+                                                        </span>
+
+                                                        <div class="msg-texting">
+                                                            <strong>Bobby Brown</strong>
+                                                            <small class="msg-time">
+                                                                <span class="far fa-clock p-r-5"></span>3 hours ago
+                                                            </small>
+                                                            <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="clearfix">
+                                                        <span class="msg-avtar">
+                                                            <img src="~/Content/images/user-avtar/pic4.jpg" alt="">
+                                                        </span>
+
+                                                        <div class="msg-texting">
+                                                            <strong>David Deo</strong>
+                                                            <small class="msg-time">
+                                                                <span class="far fa-clock p-r-5"></span>4 hours ago
+                                                            </small>
+                                                            <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <div class="message-view-all">
+                                                    <a href="javascript:;">View All</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </li>
+
+                                <!--Notification-->
+                                <li class="header-widget dashboard-noti-dropdown">
+                                    <div class="dropdown">
+                                        <a href="javascript:;" class="dropdown-toggle jobzilla-admin-notification"
+                                           id="ID-NOTI_dropdown" data-bs-toggle="dropdown">
+                                            <i class="far fa-bell"></i>
+                                            <span class="notification-animate">8</span>
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="ID-NOTI_dropdown">
+                                            <div class="dashboard-widgets-header">You have 7 notifications</div>
+                                            <div class="noti-list dashboard-widget-scroll">
+                                                <ul>
+
+                                                    <li>
+                                                        <a href="#">
+                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
+                                                            <span class="noti-texting">
+                                                                Devid applied for <b>Webdesigner.</b>
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
+                                                            <span class="noti-texting">Nikol sent you a message. </span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
+                                                            <span class="noti-texting">
+                                                                lucy bookmarked your <b>
+                                                                    SEO
+                                                                    Expert
+                                                                </b> Job!
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
+                                                            <span class="noti-texting">
+                                                                Your job for <b>teacher</b> has been
+                                                                approved!
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
+                                                            <span class="noti-texting">
+                                                                Thor applied for <b>Team Leader</b>.
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+
+                                                <div class="noti-view-all">
+                                                    <a href="admin-message.html">View All</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li class="header-widget">
+                                    <div class="dashboard-user-section">
+                                        <div class="listing-user">
+                                            <div class="dropdown">
+                                                <a href="javascript:;" class="dropdown-toggle" id="ID-ACCOUNT_dropdown"
+                                                   data-bs-toggle="dropdown">
+                                                    <div class="user-name text-black">
+                                                        <span>
+                                                            <img src="@user.User.AvartarUrl" alt="">
+                                                        </span>@user.User.FullName
+                                                    </div>
+                                                </a>
+                                                <div class="dropdown-menu" aria-labelledby="ID-ACCOUNT_dropdown">
+                                                    <ul>
+                                                        <li>
+                                                            <a href="@Url.Action("IndexCandidate","Home")">
+                                                                <i class="feather-home"></i>Dashboard
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="admin-notification.html">
+                                                                <i class="feather-mail"></i>
+                                                                Thông báo
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="@Url.Action("MyProfile","Account")">
+                                                                <i class="feather-user"></i>
+                                                                Thông tin hồ sơ
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="@Url.Action("Logout","Account")">
+                                                                <i class="feather-log-out"></i>
+                                                                Logout
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <nav id="sidebar-admin-wraper">
+                <div class="page-logo">
+                    <a href="@Url.Action("Index","Home")"><img src="~/Content/images/job_seeker_logo.png" alt=""></a>
+                </div>
+
+                <div class="admin-nav scrollbar-macosx">
+                    <ul>
+                        <li @((Context.Request.Path.Value.Contains("IndexCandidate")) ? "class=active" : "")>
+                            <a href="@Url.Action("IndexCandidate","Home")">
+                                <i class="feather-home"></i><span class="admin-nav-text">Dashboard</span>
+                            </a>
+                        </li>
+                        <li @((Context.Request.Path.Value.Contains("CandidateProfile")) ? "class=active" : "")>
+                            <a href="@Url.Action("CandidateProfile","Account")">
+                                <i class="feather-user"></i><span class="admin-nav-text">
+                                    Hồ sơ
+                                    của tôi
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;">
+                                <i class="feather-briefcase"></i><span class="admin-nav-text">
+                                    Việc làm
+                                    của tôi
+                                </span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a href="candidate-jobs-applied.html">
+                                        <span class="admin-nav-text">
+                                            Danh sách ứng
+                                            tuyển
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="candidate-saved-jobs.html">
+                                        <span class="admin-nav-text">
+                                            Việc làm đã
+                                            lưu
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="candidate-chat.html">
+                                <i class="feather-mail"></i><span class="admin-nav-text">
+                                    Tin nhắn
+                                    <sup class="twm-msg-noti">5</sup>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="candidate-alert.html">
+                                <i class="feather-bell"></i><span class="admin-nav-text">
+                                    Thông
+                                    báo
+                                </span>
+                            </a>
+                        </li>
+                        <li @((Context.Request.Path.Value.Contains("MyProfile")) ? "class=active" : "")>
+                            <a href="@Url.Action("MyProfile","Account")">
+                                <i class="feather-settings"></i><span class="admin-nav-text">
+                                    Tài khoản &amp; Cài đặt
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Logout","Account")">
+                                <i class="feather-log-out"></i><span class="admin-nav-text">Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        }
+        @if(user.User.RoleId == 2)
+        {
+            <header id="header-admin-wrap" class="header-admin-fixed">
+                <!-- Header Start -->
+                <div id="header-admin">
+                    <div class="container">
+
+                        <!-- Left Side Content -->
+                        <div class="header-left">
+                            <div class="nav-btn-wrap">
+                                <a class="nav-btn-admin" id="sidebarCollapse">
+                                    <span class="fa fa-angle-left"></span>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- Left Side Content End -->
+                        <!-- Right Side Content -->
+                        <div class="header-right">
+                            <ul class="header-widget-wrap">
+                                <!--Message-->
+                                <li class="header-widget dashboard-message-dropdown">
+
+                                    <div class="dropdown">
+                                        <a href="javascript:;" class="dropdown-toggle jobzilla-admin-messange"
+                                           id="ID-MSG_dropdown" data-bs-toggle="dropdown">
+                                            <i class="far fa-envelope"></i>
+                                            <span class="notification-animate">4</span>
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="ID-MSG_dropdown">
+                                            <div class="message-list dashboard-widget-scroll">
+                                                <ul>
+                                                    <li class="clearfix">
+                                                        <span class="msg-avtar">
+                                                            <img src="~/Content/images/user-avtar/pic1.jpg" alt="">
+                                                        </span>
+
+                                                        <div class="msg-texting">
+                                                            <strong>Alexa Johnson</strong>
+                                                            <small class="msg-time">
+                                                                <span class="far fa-clock p-r-5"></span>12 mins ago
+                                                            </small>
+                                                            <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="clearfix">
+                                                        <span class="msg-avtar">
+                                                            <img src="~/Content/images/user-avtar/pic2.jpg" alt="">
+                                                        </span>
+
+                                                        <div class="msg-texting">
+                                                            <strong>Johan Smith</strong>
+                                                            <small class="msg-time">
+                                                                <span class="far fa-clock p-r-5"></span>2 hours ago
+                                                            </small>
+                                                            <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="clearfix">
+                                                        <span class="msg-avtar">
+                                                            <img src="~/Content/images/user-avtar/pic3.jpg" alt="">
+                                                        </span>
+
+                                                        <div class="msg-texting">
+                                                            <strong>Bobby Brown</strong>
+                                                            <small class="msg-time">
+                                                                <span class="far fa-clock p-r-5"></span>3 hours ago
+                                                            </small>
+                                                            <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="clearfix">
+                                                        <span class="msg-avtar">
+                                                            <img src="~/Content/images/user-avtar/pic4.jpg" alt="">
+                                                        </span>
+
+                                                        <div class="msg-texting">
+                                                            <strong>David Deo</strong>
+                                                            <small class="msg-time">
+                                                                <span class="far fa-clock p-r-5"></span>4 hours ago
+                                                            </small>
+                                                            <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <div class="message-view-all">
+                                                    <a href="javascript:;">View All</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </li>
+
+                                <!--Notification-->
+                                <li class="header-widget dashboard-noti-dropdown">
+                                    <div class="dropdown">
+                                        <a href="javascript:;" class="dropdown-toggle jobzilla-admin-notification"
+                                           id="ID-NOTI_dropdown" data-bs-toggle="dropdown">
+                                            <i class="far fa-bell"></i>
+                                            <span class="notification-animate">8</span>
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="ID-NOTI_dropdown">
+                                            <div class="dashboard-widgets-header">You have 7 notifications</div>
+                                            <div class="noti-list dashboard-widget-scroll">
+                                                <ul>
+
+                                                    <li>
+                                                        <a href="#">
+                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
+                                                            <span class="noti-texting">
+                                                                Devid applied for <b>Webdesigner.</b>
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
+                                                            <span class="noti-texting">Nikol sent you a message. </span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
+                                                            <span class="noti-texting">
+                                                                lucy bookmarked your <b>
+                                                                    SEO
+                                                                    Expert
+                                                                </b> Job!
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
+                                                            <span class="noti-texting">
+                                                                Your job for <b>teacher</b> has been
+                                                                approved!
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
+                                                            <span class="noti-texting">
+                                                                Thor applied for <b>Team Leader</b>.
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+
+                                                <div class="noti-view-all">
+                                                    <a href="admin-message.html">View All</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li class="header-widget">
+                                    <div class="dashboard-user-section">
+                                        <div class="listing-user">
+                                            <div class="dropdown">
+                                                <a href="javascript:;" class="dropdown-toggle" id="ID-ACCOUNT_dropdown"
+                                                   data-bs-toggle="dropdown">
+                                                    <div class="user-name text-black">
+                                                        <span>
+                                                            <img src="@user.User.AvartarUrl" alt="">
+                                                        </span>@user.User.FullName
+                                                    </div>
+                                                </a>
+                                                <div class="dropdown-menu" aria-labelledby="ID-ACCOUNT_dropdown">
+                                                    <ul>
+                                                        <li>
+                                                            <a href="@Url.Action("IndexRecruiter","Home")">
+                                                                <i class="feather-home"></i>Dashboard
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="admin-notification.html">
+                                                                <i class="feather-mail"></i>
+                                                                Thông báo
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="@Url.Action("MyProfile","Account")">
+                                                                <i class="feather-user"></i>
+                                                                Thông tin hồ sơ
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="@Url.Action("Logout","Account")">
+                                                                <i class="feather-log-out"></i>
+                                                                Logout
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <nav id="sidebar-admin-wraper">
+                <div class="page-logo">
+                    <a href="@Url.Action("Index","Home")"><img src="~/Content/images/job_seeker_logo.png" alt=""></a>
+                </div>
+
+                <div class="admin-nav scrollbar-macosx">
+                    <ul>
+                        <li @((Context.Request.Path.Value.Contains("IndexRecruiter")) ? "class=active" : "")>
+                            <a href="@Url.Action("IndexRecruiter","Home")">
+                                <i class="feather-home"></i><span class="admin-nav-text">Dashboard</span>
+                            </a>
+                        </li>
+                        <li @((Context.Request.Path.Value.Contains("CompanyProfile") || Context.Request.Path.Value.Contains("PostJob") || Context.Request.Path.Value.Contains("ListPostJob")) ? "class=active" : "")>
+                            <a href="javascript:;">
+                                <i class="feather-briefcase"></i><span class="admin-nav-text">
+                                    Công
+                                    ty
+                                </span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a href="@Url.Action("CompanyProfile","Company")">
+                                        <span class="admin-nav-text">
+                                            Thông tin công
+                                            ty
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("PostJob","Company")">
+                                        <span class="admin-nav-text">Đăng tin</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("ListPostJob","Company")">
+                                        <span class="admin-nav-text">
+                                            Danh sách công
+                                            việc
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript:;">
+                                <i class="feather-users"></i><span class="admin-nav-text">
+                                    Hồ
+                                    sơ
+                                </span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a href="dash-candidates.html">
+                                        <span class="admin-nav-text">Danh sách ứng tuyển</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="dash-bookmark.html">
+                                        <span class="admin-nav-text">Hồ sơ đã lưu</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="dash-package.html">
+                                <i class="feather-dollar-sign"></i><span class="admin-nav-text">
+                                    Gói
+                                    đăng tin
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="dash-messages.html">
+                                <i class="feather-mail"></i><span class="admin-nav-text">
+                                    Tin nhắn
+                                    <sup class="twm-msg-noti">5</sup>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="dash-resume-alert.html">
+                                <i class="feather-bell"></i><span class="admin-nav-text">
+                                    Thông
+                                    báo
+                                </span>
+                            </a>
+                        </li>
+                        <li @((Context.Request.Path.Value.Contains("MyProfile")) ? "class=active" : "")>
+                            <a href="@Url.Action("MyProfile","Account")">
+                                <i class="feather-user-check"></i><span class="admin-nav-text">
+                                    Tài
+                                    khoản
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Logout","Account")">
+                                <i class="feather-log-out"></i><span class="admin-nav-text">Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        }
+        @if(user.User.RoleId == 1)
+        {
+            <header id="header-admin-wrap" class="header-admin-fixed">
+                <!-- Header Start -->
+                <div id="header-admin">
+                    <div class="container">
+
+                        <!-- Left Side Content -->
+                        <div class="header-left">
+                            <div class="nav-btn-wrap">
+                                <a class="nav-btn-admin" id="sidebarCollapse">
+                                    <span class="fa fa-angle-left"></span>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- Left Side Content End -->
+                        <!-- Right Side Content -->
+                        <div class="header-right">
+                            <ul class="header-widget-wrap">
+                                <!--Message-->
+                                <li class="header-widget dashboard-message-dropdown">
+
+                                    <div class="dropdown">
+                                        <a href="javascript:;" class="dropdown-toggle jobzilla-admin-messange"
+                                           id="ID-MSG_dropdown" data-bs-toggle="dropdown">
+                                            <i class="far fa-envelope"></i>
+                                            <span class="notification-animate">4</span>
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="ID-MSG_dropdown">
+                                            <div class="message-list dashboard-widget-scroll">
+                                                <ul>
+                                                    <li class="clearfix">
+                                                        <span class="msg-avtar">
+                                                            <img src="~/Content/images/user-avtar/pic1.jpg" alt="">
+                                                        </span>
+
+                                                        <div class="msg-texting">
+                                                            <strong>Alexa Johnson</strong>
+                                                            <small class="msg-time">
+                                                                <span class="far fa-clock p-r-5"></span>12 mins ago
+                                                            </small>
+                                                            <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="clearfix">
+                                                        <span class="msg-avtar">
+                                                            <img src="~/Content/images/user-avtar/pic2.jpg" alt="">
+                                                        </span>
+
+                                                        <div class="msg-texting">
+                                                            <strong>Johan Smith</strong>
+                                                            <small class="msg-time">
+                                                                <span class="far fa-clock p-r-5"></span>2 hours ago
+                                                            </small>
+                                                            <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="clearfix">
+                                                        <span class="msg-avtar">
+                                                            <img src="~/Content/images/user-avtar/pic3.jpg" alt="">
+                                                        </span>
+
+                                                        <div class="msg-texting">
+                                                            <strong>Bobby Brown</strong>
+                                                            <small class="msg-time">
+                                                                <span class="far fa-clock p-r-5"></span>3 hours ago
+                                                            </small>
+                                                            <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                                        </div>
+                                                    </li>
+                                                    <li class="clearfix">
+                                                        <span class="msg-avtar">
+                                                            <img src="~/Content/images/user-avtar/pic4.jpg" alt="">
+                                                        </span>
+
+                                                        <div class="msg-texting">
+                                                            <strong>David Deo</strong>
+                                                            <small class="msg-time">
+                                                                <span class="far fa-clock p-r-5"></span>4 hours ago
+                                                            </small>
+                                                            <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <div class="message-view-all">
+                                                    <a href="javascript:;">View All</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </li>
+
+                                <!--Notification-->
+                                <li class="header-widget dashboard-noti-dropdown">
+                                    <div class="dropdown">
+                                        <a href="javascript:;" class="dropdown-toggle jobzilla-admin-notification"
+                                           id="ID-NOTI_dropdown" data-bs-toggle="dropdown">
+                                            <i class="far fa-bell"></i>
+                                            <span class="notification-animate">8</span>
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="ID-NOTI_dropdown">
+                                            <div class="dashboard-widgets-header">You have 7 notifications</div>
+                                            <div class="noti-list dashboard-widget-scroll">
+                                                <ul>
+
+                                                    <li>
+                                                        <a href="#">
+                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
+                                                            <span class="noti-texting">
+                                                                Devid applied for <b>Webdesigner.</b>
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
+                                                            <span class="noti-texting">Nikol sent you a message. </span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
+                                                            <span class="noti-texting">
+                                                                lucy bookmarked your <b>
+                                                                    SEO
+                                                                    Expert
+                                                                </b> Job!
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
+                                                            <span class="noti-texting">
+                                                                Your job for <b>teacher</b> has been
+                                                                approved!
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">
+                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
+                                                            <span class="noti-texting">
+                                                                Thor applied for <b>Team Leader</b>.
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+
+                                                <div class="noti-view-all">
+                                                    <a href="admin-message.html">View All</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li class="header-widget">
+                                    <div class="dashboard-user-section">
+                                        <div class="listing-user">
+                                            <div class="dropdown">
+                                                <a href="javascript:;" class="dropdown-toggle" id="ID-ACCOUNT_dropdown"
+                                                   data-bs-toggle="dropdown">
+                                                    <div class="user-name text-black">
+                                                        <span>
+                                                            <img src="@user.User.AvartarUrl" alt="">
+                                                        </span>@user.User.FullName
+                                                    </div>
+                                                </a>
+                                                <div class="dropdown-menu" aria-labelledby="ID-ACCOUNT_dropdown">
+                                                    <ul>
+                                                        <li>
+                                                            <a href="@Url.Action("IndexAdmin","Home")">
+                                                                <i class="feather-home"></i>Dashboard
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="admin-notification.html">
+                                                                <i class="feather-mail"></i>
+                                                                Thông báo
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="@Url.Action("MyProfile","Account")">
+                                                                <i class="feather-user"></i>
+                                                                Thông tin hồ sơ
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="@Url.Action("Logout","Account")">
+                                                                <i class="feather-log-out"></i>
+                                                                Logout
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <nav id="sidebar-admin-wraper">
+                <div class="page-logo d-flex align-items-center">
+                    <a href="index.html"><img src="~/Content/images/job_seeker_logo.png" alt=""></a>
+                    <h3 class="m-l10">Grabword</h3>
+                </div>
+
+                <div class="admin-nav scrollbar-macosx">
+                    <ul>
+                        <li @((Context.Request.Path.Value.Contains("IndexAdmin")) ? "class=active" : "")>
+                            <a href="@Url.Action("IndexAdmin","Home")">
+                                <i class="feather-home"></i><span class="admin-nav-text">Dashboard</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="admin-notification.html">
+                                <i class="feather-bell"></i><span class="admin-nav-text">
+                                    Thông
+                                    báo
+                                    <sup class="twm-msg-noti">5</sup>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="admin-company-managed.html">
+                                <i class="feather-file-text"></i><span class="admin-nav-text">
+                                    Quản lý doanh
+                                    nghiệp
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="admin-job-posting.html">
+                                <i class="feather-briefcase"></i><span class="admin-nav-text">
+                                    Quản lý các
+                                    bài đăng
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="feather-users"></i><span class="admin-nav-text">Quản lý tài khoản</span>
+                            </a>
+                        </li>
+                        <li @((Context.Request.Path.Value.Contains("MyProfile")) ? "class=active" : "")>
+                            <a href="@Url.Action("MyProfile","Account")">
+                                <i class="feather-user-check"></i><span class="admin-nav-text">
+                                    Tài
+                                    khoản
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Logout","Account")">
+                                <i class="feather-log-out"></i><span class="admin-nav-text">Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        }
+
+        <!-- Page Content Holder -->
+        @RenderBody()
+
+        <!--Delete Profile Popup-->
+        <div class="modal fade twm-model-popup" id="delete-dash-profile" data-bs-backdrop="static"
+             data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h4 class="modal-title">Do you want to delete your profile?</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="site-button" data-bs-dismiss="modal">No</button>
+                        <button type="button" class="site-button outline-primary">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Logout Profile Popup-->
+        <div class="modal fade twm-model-popup" id="logout-dash-profile" data-bs-backdrop="static"
+             data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h4 class="modal-title">Do you want to Logout your profile?</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="site-button" data-bs-dismiss="modal">No</button>
+                        <button type="button" href="@Url.Action("Logout","Account")" class="site-button outline-primary">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- JAVASCRIPT  FILES ========================================= -->
+    <script src="~/Content/js/jquery-3.6.0.min.js"></script><!-- JQUERY.MIN JS -->
+    <script src="~/Content/js/popper.min.js"></script><!-- POPPER.MIN JS -->
+    <script src="~/Content/js/bootstrap.min.js"></script><!-- BOOTSTRAP.MIN JS -->
+    <script src="~/Content/js/magnific-popup.min.js"></script><!-- MAGNIFIC-POPUP JS -->
+    <script src="~/Content/js/waypoints.min.js"></script><!-- WAYPOINTS JS -->
+    <script src="~/Content/js/counterup.min.js"></script><!-- COUNTERUP JS -->
+    <script src="~/Content/js/waypoints-sticky.min.js"></script><!-- STICKY HEADER -->
+    <script src="~/Content/js/isotope.pkgd.min.js"></script><!-- MASONRY  -->
+    <script src="~/Content/js/imagesloaded.pkgd.min.js"></script><!-- MASONRY  -->
+    <script src="~/Content/js/owl.carousel.min.js"></script><!-- OWL  SLIDER  -->
+    <script src="~/Content/js/theia-sticky-sidebar.js"></script><!-- STICKY SIDEBAR  -->
+    <script src="~/Content/js/lc_lightbox.lite.js"></script><!-- IMAGE POPUP -->
+    <script src="~/Content/js/bootstrap-select.min.js"></script><!-- Form js -->
+    <script src="~/Content/js/dropzone.js"></script><!-- IMAGE UPLOAD  -->
+    <script src="~/Content/js/jquery.scrollbar.js"></script><!-- scroller -->
+    <script src="~/Content/js/bootstrap-datepicker.js"></script><!-- scroller -->
+    <script src="~/Content/js/jquery.dataTables.min.js"></script><!-- Datatable -->
+    <script src="~/Content/js/dataTables.bootstrap5.min.js"></script><!-- Datatable -->
+    <script src="~/Content/js/chart.js"></script><!-- Chart -->
+    <script src="~/Content/js/bootstrap-slider.min.js"></script><!-- Price range slider -->
+    <script src="~/Content/js/swiper-bundle.min.js"></script><!-- Swiper JS -->
+    <script src="~/Content/js/custom.js"></script><!-- CUSTOM FUCTIONS  -->
+    <script src="~/Content/js/switcher.js"></script><!-- SHORTCODE FUCTIONS  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <script src="~/Content/js/script.js"></script>
+
+    
+
+</body>
+
+</html>
+

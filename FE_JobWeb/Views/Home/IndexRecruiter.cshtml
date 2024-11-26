@@ -1,0 +1,447 @@
+﻿
+@{
+    ViewData["Title"] = "IndexRecuiter";
+    Layout = "~/Views/Shared/_LayoutRecuiter.cshtml";
+}
+
+<div id="content">
+    <div class="content-admin-main">
+        <div class="wt-admin-right-page-header clearfix">
+            <h2>Hello, Nikola Tesla</h2>
+            <div class="breadcrumbs"><a href="@Url.Action("Index","Home")">Home</a><span>Dasboard</span></div>
+        </div>
+
+        <div class="twm-dash-b-blocks mb-5">
+            <div class="row">
+                <div class="col-xl-3 col-lg-3 col-md-12 mb-3">
+                    <div class="panel panel-default">
+                        <div class="panel-body wt-panel-body dashboard-card-2 block-gradient">
+                            <div class="wt-card-wrap-2">
+                                <div class="wt-card-icon-2"><i class="fa fa-file-alt"></i></div>
+                                <div class="wt-card-right wt-total-active-listing  ">25</div>
+                                <div class="wt-card-bottom-2 ">
+                                    <p class="m-b0 panel-title">Tất cả tin</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-12 mb-3">
+                    <div class="panel panel-default">
+                        <div class="panel-body wt-panel-body dashboard-card-2 block-gradient-3">
+                            <div class="wt-card-wrap-2">
+                                <div class="wt-card-icon-2"><i class="fa fa-clock"></i></div>
+                                <div class="wt-card-right wt-total-listing-review  ">28</div>
+                                <div class="wt-card-bottom-2">
+                                    <p class="m-b0 panel-title">Tin đang chờ duyệt</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-12 mb-3">
+                    <div class="panel panel-default">
+                        <div class="panel-body wt-panel-body dashboard-card-2 block-gradient-2">
+                            <div class="wt-card-wrap-2">
+                                <div class="wt-card-icon-2"><i class="flaticon-resume"></i></div>
+                                <div class="wt-card-right  wt-total-listing-view  ">435</div>
+                                <div class="wt-card-bottom-2">
+                                    <p class="m-b0 panel-title">Ứng viên ứng tuyển</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-12 mb-3">
+                    <div class="panel panel-default">
+                        <div class="panel-body wt-panel-body dashboard-card-2 block-gradient-4">
+                            <div class="wt-card-wrap-2">
+                                <div class="wt-card-icon-2"><i class="fa fa-bell"></i></div>
+                                <div class="wt-card-right wt-total-listing-bookmarked  ">18</div>
+                                <div class="wt-card-bottom-2">
+                                    <p class="m-b0 panel-title">Thông báo</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="twm-pro-view-chart-wrap">
+            <div class="row">
+                <div class="col-xl-6 col-lg-12 col-md-12 mb-4">
+                    <div class="panel panel-default site-bg-white">
+                        <div class="panel-heading wt-panel-heading p-a20">
+                            <h4 class="panel-tittle m-a0">
+                                <i class="far fa-chart-bar"></i>Your Profile Views
+                            </h4>
+                        </div>
+                        <div class="panel-body wt-panel-body twm-pro-view-chart">
+                            <canvas id="profileViewChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-6 col-lg-12 col-md-12 mb-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading wt-panel-heading p-a20">
+                            <h4 class="panel-tittle m-a0">Inbox</h4>
+                        </div>
+                        <div class="panel-body wt-panel-body bg-white">
+                            <div class="dashboard-messages-box-scroll scrollbar-macosx">
+
+                                <div class="dashboard-messages-box">
+                                    <div class="dashboard-message-avtar">
+                                        <img src="~/Content/images/user-avtar/pic1.jpg"
+                                             alt="">
+                                    </div>
+                                    <div class="dashboard-message-area">
+                                        <h5>Lucy Smith<span>18 June 2023</span></h5>
+                                        <p>
+                                            Bring to the table win-win survival strategies to ensure proactive
+                                            domination. at the end of the day, going forward, a new normal that
+                                            has evolved from generation.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="dashboard-messages-box">
+                                    <div class="dashboard-message-avtar">
+                                        <img src="~/Content/images/user-avtar/pic3.jpg"
+                                             alt="">
+                                    </div>
+                                    <div class="dashboard-message-area">
+                                        <h5>Richred paul<span>19 June 2023</span></h5>
+                                        <p>
+                                            Bring to the table win-win survival strategies to ensure proactive
+                                            domination. at the end of the day, going forward, a new normal that
+                                            has evolved from generation.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="dashboard-messages-box">
+                                    <div class="dashboard-message-avtar">
+                                        <img src="~/Content/images/user-avtar/pic4.jpg"
+                                             alt="">
+                                    </div>
+                                    <div class="dashboard-message-area">
+                                        <h5>Jon Doe<span>20 June 2023</span></h5>
+                                        <p>
+                                            Bring to the table win-win survival strategies to ensure proactive
+                                            domination. at the end of the day, going forward, a new normal that
+                                            has evolved from generation.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="dashboard-messages-box">
+                                    <div class="dashboard-message-avtar">
+                                        <img src="~/Content/images/user-avtar/pic1.jpg"
+                                             alt="">
+                                    </div>
+                                    <div class="dashboard-message-area">
+                                        <h5>Thomas Smith<span>22 June 2023</span></h5>
+                                        <p>
+                                            Bring to the table win-win survival strategies to ensure proactive
+                                            domination. at the end of the day, going forward, a new normal that
+                                            has evolved from generation.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-lg-12 col-md-12 mb-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading wt-panel-heading p-a20">
+                            <h4 class="panel-tittle m-a0">Danh sách tin đăng gần đây</h4>
+                        </div>
+                        <div class="twm-jobs-list-wrap pt-4">
+                            <ul>
+                                <li>
+                                    <div class="twm-jobs-list-style1 mb-4">
+                                        <div class="twm-media">
+                                            <img src="~/Content/images/jobs-company/pic1.jpg" alt="#">
+                                        </div>
+                                        <div class="twm-mid-content">
+                                            <a href="job-detail.html" class="twm-job-title">
+                                                <h5>
+                                                    Senior Web Designer<span class="twm-job-post-duration">
+                                                        / 1
+                                                        days ago
+                                                    </span>
+                                                </h5>
+                                            </a>
+                                            <p class="twm-job-address">
+                                                1363-1385 Sunset Blvd Los Angeles, CA
+                                                90026, USA
+                                            </p>
+                                            <a href="https://themeforest.net/user/thewebmax/portfolio"
+                                               class="twm-job-websites site-text-primary">https://thewebmax.com</a>
+                                        </div>
+                                        <div class="twm-right-content">
+                                            <div class="twm-jobs-category green">
+                                                <span class="twm-bg-green badge-success">New</span>
+                                            </div>
+                                            <div class="twm-jobs-amount">$2500 <span>/ Month</span></div>
+                                            <a href="job-detail.html"
+                                               class="twm-jobs-browse site-text-primary">Apply Job</a>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div class="twm-jobs-list-style1 mb-4">
+                                        <div class="twm-media">
+                                            <img src="~/Content/images/jobs-company/pic2.jpg" alt="#">
+                                        </div>
+                                        <div class="twm-mid-content">
+                                            <a href="job-detail.html" class="twm-job-title">
+                                                <h5>
+                                                    Sr. Rolling Stock Technician<span class="twm-job-post-duration">/ 15 days ago</span>
+                                                </h5>
+                                            </a>
+                                            <p class="twm-job-address">
+                                                1363-1385 Sunset Blvd Los Angeles, CA
+                                                90026, USA
+                                            </p>
+                                            <a href="https://themeforest.net/user/thewebmax/portfolio"
+                                               class="twm-job-websites site-text-primary">https://thewebmax.com</a>
+                                        </div>
+                                        <div class="twm-right-content">
+                                            <div class="twm-jobs-category green">
+                                                <span class="twm-bg-brown">Intership</span>
+                                            </div>
+                                            <div class="twm-jobs-amount">$2500 <span>/ Month</span></div>
+                                            <a href="job-detail.html"
+                                               class="twm-jobs-browse site-text-primary">Apply Job</a>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div class="twm-jobs-list-style1 mb-4">
+                                        <div class="twm-media">
+                                            <img src="~/Content/images/jobs-company/pic3.jpg" alt="#">
+                                        </div>
+                                        <div class="twm-mid-content">
+                                            <a href="job-detail.html" class="twm-job-title">
+                                                <h5 class="twm-job-title">
+                                                    IT Department Manager<span class="twm-job-post-duration"> / 6 Month ago</span>
+                                                </h5>
+                                            </a>
+                                            <p class="twm-job-address">
+                                                1363-1385 Sunset Blvd Los Angeles, CA
+                                                90026, USA
+                                            </p>
+                                            <a href="https://themeforest.net/user/thewebmax/portfolio"
+                                               class="twm-job-websites site-text-primary">https://thewebmax.com</a>
+                                        </div>
+                                        <div class="twm-right-content">
+                                            <div class="twm-jobs-category green">
+                                                <span class="twm-bg-purple">Fulltime</span>
+                                            </div>
+                                            <div class="twm-jobs-amount">$2500 <span>/ Month</span></div>
+                                            <a href="job-detail.html"
+                                               class="twm-jobs-browse site-text-primary">Apply Job</a>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div class="twm-jobs-list-style1 mb-4">
+                                        <div class="twm-media">
+                                            <img src="~/Content/images/jobs-company/pic4.jpg" alt="#">
+                                        </div>
+                                        <div class="twm-mid-content">
+                                            <a href="job-detail.html" class="twm-job-title">
+                                                <h5 class="twm-job-title">
+                                                    Art Production Specialist <span class="twm-job-post-duration">/ 2 days ago</span>
+                                                </h5>
+                                            </a>
+                                            <p class="twm-job-address">
+                                                1363-1385 Sunset Blvd Los Angeles, CA
+                                                90026, USA
+                                            </p>
+                                            <a href="https://themeforest.net/user/thewebmax/portfolio"
+                                               class="twm-job-websites site-text-primary">https://thewebmax.com</a>
+                                        </div>
+                                        <div class="twm-right-content">
+                                            <div class="twm-jobs-category green">
+                                                <span class="twm-bg-sky">Freelancer</span>
+                                            </div>
+                                            <div class="twm-jobs-amount">$1500 <span>/ Month</span></div>
+                                            <a href="job-detail.html"
+                                               class="twm-jobs-browse site-text-primary">Apply Job</a>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div class="twm-jobs-list-style1 mb-4">
+                                        <div class="twm-media">
+                                            <img src="~/Content/images/jobs-company/pic5.jpg" alt="#">
+                                        </div>
+                                        <div class="twm-mid-content">
+                                            <a href="job-detail.html" class="twm-job-title">
+                                                <h5 class="twm-job-title">
+                                                    Recreation &amp; Fitness Worker <span class="twm-job-post-duration">/ 1 days ago</span>
+                                                </h5>
+                                            </a>
+                                            <p class="twm-job-address">
+                                                1363-1385 Sunset Blvd Los Angeles, CA
+                                                90026, USA
+                                            </p>
+                                            <a href="https://themeforest.net/user/thewebmax/portfolio"
+                                               class="twm-job-websites site-text-primary">https://thewebmax.com</a>
+                                        </div>
+                                        <div class="twm-right-content">
+                                            <div class="twm-jobs-category green">
+                                                <span class="twm-bg-golden">Temporary</span>
+                                            </div>
+                                            <div class="twm-jobs-amount">$800 <span>/ Month</span></div>
+                                            <a href="job-detail.html"
+                                               class="twm-jobs-browse site-text-primary">Apply Job</a>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div class="twm-jobs-list-style1 mb-4">
+                                        <div class="twm-media">
+                                            <img src="~/Content/images/jobs-company/pic1.jpg" alt="#">
+                                        </div>
+                                        <div class="twm-mid-content">
+                                            <a href="job-detail.html" class="twm-job-title">
+                                                <h5>
+                                                    Senior Web Designer<span class="twm-job-post-duration">
+                                                        / 1
+                                                        days ago
+                                                    </span>
+                                                </h5>
+                                            </a>
+                                            <p class="twm-job-address">
+                                                1363-1385 Sunset Blvd Los Angeles, CA
+                                                90026, USA
+                                            </p>
+                                            <a href="https://themeforest.net/user/thewebmax/portfolio"
+                                               class="twm-job-websites site-text-primary">https://thewebmax.com</a>
+                                        </div>
+                                        <div class="twm-right-content">
+                                            <div class="twm-jobs-category green">
+                                                <span class="twm-bg-green badge-success">New</span>
+                                            </div>
+                                            <div class="twm-jobs-amount">$1000 <span>/ Month</span></div>
+                                            <a href="job-detail.html"
+                                               class="twm-jobs-browse site-text-primary">Apply Job</a>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div class="twm-jobs-list-style1 mb-4">
+                                        <div class="twm-media">
+                                            <img src="~/Content/images/jobs-company/pic2.jpg" alt="#">
+                                        </div>
+                                        <div class="twm-mid-content">
+                                            <a href="job-detail.html" class="twm-job-title">
+                                                <h5>
+                                                    Sr. Rolling Stock Technician<span class="twm-job-post-duration">/ 15 days ago</span>
+                                                </h5>
+                                            </a>
+                                            <p class="twm-job-address">
+                                                1363-1385 Sunset Blvd Los Angeles, CA
+                                                90026, USA
+                                            </p>
+                                            <a href="https://themeforest.net/user/thewebmax/portfolio"
+                                               class="twm-job-websites site-text-primary">https://thewebmax.com</a>
+                                        </div>
+                                        <div class="twm-right-content">
+                                            <div class="twm-jobs-category green">
+                                                <span class="twm-bg-brown">Intership</span>
+                                            </div>
+                                            <div class="twm-jobs-amount">$1500 <span>/ Month</span></div>
+                                            <a href="job-detail.html"
+                                               class="twm-jobs-browse site-text-primary">Apply Job</a>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div class="twm-jobs-list-style1 mb-4">
+                                        <div class="twm-media">
+                                            <img src="~/Content/images/jobs-company/pic3.jpg" alt="#">
+                                        </div>
+                                        <div class="twm-mid-content">
+                                            <a href="job-detail.html" class="twm-job-title">
+                                                <h5 class="twm-job-title">
+                                                    IT Department Manager<span class="twm-job-post-duration"> / 6 Month ago</span>
+                                                </h5>
+                                            </a>
+                                            <p class="twm-job-address">
+                                                1363-1385 Sunset Blvd Los Angeles, CA
+                                                90026, USA
+                                            </p>
+                                            <a href="https://themeforest.net/user/thewebmax/portfolio"
+                                               class="twm-job-websites site-text-primary">https://thewebmax.com</a>
+                                        </div>
+                                        <div class="twm-right-content">
+                                            <div class="twm-jobs-category green">
+                                                <span class="twm-bg-purple">Fulltime</span>
+                                            </div>
+                                            <div class="twm-jobs-amount">$2500 <span>/ Month</span></div>
+                                            <a href="job-detail.html"
+                                               class="twm-jobs-browse site-text-primary">Apply Job</a>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div class="twm-jobs-list-style1 mb-4">
+                                        <div class="twm-media">
+                                            <img src="~/Content/images/jobs-company/pic4.jpg" alt="#">
+                                        </div>
+                                        <div class="twm-mid-content">
+                                            <a href="job-detail.html" class="twm-job-title">
+                                                <h5 class="twm-job-title">
+                                                    Art Production Specialist <span class="twm-job-post-duration">/ 2 days ago</span>
+                                                </h5>
+                                            </a>
+                                            <p class="twm-job-address">
+                                                1363-1385 Sunset Blvd Los Angeles, CA
+                                                90026, USA
+                                            </p>
+                                            <a href="https://themeforest.net/user/thewebmax/portfolio"
+                                               class="twm-job-websites site-text-primary">https://thewebmax.com</a>
+                                        </div>
+                                        <div class="twm-right-content">
+                                            <div class="twm-jobs-category green">
+                                                <span class="twm-bg-sky">Freelancer</span>
+                                            </div>
+                                            <div class="twm-jobs-amount">$3000 <span>/ Month</span></div>
+                                            <a href="job-detail.html"
+                                               class="twm-jobs-browse site-text-primary">Apply Job</a>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@if (ViewBag.ErrorMessage != null)
+{
+    <script>
+        alert("@Html.Raw(ViewBag.ErrorMessage)");
+    </script>
+}
+

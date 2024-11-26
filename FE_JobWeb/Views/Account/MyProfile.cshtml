@@ -1,0 +1,402 @@
+﻿@using FE_JobWeb.Others
+@inject ApplicationUser user
+@{
+    ViewData["Title"] = "MyProfile";
+    Layout = "~/Views/Shared/_LayoutRecuiter.cshtml";
+}
+
+<div id="content">
+    <div class="content-admin-main">
+
+        @if (user.User.RoleId == 3)
+        {
+            <div class="wt-admin-right-page-header clearfix">
+                <h2>Thông tin tài khoản</h2>
+                <div class="breadcrumbs">
+                    <a href="@Url.Action("Index","Home")">Trang chủ</a><a href="@Url.Action("IndexCandidate","Home")">Dasboard</a><span>Tài khoản</span>
+                </div>
+            </div>
+        }
+        @if (user.User.RoleId == 2)
+        {
+            <div class="wt-admin-right-page-header clearfix">
+                <h2>Thông tin tài khoản</h2>
+                <div class="breadcrumbs">
+                    <a href="@Url.Action("Index","Home")">Trang chủ</a><a href="@Url.Action("IndexRecruiter","Home")">Dasboard</a><span>Tài khoản</span>
+                </div>
+            </div>
+        }
+        @if (user.User.RoleId == 1)
+        {
+            <div class="wt-admin-right-page-header clearfix">
+                <h2>Thông tin tài khoản</h2>
+                <div class="breadcrumbs">
+                    <a href="@Url.Action("Index","Home")">Trang chủ</a><a href="@Url.Action("IndexAdmin","Home")">Dasboard</a><span>Tài khoản</span>
+                </div>
+            </div>
+        }
+
+        <div class="panel panel-default">
+            <div class="panel-body wt-panel-body p-a20">
+                <div class="twm-tabs-style-1">
+                    <ul class="nav nav-tabs" id="myTab3" role="tablist">
+                        <li class="nav-item">
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#AccountInfo"
+                                    type="button" role="tab">
+                                Thông tin tài khoản
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#ChangePassword"
+                                    type="button" role="tab">
+                                Thay đổi mật khẩu
+                            </button>
+                        </li>
+                        @if (user.User.RoleId == 3)
+                        {
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#Settings"
+                                        type="button" role="tab">
+                                    Cài đặt thông báo việc làm
+                                </button>
+                            </li>
+                        }
+                    </ul>
+
+                    <div class="tab-content" id="myTab3Content">
+                        <div class="tab-pane fade show active" id="AccountInfo">
+                            <form action="@Url.Action("MyProfile","Account")" method="post" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="form-group">
+                                            <div class="dashboard-profile-pic">
+                                                <div class="dashboard-profile-photo">
+                                                    <img src="@user.User.AvartarUrl" alt="" />
+                                                    <div class="upload-btn-wrapper">
+                                                        <div id="upload-image-grid"></div>
+                                                        <button class="site-button button-sm">Upload Photo</button>
+                                                        <input type="file" name="image" id="file-uploader"
+                                                               accept=".jpg, .jpeg, .png" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-12 col-lg-12 col-md-12">
+                                        <div class="form-group">
+                                            <label for="fullName" class="form-label">
+                                                Họ tên <span class="required">*</span>
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <input class="form-control" name="fullname" type="text"
+                                                       placeholder="Your name" id="fullName" value="@user.User.FullName" />
+                                                <i class="fs-input-icon fa fa-user"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-12 col-lg-12 col-md-12">
+                                        <div class="form-group">
+                                            <label for="email" class="form-label">
+                                                Email <span class="required">*</span>
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <input class="form-control" name="email" type="email" value="@user.User.Email"
+                                                       placeholder="Your Email" id="email" />
+                                                <i class="fs-input-icon fas feather-mail"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @* <div class="col-xl-6 col-lg-6 col-md-12">
+                                    <div class="form-group">
+                                    <label for="passwordAccount" class="form-label">
+                                    Mật khẩu <span class="required">*</span>
+                                    </label>
+                                    <div class="ls-inputicon-box">
+                                    <input class="form-control" name="password" type="password" value="@user.User.p"
+                                    id="passwordAccount" disabled />
+                                    <i class="fs-input-icon fa fa-key"></i>
+                                    </div>
+                                    </div>
+                                    </div> *@
+
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="text-left">
+                                            <button type="submit" class="site-button">Lưu thay đổi</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="tab-pane fade" id="ChangePassword">
+                            <form action="@Url.Action("ChangePassword","Account")" method="post">
+                                <div class="row">
+
+                                    <div class="col-xl-10 col-lg-10 col-md-10">
+                                        <div class="form-group">
+                                            <label for="oldPassword" class="form-label">
+                                                Mật khẩu cũ <span class="required">*</span>
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <input class="form-control" name="oldpassword" type="password"
+                                                       id="oldPassword" />
+                                                <i class="fs-input-icon fa fa-key"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-10 col-lg-10 col-md-10">
+                                        <div class="form-group">
+                                            <label for="newPassword" class="form-label">
+                                                Mật khẩu mới <span class="required">*</span>
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <input class="form-control" name="newpassword" type="password"
+                                                       id="newPassword" />
+                                                <i class="fs-input-icon fa fa-key"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-10 col-lg-10 col-md-10">
+                                        <div class="form-group">
+                                            <label for="confirmPassword" class="form-label">
+                                                Nhập lại mật khẩu mới
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <input class="form-control" name="confirmnewpassword" type="password"
+                                                       id="confirmPassword" />
+                                                <i class="fs-input-icon fa fa-key"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="text-left">
+                                            <button type="submit" class="site-button">Cập nhật</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        @if (user.User.RoleId == 3)
+                        {
+                            <!-- Cai dat thong bao goi y viec lam -->
+                            <div class="tab-pane fade" id="Settings">
+                                <form action="@Url.Action("NotificationSettingCandidate","Account")" method="post">
+                                    <div class="row">
+                                        <div class="col-xl-6 col-lg-6 col-md-12">
+                                            <div class="form-group">
+                                                <label for="companyBusinessSector" class="form-label">
+                                                    Lĩnh vực hoạt động
+                                                    <span class="required">*</span>
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <select class="wt-select-box selectpicker" data-live-search="true"
+                                                            title="" id="companyBusinessSector" data-bv-field="size">
+                                                        <option class="bs-title-option" value="">
+                                                            Xuất nhập khẩu
+                                                        </option>
+                                                        <option>Sản xuất</option>
+                                                        <option>Xuất nhập khẩu</option>
+                                                        <option>Truyền thông</option>
+                                                        <option>Chế biến và sản xuất</option>
+                                                        <option>Giáo dục</option>
+                                                        <option>Viễn thông</option>
+                                                    </select>
+                                                    <i class="fs-input-icon fa fa-briefcase"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @* <div class="col-xl-6 col-lg-6 col-md-12">
+                                            <div class="form-group city-outer-bx has-feedback">
+                                                <label for="jobCategory" class="form-label">
+                                                    Ngành nghề <span class="required">*</span>
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <select class="wt-select-box selectpicker" data-live-search="true"
+                                                            title="" id="jobCategory" name="job_category"
+                                                            data-bv-field="size">
+                                                        <option disabled selected value="">Chọn ngành nghề</option>
+                                                        <option>Bán hàng kỹ thuật</option>
+                                                        <option>Bản lẻ/ Bán sỉ</option>
+                                                        <option>Báo chí truyền hình</option>
+                                                        <option>Bất động sản</option>
+                                                        <option>Nhân sự</option>
+                                                        <option>Bưu chính - Viễn thông</option>
+                                                        <option>IT phần mềm</option>
+                                                        <option>IT phần cứng</option>
+                                                        <option>Mạng máy tính</option>
+                                                        <option>Điện tử</option>
+                                                        <option>Du lịch</option>
+                                                    </select>
+                                                    <i class="fs-input-icon fa fa-border-all"></i>
+                                                </div>
+
+                                            </div>
+                                        </div> *@
+
+                                        <div class="col-xl-6 col-lg-6 col-md-12">
+                                            <div class="form-group">
+                                                <label for="city" class="form-label">
+                                                    Tỉnh/ Thành phố <span class="required">*</span>
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <select class="wt-select-box selectpicker" data-live-search="true" name="city"
+                                                            title="" id="city" data-bv-field="size">
+                                                        <option class="bs-title-option" value="">
+                                                            Tỉnh/ Thành phố
+                                                        </option>
+                                                        <option>Hồ Chí Minh</option>
+                                                        <option>Hà Nội</option>
+                                                        <option>Đà Nẵng</option>
+                                                        <option>Nha Trang</option>
+                                                        <option>Lâm Đồng</option>
+                                                        <option>Antigua and Barbuda</option>
+                                                        <option>Argentina</option>
+                                                        <option>Armenia</option>
+                                                        <option>Australia</option>
+                                                        <option>Austria</option>
+                                                        <option>Azerbaijan</option>
+                                                        <option>The Bahamas</option>
+                                                        <option>Bahrain</option>
+                                                        <option>Bangladesh</option>
+                                                        <option>Barbados</option>
+                                                    </select>
+                                                    <i class="fs-input-icon fa fa-city"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @* <div class="col-xl-6 col-lg-6 col-md-12">
+                                            <div class="form-group">
+                                                <label for="district" class="form-label">
+                                                    Quận/ Huyện <span class="required"> *</span>
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <select class="wt-select-box selectpicker" data-live-search="true"
+                                                            title="" id="district" data-bv-field="size">
+                                                        <option class="bs-title-option" value="">Quận</option>
+                                                        <option>Quận 12</option>
+                                                        <option>Quận 1</option>
+                                                        <option>Quận 2</option>
+                                                        <option>Quận 3</option>
+                                                        <option>Quận Phú Nhuận</option>
+                                                        <option>Quận Tân Bình</option>
+                                                        <option>Quận Bình Tân</option>
+                                                        <option>Quận 5</option>
+                                                        <option>Quận 8</option>
+                                                        <option>Quận 10</option>
+                                                        <option>Quận Bình Chánh</option>
+                                                        <option>Quận Tân Phú</option>
+                                                        <option>Quận Nhà Bè</option>
+                                                    </select>
+                                                    <i class="fs-input-icon fa fa-map-marker-alt"></i>
+                                                </div>
+                                            </div>
+                                        </div> *@
+
+                                        <div class="col-xl-6 col-lg-6 col-md-12">
+                                            <div class="form-group">
+                                                <label class="form-label" for="jobWorkingType">
+                                                    Hình thức làm việc <span class="required">*</span>
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <select class="wt-select-box selectpicker" data-live-search="true"
+                                                            title="" name="job_working_type" id="jobWorkingType"
+                                                            data-bv-field="size">
+                                                        <option class="bs-title-option" value="">Hình thức</option>
+                                                        <option>Toàn thời gian</option>
+                                                        <option>Làm việc tự do</option>
+                                                        <option>Bán thời gian</option>
+                                                        <option>Làm việc từ xa</option>
+                                                        <option>Hợp đồng thời vụ</option>
+                                                    </select>
+                                                    <i class="fs-input-icon fa fa-file-alt"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-6 col-lg-6 col-md-12">
+                                            <div class="form-group">
+                                                <label class="form-label" for="jobExperience">
+                                                    Kinh nghiệm <span class="required">*</span>
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <select class="wt-select-box selectpicker" data-live-search="true"
+                                                            title="" name="job_salary_min" id="jobExperience"
+                                                            data-bv-field="size">
+                                                        <option class="bs-title-option" value="">
+                                                            Chọn kinh nghiệm
+                                                        </option>
+                                                        <option>Không yêu cầu kinh nghiệm</option>
+                                                        <option>1 năm</option>
+                                                        <option>2 năm</option>
+                                                        <option>3 năm</option>
+                                                        <option>4 năm</option>
+                                                        <option>5 năm</option>
+                                                        <option>Trên 5 năm</option>
+                                                    </select>
+                                                    <i class="fs-input-icon fa fa-user-edit"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-6 col-lg-6 col-md-12">
+                                            <div class="form-check d-flex">
+                                                <span class="d-inline-block m-r40 fw-bold fa-1x">
+                                                    Nhận thông báo qua:
+                                                </span>
+                                                <input id="jobUrgent" type="radio" class="form-check-input" checked>
+                                                <label for="jobUrgent"
+                                                       class="form-label form-check-label m-l10">Email</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12 col-md-12 mt-3">
+                                            <div class="text-left">
+                                                <button type="submit" class="site-button">Tạo mới tin</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+<script>
+    var citis = document.getElementById("city");
+    var Parameter = {
+        url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
+        method: "GET",
+        responseType: "application/json",
+    };
+    var promise = axios(Parameter);
+    promise.then(function (result) {
+        renderCity(result.data);
+    });
+
+    function renderCity(data) {
+        for (const x of data) {
+            citis.options[citis.options.length] = new Option(x.Name, x.Name);
+        }
+    }
+</script>
+@if (ViewBag.ErrorMessage != null)
+{
+    <script>
+        alert("@Html.Raw(ViewBag.ErrorMessage)");
+    </script>
+}
+

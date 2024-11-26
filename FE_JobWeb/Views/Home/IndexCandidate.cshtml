@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewData["Title"] = "IndexCandidate";
+    Layout = "~/Views/Shared/_LayoutRecuiter.cshtml";
+}
+
+<div id="content">
+    <div class="content-admin-main">
+        <div class="wt-admin-right-page-header clearfix">
+            <h2>Hello, Nikola Tesla</h2>
+            <div class="breadcrumbs"><a href="@Url.Action("Index","Home")">Home</a><span>Dasboard</span></div>
+        </div>
+
+        <div class="twm-dash-b-blocks mb-5">
+            <div class="row">
+                <div class="col-xl-3 col-lg-3 col-md-12 mb-3">
+                    <div class="panel panel-default">
+                        <div class="panel-body wt-panel-body dashboard-card-2 block-gradient">
+                            <div class="wt-card-wrap-2">
+                                <div class="wt-card-icon-2"><i class="flaticon-job"></i></div>
+                                <div class="wt-card-right wt-total-active-listing  ">25</div>
+                                <div class="wt-card-bottom-2 ">
+                                    <p class="m-b0 panel-title">Việc đã ứng tuyển</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-12 mb-3">
+                    <div class="panel panel-default">
+                        <div class="panel-body wt-panel-body dashboard-card-2 block-gradient-2">
+                            <div class="wt-card-wrap-2">
+                                <div class="wt-card-icon-2"><i class="flaticon-resume"></i></div>
+                                <div class="wt-card-right  wt-total-listing-view  ">435</div>
+                                <div class="wt-card-bottom-2">
+                                    <p class="m-b0 panel-title">Việc đã lưu</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-12 mb-3">
+                    <div class="panel panel-default">
+                        <div class="panel-body wt-panel-body dashboard-card-2 block-gradient-3">
+                            <div class="wt-card-wrap-2">
+                                <div class="wt-card-icon-2"><i class="flaticon-hr"></i></div>
+                                <div class="wt-card-right wt-total-listing-review  ">28</div>
+                                <div class="wt-card-bottom-2">
+                                    <p class="m-b0 panel-title">NTD đã theo dõi</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-12 mb-3">
+                    <div class="panel panel-default">
+                        <div class="panel-body wt-panel-body dashboard-card-2 block-gradient-4">
+                            <div class="wt-card-wrap-2">
+                                <div class="wt-card-icon-2"><i class="flaticon-bell"></i></div>
+                                <div class="wt-card-right wt-total-listing-bookmarked  ">18</div>
+                                <div class="wt-card-bottom-2">
+                                    <p class="m-b0 panel-title">Thông báo</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@if (ViewBag.ErrorMessage != null)
+{
+    <script>
+        alert("@Html.Raw(ViewBag.ErrorMessage)");
+    </script>
+}
+

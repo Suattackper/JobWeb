@@ -1,0 +1,405 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "RegisterRecruiter";
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- META -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="" />
+    <meta name="author" content="" />
+    <meta name="robots" content="" />
+    <meta name="description" content="" />
+
+    <!-- FAVICONS ICON -->
+    <link rel="icon" href="~/Content/images/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="~/Content/images/job_seeker_logo.png" />
+
+    <!-- PAGE TITLE HERE -->
+    <title>Trang Chủ</title>
+
+    <!-- MOBILE SPECIFIC -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="~/Content/css/bootstrap.min.css"><!-- BOOTSTRAP STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/font-awesome.min.css"><!-- FONTAWESOME STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/feather.css"><!-- FEATHER ICON SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/owl.carousel.min.css"><!-- OWL CAROUSEL STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/magnific-popup.min.css"><!-- MAGNIFIC POPUP STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/lc_lightbox.css"><!-- Lc light box popup -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/bootstrap-select.min.css"><!-- BOOTSTRAP SLECT BOX STYLE SHEET  -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/dataTables.bootstrap5.min.css"><!-- DATA table STYLE SHEET  -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/select.bootstrap5.min.css">
+    <!-- DASHBOARD select bootstrap  STYLE SHEET  -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/dropzone.css"><!-- DROPZONE STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/scrollbar.css"><!-- CUSTOM SCROLL BAR STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/datepicker.css"><!-- DATEPICKER STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/flaticon.css"> <!-- Flaticon -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/swiper-bundle.min.css"><!-- Swiper Slider -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/style.css"><!-- MAIN STYLE SHEET -->
+    <!-- THEME COLOR CHANGE STYLE SHEET -->
+    <link rel="stylesheet" class="skin" type="text/css" href="~/Content/css/skins-type/skin-6.css">
+    <!-- SIDE SWITCHER STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/switcher.css">
+
+
+</head>
+
+<body>
+    <!-- LOADING AREA START ===== -->
+    <div class="loading-area">
+        <div class="loading-box"></div>
+        <div class="loading-pic">
+            <div class="wrapper">
+                <div class="cssload-loader"></div>
+            </div>
+        </div>
+    </div>
+    <!-- LOADING AREA  END ====== -->
+
+    <div class="page-wraper">
+        <!-- CONTENT START -->
+        <div class="page-content">
+
+            <div class="section-full site-bg-white">
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-6 col-md-5 twm-log-reg-media-wrap">
+                            <div class="twm-log-reg-media">
+                                <div class="twm-l-media">
+                                    <img src="~/Content/images/login-bg.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-8 col-lg-6 col-md-7">
+                            <!-- Info Section -->
+                            <div class="login-section">
+                                <div class="container">
+                                    <div class="card-login">
+                                        <h4 class="card-title text-center mb-4">Đăng ký tài khoản nhà tuyển dụng</h4>
+
+                                        <!-- Step Progress Bar -->
+                                        <div class="step-progress">
+                                            <div class="step-item-login">
+                                                <div class="circle" id="circle-1">1</div>
+                                                <span>Thông tin đăng nhập</span>
+                                            </div>
+                                            <div class="line"></div>
+                                            <div class="step-item-login">
+                                                <div class="circle inactive" id="circle-2">2</div>
+                                                <span>Thông tin công ty</span>
+                                            </div>
+                                        </div>
+                                        <form id="loginForm" action="@Url.Action("RegisterRecruiter","Account")" method="post">
+                                            <!-- Step 1: User Information -->
+                                            <div class="form-step active" id="step-1">
+                                                <div class="mb-3">
+                                                    <label for="fullname" class="form-label">
+                                                        Họ và tên <span class="required">*</span>
+                                                    </label>
+                                                    <input type="text" class="form-control" id="fullname" name="fullname"
+                                                           placeholder="Nhập họ và tên" required>
+                                                </div>
+
+                                                <!-- Email and Gender (Giới tính) on the same row -->
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="email" class="form-label">
+                                                            Email <span class="required">*</span>
+                                                        </label>
+                                                        <input type="email" class="form-control" id="email" name="email"
+                                                               placeholder="Nhập email" required>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">
+                                                            Giới tính <span class="required">*</span>
+                                                        </label>
+                                                        <div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio"
+                                                                       name="gender" id="male" value="male" checked required>
+                                                                <label class="form-check-label" for="male">Nam</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio"
+                                                                       name="gender" id="female" value="female" required>
+                                                                <label class="form-check-label" for="female">Nữ</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="phone" class="form-label">
+                                                        Số điện thoại cá nhân<span class="required">*</span>
+                                                    </label>
+                                                    <input type="tel" class="form-control" id="phone" name="phone"
+                                                           placeholder="Nhập số điện thoại cá nhân" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="password" class="form-label">
+                                                        Mật khẩu <span class="required">*</span>
+                                                    </label>
+                                                    <input type="password" class="form-control" id="password" name="password"
+                                                           placeholder="Nhập mật khẩu" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="confirm-password" class="form-label">
+                                                        Mật khẩu xác nhận
+                                                        <span class="required">*</span>
+                                                    </label>
+                                                    <input type="password" class="form-control" id="confirmpassword" name="confirmpassword"
+                                                           placeholder="Nhập mật khẩu xác nhận" required>
+                                                </div>
+                                                <div class="text-end">
+                                                    <button type="button" class="btn btn-primary btn-custom"
+                                                            onclick="goToNextStep()">
+                                                        Tiếp tục
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <!-- Step 2: Company Information -->
+                                            <div class="form-step" id="step-2">
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="company-name" class="form-label">
+                                                            Tên công ty <span class="required">*</span>
+                                                        </label>
+                                                        <input type="text" class="form-control" id="companyname" name="companyname"
+                                                               placeholder="Nhập tên công ty" required>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="company-email" class="form-label">
+                                                            Email công ty <span class="required">*</span>
+                                                        </label>
+                                                        <input type="email" class="form-control" id="companyemail" name="companyemail"
+                                                               placeholder="Nhập email công ty" required>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Số điện thoại and Mã số thuế on the same row -->
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="phone" class="form-label">
+                                                            Số điện thoại <span class="required">*</span>
+                                                        </label>
+                                                        <input type="tel" class="form-control" id="phone" name="companyphone"
+                                                               placeholder="Nhập số điện thoại công ty" required>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="tax-id" class="form-label">
+                                                            Mã số thuế <span class="required">*</span>
+                                                        </label>
+                                                        <input type="text" class="form-control" id="tax-id" name="taxcode"
+                                                               placeholder="Nhập mã số thuế" required>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Ngày thành lập and Lĩnh vực hoạt động on the same row -->
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="establish-date" class="form-label">
+                                                            Ngày thành
+                                                            lập <span class="required">*</span>
+                                                        </label>
+                                                        <input type="date" class="form-control" id="establish-date" name="foundeddate" required>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="field" class="form-label">Lĩnh vực hoạt động<span class="required">*</span></label>
+                                                        <select name="jobfield" id="field" class="form-select form-control" required>
+                                                            @if (ViewBag.Jobfield != null)
+                                                            {
+                                                                foreach (var i in ViewBag.Jobfield)
+                                                                {
+                                                                    <option value="@i.JobFieldId">@i.JobFieldName</option>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="">Chọn lĩnh vực hoạt động</option>
+                                                            }
+                                                            @* <option value="small">Dưới 50 nhân viên</option>
+                                                            <option value="medium">50-200 nhân viên</option>
+                                                            <option value="large">Trên 200 nhân viên</option> *@
+                                                        </select>
+                                                        @* <input type="text" class="form-control" id="field"
+                                                        placeholder="Nhập lĩnh vực hoạt động"> *@
+                                                    </div>
+                                                </div>
+
+                                                <!-- Quy mô công ty and Website on the same row -->
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="company-size" class="form-label">
+                                                            Quy mô công
+                                                            ty <span class="required">*</span>
+                                                        </label>
+                                                        <select name="companysize" id="company-size" class="form-select form-control" required>
+                                                            @* <option value="">Chọn quy mô công ty</option> *@
+                                                            <option value="small">Dưới 50 nhân viên</option>
+                                                            <option value="medium">50-200 nhân viên</option>
+                                                            <option value="large">Trên 200 nhân viên</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="website" class="form-label">Website <span class="required">*</span></label>
+                                                        <input type="text" class="form-control" id="website" name="websiteurl" required
+                                                               placeholder="Nhập địa chỉ website">
+                                                    </div>
+                                                </div>
+
+                                                <!-- Tỉnh/Thành phố and Quận/Huyện on the same row -->
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="city" class="form-label">Tỉnh/Thành phố <span class="required">*</span></label>
+                                                        <select id="city" name="city" class="form-select form-control" required>
+                                                            <option value="">Chọn tỉnh/thành phố</option>
+                                                            <!-- Add city options here -->
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="district" class="form-label">Quận/Huyện <span class="required">*</span></label>
+
+                                                        <select id="district" name="district" class="form-select form-control" required>
+                                                            <option value="">Chọn quận/huyện</option>
+                                                            <!-- Add district options here -->
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="ward" class="form-label">Phường/Xã <span class="required">*</span></label>
+
+                                                        <select id="ward" name="ward" class="form-select form-control" required>
+                                                            <option value="">Chọn phường/xã</option>
+                                                            <!-- Add ward options here -->
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="address" class="form-label">Địa chỉ <span class="required">*</span></label>
+                                                        <input type="text" class="form-control" id="address" name="addressdetail" required
+                                                               placeholder="Nhập địa chỉ">
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-between">
+                                                    <button type="button" class="btn btn-secondary btn-custom"
+                                                            onclick="goToPreviousStep()">
+                                                        Quay
+                                                        lại
+                                                    </button>
+                                                    <button type="submit" class="btn btn-primary btn-custom">
+                                                        Đăng
+                                                        ký
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <div class="text-center mt-4 mb-4">
+                                            <a href="@Url.Action("Login","Account")" class="site-text-primary">Đã có tài khoản? Đăng nhập</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Login Section End -->
+
+
+
+        </div>
+
+        <!-- BUTTON TOP START -->
+        <button class="scroltop"><span class="fa fa-angle-up  relative" id="btn-vibrate"></span></button>
+
+    </div>
+
+
+    <!-- JAVASCRIPT  FILES ========================================= -->
+    <script src="~/Content/js/jquery-3.6.0.min.js"></script><!-- JQUERY.MIN JS -->
+    <script src="~/Content/js/popper.min.js"></script><!-- POPPER.MIN JS -->
+    <script src="~/Content/js/bootstrap.min.js"></script><!-- BOOTSTRAP.MIN JS -->
+    <script src="~/Content/js/magnific-popup.min.js"></script><!-- MAGNIFIC-POPUP JS -->
+    <script src="~/Content/js/waypoints.min.js"></script><!-- WAYPOINTS JS -->
+    <script src="~/Content/js/counterup.min.js"></script><!-- COUNTERUP JS -->
+    <script src="~/Content/js/waypoints-sticky.min.js"></script><!-- STICKY HEADER -->
+    <script src="~/Content/js/isotope.pkgd.min.js"></script><!-- MASONRY  -->
+    <script src="~/Content/js/imagesloaded.pkgd.min.js"></script><!-- MASONRY  -->
+    <script src="~/Content/js/owl.carousel.min.js"></script><!-- OWL  SLIDER  -->
+    <script src="~/Content/js/theia-sticky-sidebar.js"></script><!-- STICKY SIDEBAR  -->
+    <script src="~/Content/js/lc_lightbox.lite.js"></script><!-- IMAGE POPUP -->
+    <script src="~/Content/js/bootstrap-select.min.js"></script><!-- Form js -->
+    <script src="~/Content/js/dropzone.js"></script><!-- IMAGE UPLOAD  -->
+    <script src="~/Content/js/jquery.scrollbar.js"></script><!-- scroller -->
+    <script src="~/Content/js/bootstrap-datepicker.js"></script><!-- scroller -->
+    <script src="~/Content/js/jquery.dataTables.min.js"></script><!-- Datatable -->
+    <script src="~/Content/js/dataTables.bootstrap5.min.js"></script><!-- Datatable -->
+    <script src="~/Content/js/chart.js"></script><!-- Chart -->
+    <script src="~/Content/js/bootstrap-slider.min.js"></script><!-- Price range slider -->
+    <script src="~/Content/js/swiper-bundle.min.js"></script><!-- Swiper JS -->
+    <script src="~/Content/js/script.js"></script>
+    <script src="~/Content/js/custom.js"></script><!-- CUSTOM FUCTIONS  -->
+    <script src="~/Content/js/switcher.js"></script><!-- SHORTCODE FUCTIONS  -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script>
+        var citis = document.getElementById("city");
+        var districts = document.getElementById("district");
+        var wards = document.getElementById("ward");
+        var Parameter = {
+            url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
+            method: "GET",
+            responseType: "application/json",
+        };
+        var promise = axios(Parameter);
+        promise.then(function (result) {
+            renderCity(result.data);
+        });
+
+        function renderCity(data) {
+            for (const x of data) {
+                citis.options[citis.options.length] = new Option(x.Name, x.Name);
+            }
+            citis.onchange = function () {
+                district.length = 1;
+                ward.length = 1;
+                if (this.value != "") {
+                    const result = data.filter(n => n.Name === this.value);
+
+                    for (const k of result[0].Districts) {
+                        district.options[district.options.length] = new Option(k.Name, k.Name);
+                    }
+                }
+            };
+            districts.onchange = function () {
+                ward.length = 1;
+                const dataCity = data.filter((n) => n.Name === citis.value);
+                if (this.value != "") {
+                    const dataWards = dataCity[0].Districts.filter(n => n.Name === this.value)[0].Wards;
+
+                    for (const w of dataWards) {
+                        wards.options[wards.options.length] = new Option(w.Name, w.Name);
+                    }
+                }
+            };
+        }
+    </script>
+
+</body>
+
+</html>
+
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <script>
+        alert("@Html.Raw(ViewBag.ErrorMessage)");
+    </script>
+}

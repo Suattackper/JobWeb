@@ -1,0 +1,490 @@
+﻿@model Data_JobWeb.Entity.JobSeekerEnterprise
+@{
+    ViewData["Title"] = "CompanyProfile";
+    Layout = "~/Views/Shared/_LayoutRecuiter.cshtml";
+}
+
+<div id="content">
+    <div class="content-admin-main">
+        <div class="wt-admin-right-page-header clearfix">
+            <h2>Company Profile!</h2>
+            <div class="breadcrumbs">
+                <a href="index.html">Home</a><a href="dashboard.html">Dasboard</a><span>Company Profile!</span>
+            </div>
+        </div>
+
+
+        <div class="panel panel-default">
+            <div class="panel-body wt-panel-body p-a20 ">
+                <div class="twm-tabs-style-1">
+                    <ul class="nav nav-tabs" id="myTab3" role="tablist">
+                        <li class="nav-item">
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#BasicInfo"
+                                    type="button" role="tab">
+                                Thông tin cơ bản
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#ImgVideo"
+                                    type="button" role="tab">
+                                Hình ảnh & Video
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#SocialMedia"
+                                    type="button" role="tab">
+                                Truyền thông và mạng xã hội
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#Address"
+                                    type="button" role="tab">
+                                Địa chỉ liên hệ
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="myTab3Content">
+                        <!-- Basic info -->
+                        <div class="tab-pane fade show active" id="BasicInfo">
+                            <form action="@Url.Action("CompanyProfile","Company",new {type = 1})" method="post">
+                                <div class="row">
+                                    <div class="col-xl-12 col-lg-12 col-md-12">
+                                        <div class="form-group">
+                                            <label for="companyName" class="form-label">
+                                                Tên công ty <span class="required">*</span>
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <input class="form-control" name="companyname" type="text" value="@Model.FullCompanyName" required
+                                                       placeholder="Company Name" id="companyName">
+                                                <i class="fs-input-icon fa fa-building"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6 col-lg-6 col-md-12">
+                                        <div class="form-group">
+                                            <label for="companyBusinessSector" class="form-label">
+                                                Lĩnh vực hoạt động
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <select name="jobfield" id="field" class="form-select form-control" required>
+                                                    @if (ViewBag.Jobfield != null)
+                                                    {
+                                                        foreach (var i in ViewBag.Jobfield)
+                                                        {
+                                                            if (Model.JobFieldId == i.JobFieldId)
+                                                            {
+                                                                <option selected value="@i.JobFieldId">@i.JobFieldName</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@i.JobFieldId">@i.JobFieldName</option>
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="">Chọn lĩnh vực hoạt động</option>
+                                                    }
+                                                </select>
+                                                <i class="fs-input-icon fa fa-briefcase"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6 col-lg-6 col-md-12">
+                                        <div class="form-group">
+                                            <label for="companySize" class="form-label">
+                                                Quy mô công ty <span class="required">*</span>
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <select name="companysize" id="company-size" class="form-select form-control" required>
+                                                    @* <option value="">Chọn quy mô công ty</option> *@
+                                                    @if (Model.EnterpriseSize == "small")
+                                                    {
+                                                        <option value="small" selected>Dưới 50 nhân viên</option>
+                                                        <option value="medium">50-200 nhân viên</option>
+                                                        <option value="large">Trên 200 nhân viên</option>
+                                                    }
+                                                    else if (Model.EnterpriseSize == "medium")
+                                                    {
+                                                        <option value="small">Dưới 50 nhân viên</option>
+                                                        <option value="medium" selected>50-200 nhân viên</option>
+                                                        <option value="large">Trên 200 nhân viên</option>
+                                                    }
+                                                    else if (Model.EnterpriseSize == "large")
+                                                    {
+                                                        <option value="small">Dưới 50 nhân viên</option>
+                                                        <option value="medium">50-200 nhân viên</option>
+                                                        <option value="large" selected>Trên 200 nhân viên</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="small">Dưới 50 nhân viên</option>
+                                                        <option value="medium">50-200 nhân viên</option>
+                                                        <option value="large">Trên 200 nhân viên</option>
+                                                    }
+                                                </select>
+                                                <i class="fs-input-icon fa fa-dollar-sign"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6 col-lg-6 col-md-12">
+                                        <div class="form-group">
+                                            <label for="companyTaxCode" class="form-label">
+                                                Mã số thuế <span class="required">*</span>
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <input class="form-control" name="taxcode" type="text" value="@Model.TaxCode" required
+                                                       placeholder="Tax Code" id="companyTaxCode">
+                                                <i class="fs-input-icon fas feather-file-text"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6 col-lg-6 col-md-12">
+                                        <div class="form-group">
+                                            <label for="companyFoundedDate" class="form-label">
+                                                Ngày thành lập <span class="required">*</span>
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <input class="form-control datepicker" name="foundeddate"
+                                                       type="text" placeholder="dd/mm/yyyy" value="@(Model.FoundedDate?.ToString("dd/MM/yyyy"))" required
+                                                       id="companyFoundedDate">
+                                                <i class="fs-input-icon fa fa-calendar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6 col-lg-6 col-md-12">
+                                        <div class="form-group">
+                                            <label for="companyEmail" class="form-label">
+                                                Email công ty <span class="required">*</span>
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <input class="form-control" name="companyemail" value="@Model.CompanyEmail" required
+                                                       type="email" placeholder="Company Email" id="companyEmail">
+                                                <i class="fs-input-icon fa fa-envelope"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6 col-lg-6 col-md-12">
+                                        <div class="form-group">
+                                            <label for="companyPhoneNumber" class="form-label">
+                                                Số điện thoại <span class="required">*</span>
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <input class="form-control" name="companyphone" value="@Model.CompanyPhoneContact" required
+                                                       type="text" placeholder="Company Phone"
+                                                       id="companyPhoneNumber">
+                                                <i class="fs-input-icon fa fa-phone-alt"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-12 col-lg-12 col-md-12">
+                                        <div class="form-group">
+                                            <label for="companyDesc" class="form-label">
+                                                Mô tả công ty <span class="required">*</span>
+                                            </label>
+                                            <textarea id="companydecription" rows="15"name="companydecription" class="form-control" required>@Model.Descriptions</textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="text-left">
+                                            <button type="submit" class="site-button">Lưu thay đổi</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Img Video -->
+                        <div class="tab-pane fade" id="ImgVideo">
+                            <form action="@Url.Action("CompanyProfile","Company",new {type = 2})" method="post" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="panel-heading wt-panel-heading p-a20">
+                                        <h4 class="panel-tittle m-a0">Hình đại diện và ảnh nền</h4>
+                                    </div>
+                                    <div class="panel-body wt-panel-body p-a20 p-b0 m-b30 ">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12">
+                                                <div class="form-group">
+                                                    <div class="dashboard-profile-pic">
+                                                        <div class="dashboard-profile-photo">
+                                                            <img src="@Model.LogoUrl" alt="">
+                                                            <div class="upload-btn-wrapper">
+                                                                <div id="upload-image-grid"></div>
+                                                                <button class="site-button button-sm">
+                                                                    Thay
+                                                                    logo
+                                                                </button>
+                                                                <input type="file" name="imagelogo"
+                                                                       id="file-uploader" accept=".jpg, .jpeg, .png">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-12 col-md-12">
+                                                <div class="banner-container">
+                                                    <img src="@Model.CoverImgUrl"
+                                                         alt="Banner Image" id="banner-preview">
+                                                    <label class="banner-btn" for="banner-upload">
+                                                        Thay ảnh
+                                                        bìa
+                                                    </label>
+                                                    <input type="file" class="form-control d-none" name="imagebackground"
+                                                           id="banner-upload" accept="image/*"
+                                                           onchange="previewBanner()">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="text-left">
+                                            <button type="submit" class="site-button">Cập nhật</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+
+                        <!-- Social Media -->
+                        <div class="tab-pane fade" id="SocialMedia">
+                            <form action="@Url.Action("CompanyProfile","Company",new {type = 3})" method="post">
+                                <div class="row">
+                                    <div class="panel-heading wt-panel-heading p-a20">
+                                        <h4 class="panel-tittle m-a0">Truyền thông và Mạng xã hội</h4>
+                                    </div>
+                                    <div class="panel-body wt-panel-body p-a20 m-b30 ">
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label"
+                                                           for="companyFacebooUrl">Facebook</label>
+                                                    <div class="ls-inputicon-box">
+                                                        <input class="form-control wt-form-control"
+                                                               name="facebookurl" type="text" value="@Model.FacebookUrl"
+                                                               id="companyFacebooUrl"
+                                                               placeholder="https://www.facebook.com/">
+                                                        <i class="fs-input-icon fab fa-facebook-f"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="form-group">
+                                                    <label for="companyLinkedinUrl" class="form-label">
+                                                        Linkedin
+                                                    </label>
+                                                    <div class="ls-inputicon-box">
+                                                        <input class="form-control wt-form-control"
+                                                               name="linkedinurl" type="text" value="@Model.LinkedinUrl"
+                                                               id="companyLinkedinUrl"
+                                                               placeholder="https://in.linkedin.com/">
+                                                        <i class="fs-input-icon fab fa-linkedin-in"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="form-group">
+                                                    <label for="companyWebsiteUrl"
+                                                           class="form-label">Website</label>
+                                                    <div class="ls-inputicon-box">
+                                                        <input class="form-control wt-form-control"
+                                                               name="websiteurl" type="text" value="@Model.WebsiteUrl"
+                                                               id="companyWebsiteUrl"
+                                                               placeholder="https://www.whatsapp.com/">
+                                                        <i class="fs-input-icon fab fa-gg-circle"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="text-left">
+                                            <button type="submit" class="site-button">Cập nhật</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Company Address -->
+                        <div class="tab-pane fade" id="Address">
+                            <div class="panel-heading wt-panel-heading p-a20">
+                                <h4 class="panel-tittle m-a0">
+                                    <i class="fa fa-globe m-r"></i>Địa chỉ liên hệ
+                                </h4>
+                            </div>
+                            <div class="panel-body wt-panel-body p-a20 m-b30 ">
+                                <form action="@Url.Action("CompanyProfile","Company",new {type = 4})" method="post">
+                                    <div class="row">
+                                        <!--Country-->
+                                        <div class="col-xl-4 col-lg-6 col-md-12">
+                                            <div class="form-group">
+                                                <label for="city" class="form-label">
+                                                    Tỉnh/ Thành phố <span class="required">*</span>
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <select id="city" data-city="@Model.City" name="city" class="form-select form-control" required>
+                                                        <option value="">Chọn tỉnh/thành phố</option>
+                                                    </select>
+                                                    <i class="fs-input-icon fa fa-city"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!--District-->
+                                        <div class="col-xl-4 col-lg-6 col-md-12">
+                                            <div class="form-group">
+                                                <label for="district" class="form-label">
+                                                    Quận/ Huyện <span class="required"> *</span>
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <select id="district" data-district="@Model.District" name="district" class="form-select form-control" required>
+                                                        <option value="">Chọn quận/huyện</option>
+                                                    </select>
+                                                    <i class="fs-input-icon fa fa-map-marker-alt"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Ward -->
+                                        <div class="col-xl-4 col-lg-6 col-md-12">
+                                            <div class="form-group">
+                                                <label for="ward" class="form-label">Phường/ Xã <span class="required"> *</span></label>
+                                                <div class="ls-inputicon-box">
+                                                    <select id="ward" data-ward="@Model.Ward" name="ward" class="form-select form-control" required>
+                                                        <option value="">Chọn phường/xã</option>
+                                                    </select>
+                                                    <i class="fs-input-icon fa fa-map-marker-alt"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!--Complete Address-->
+                                        <div class="col-xl-12 col-lg-6 col-md-12">
+                                            <div class="form-group">
+                                                <label for="address" class="form-label">Địa chỉ <span class="required"> *</span></label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="address" id="address"
+                                                           type="text" value="@Model.Address" required
+                                                           placeholder="11/23 khu phố 16 đường Nguyễn Văn Quá">
+                                                    <i class="fs-input-icon fa fa-building"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12 col-md-12">
+                                            <div class="text-left">
+                                                <button type="submit" class="site-button">Lưu thay đổi</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <script>
+        alert("@Html.Raw(ViewBag.ErrorMessage)");
+    </script>
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+<script>
+    // function previewBanner() {
+    //     const file = document.getElementById('banner-upload').files[0];
+    //     const reader = new FileReader();
+
+    //     reader.onloadend = function () {
+    //         document.getElementById('banner-preview').src = reader.result;
+    //     };
+
+    //     if (file) {
+    //         reader.readAsDataURL(file);
+    //     }
+    // }
+
+    var savedWard = document.getElementById("ward").dataset.ward;
+    var savedDistrict = document.getElementById("district").dataset.district;
+    var savedCity = document.getElementById("city").dataset.city;
+
+    var citis = document.getElementById("city");
+    var districts = document.getElementById("district");
+    var wards = document.getElementById("ward");
+    var Parameter = {
+        url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
+        method: "GET",
+        responseType: "application/json",
+    };
+    var promise = axios(Parameter);
+    promise.then(function (result) {
+        renderCity(result.data);
+    });
+
+    function renderCity(data) {
+        for (const x of data) {
+            // citis.options[citis.options.length] = new Option(x.Name, x.Name);
+            var option = new Option(x.Name, x.Name);
+            if (x.Name === savedCity) {
+                option.selected = true;  // Đặt thuộc tính selected cho ward đã lưu
+            }
+            citis.options[citis.options.length] = option;
+        }
+        citis.onchange = function () {
+            district.length = 1;
+            ward.length = 1;
+            if (this.value != "") {
+                const result = data.filter(n => n.Name === this.value);
+
+                for (const k of result[0].Districts) {
+                    // district.options[district.options.length] = new Option(k.Name, k.Name);
+                    var option = new Option(k.Name, k.Name);
+                    if (k.Name === savedDistrict) {
+                        option.selected = true;  // Đặt thuộc tính selected cho ward đã lưu
+                    }
+                    districts.options[districts.options.length] = option;
+                }
+            }
+        };
+        districts.onchange = function () {
+            ward.length = 1;
+            const dataCity = data.filter((n) => n.Name === citis.value);
+            if (this.value != "") {
+                const dataWards = dataCity[0].Districts.filter(n => n.Name === this.value)[0].Wards;
+
+                for (const w of dataWards) {
+                    // wards.options[wards.options.length] = new Option(w.Name, w.Name);
+                    var option = new Option(w.Name, w.Name);
+                    if (w.Name === savedWard) {
+                        option.selected = true;  // Đặt thuộc tính selected cho ward đã lưu
+                    }
+                    wards.options[wards.options.length] = option;
+                }
+            }
+        };
+        citis.onchange();
+        districts.onchange();
+    }
+</script>
+

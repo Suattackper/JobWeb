@@ -1,0 +1,389 @@
+﻿
+@{
+    ViewData["Title"] = "PostJob";
+    Layout = "~/Views/Shared/_LayoutRecuiter.cshtml";
+}
+
+<div id="content">
+    <div class="content-admin-main">
+        <div class="wt-admin-right-page-header clearfix">
+            <h2>Thông tin tuyển dụng</h2>
+            <div class="breadcrumbs">
+                <a href="index.html">Trang chủ</a><a href="dashboard.html">Dasboard</a><span>Tin tuyển dụng</span>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading wt-panel-heading p-a20">
+                <h4 class="panel-tittle m-a0 m-l10"><i class="fa fa-suitcase"></i> Thông tin tuyển dụng</h4>
+            </div>
+            <div class="panel-body wt-panel-body p-a20 m-b30 ">
+                <form action="@Url.Action("PostJob","Company")" method="post">
+                    <div class="row">
+                        <!--Job title-->
+                        <div class="col-xl-6 col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="jobTitle" class="form-label">
+                                    Tên công việc <span class="required">*</span>
+                                </label>
+                                <div class="ls-inputicon-box">
+                                    <input class="form-control" name="title" type="text" id="jobTitle" required
+                                           placeholder="Name">
+                                    <i class="fs-input-icon fa fa-address-card"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Quantity -->
+                        <div class="col-xl-6 col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="jobSalaryMin" class="form-label">Số lượng <span class="required">*</span></label>
+                                <div class="ls-inputicon-box">
+                                    <input class="form-control" name="quantity" id="jobSalaryMin" type="number" min="1" required
+                                           placeholder="Quantity" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                    <i class="fs-input-icon fa fa-dollar-sign"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Job Category-->
+                        <div class="col-xl-4 col-lg-6 col-md-12">
+                            <div class="form-group city-outer-bx has-feedback">
+                                <label for="jobCategory" class="form-label">
+                                    Ngành nghề <span class="required">*</span>
+                                </label>
+                                <div class="ls-inputicon-box">
+                                    <select class="wt-select-box selectpicker" data-live-search="true" title="" name="category" required
+                                            id="jobCategory" name="job_category" data-bv-field="size">
+                                        @if (ViewBag.Jobcategory != null)
+                                        {
+                                            foreach (var i in ViewBag.Jobcategory)
+                                            {
+                                                <option value="@i.Id">@i.JobCategoryName</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option value="">Chọn ngành nghề</option>
+                                        }
+                                    </select>
+                                    <i class="fs-input-icon fa fa-border-all"></i>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Job Type -->
+                        <div class="col-xl-4 col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label class="form-label" for="jobWorkingType">
+                                    Hình thức làm việc <span class="required">*</span>
+                                </label>
+                                <div class="ls-inputicon-box">
+                                    <select class="wt-select-box selectpicker" data-live-search="true" title="" required
+                                            name="worktype" id="jobWorkingType" data-bv-field="size">
+                                        @* <option class="bs-title-option" value="">Hình thức</option> *@
+                                        <option selected value="fulltime">Toàn thời gian</option>
+                                        <option value="parttime">Bán thời gian</option>
+                                        <option value="intern">Thực tập</option>
+                                    </select>
+                                    <i class="fs-input-icon fa fa-file-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Experience -->
+                        <div class="col-xl-4 col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label class="form-label" for="jobExperience">
+                                    Kinh nghiệm <span class="required">*</span>
+                                </label>
+                                <div class="ls-inputicon-box">
+                                    <select class="wt-select-box selectpicker" data-live-search="true" title="" required
+                                            name="exp" id="jobExperience" data-bv-field="size">
+                                        @* <option class="bs-title-option" value="">Chọn kinh nghiệm</option> *@
+                                        <option selected value="0">Không yêu cầu kinh nghiệm</option>
+                                        <option value="1">1 năm</option>
+                                        <option value="2">2 năm</option>
+                                        <option value="3">3 năm</option>
+                                        <option value="4">4 năm</option>
+                                        <option value="5">5 năm</option>
+                                        <option value="5+">Trên 5 năm</option>
+                                    </select>
+                                    <i class="fs-input-icon fa fa-user-edit"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Level -->
+                        <div class="col-xl-4 col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label class="form-label" for="jobLevel">
+                                    Vị trí/ Cấp bậc <span class="required">*</span>
+                                </label>
+                                <div class="ls-inputicon-box">
+                                    <select class="wt-select-box selectpicker" data-live-search="true" title="" required
+                                            name="level" id="jobLevel" data-bv-field="size">
+                                        @* <option class="bs-title-option" value="">Chọn vị trí - cấp bậc</option> *@
+                                        @if (ViewBag.Joblevel != null)
+                                        {
+                                            foreach (var i in ViewBag.Joblevel)
+                                            {
+                                                <option value="@i.Id">@i.JobLevelName</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option value="">Chọn vị trí - cấp bậc</option>
+                                        }
+                                    </select>
+                                    <i class="fs-input-icon fa fa-user-edit"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Salary Min -->
+                        <div class="col-xl-4 col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label for="jobSalaryMin" class="form-label">Mức lương tối thiểu <span class="required">*</span></label>
+                                <div class="ls-inputicon-box">
+                                    <input class="form-control" name="salarymin" id="jobSalaryMin" type="number" min="0" required
+                                           placeholder="Min" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                    <i class="fs-input-icon fa fa-dollar-sign"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Salary Max -->
+                        <div class="col-xl-4 col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label for="jobSalaryMax" class="form-label">Mức lương tối đa <span class="required">*</span></label>
+                                <div class="ls-inputicon-box">
+                                    <input class="form-control" name="salarymax" id="jobSalaryMin" type="number" min="1" required
+                                           placeholder="Max" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                    <i class="fs-input-icon fa fa-dollar-sign"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-4 col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label class="form-label" for="jobAcademicLevel">
+                                    Yêu cầu bằng cấp <span class="required">*</span>
+                                </label>
+                                <div class="ls-inputicon-box">
+                                    <select class="wt-select-box selectpicker" data-live-search="true" title="" required
+                                            name="degree" id="jobAcademicLevel" data-bv-field="size">
+                                        @* <option class="bs-title-option" value="">Chọn yêu cầu học vấn</option> *@
+                                        <option selected value="Không">Không yêu cầu</option>
+                                        <option value="Cử nhân">Cử nhân</option>
+                                        <option value="Kỹ sư">Kỹ sư</option>
+                                        <option value="Thạc sĩ">Thạc sĩ</option>
+                                        <option value="Tiến sĩ">Tiến sĩ</option>
+                                    </select>
+                                    <i class="fs-input-icon fa fa-user-graduate"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Gender-->
+                        <div class="col-xl-4 col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label class="form-label" for="jobGender">
+                                    Giới tính <span class="required">*</span>
+                                </label>
+                                <div class="ls-inputicon-box">
+                                    <select class="wt-select-box selectpicker" data-live-search="true" title="" required
+                                            name="gender" id="jobGender" data-bv-field="size">
+                                        @* <option class="bs-title-option" value="">Chọn giới tính</option> *@
+                                        <option value="male">Nam</option>
+                                        <option value="female">Nữ</option>
+                                    </select>
+                                    <i class="fs-input-icon fa fa-venus-mars"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--City-->
+                        <div class="col-xl-4 col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="city" class="form-label">
+                                    Tỉnh/ Thành phố <span class="required">*</span>
+                                </label>
+                                <div class="ls-inputicon-box">
+                                    <select class="form-select form-control" data-live-search="true" title="" name="city" required
+                                            id="city" data-bv-field="size">
+                                        <option class="bs-title-option" value="">
+                                            Tỉnh/ Thành phố
+                                        </option>
+                                    </select>
+                                    <i class="fs-input-icon fa fa-city"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- District -->
+                        <div class="col-xl-4 col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="district" class="form-label">
+                                    Quận/ Huyện <span class="required">*</span>
+                                </label>
+                                <div class="ls-inputicon-box">
+                                    <select class="form-select form-control" data-live-search="true" title="" name="district" required
+                                            id="district" data-bv-field="size">
+                                        <option class="bs-title-option" value="">
+                                            Quận/ Huyện
+                                        </option>
+                                    </select>
+                                    <i class="fs-input-icon fa fa-map-marker-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ward -->
+                        <div class="col-xl-4 col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="ward" class="form-label">Phường/ Xã <span class="required">*</span></label>
+                                <div class="ls-inputicon-box">
+                                    <select class="form-select form-control" data-live-search="true" title="" name="ward" required
+                                            id="ward" data-bv-field="size">
+                                        <option class="bs-title-option" value="">
+                                            Phường/ Xã
+                                        </option>
+                                    </select>
+                                    <i class="fs-input-icon fa fa-map-marker-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--End Date-->
+                        <div class="col-xl-4 col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label class="form-label" for="jobExpired">
+                                    Hạn nộp <span class="required">*</span>
+                                </label>
+                                <div class="ls-inputicon-box">
+                                    <input class="form-control datepicker" data-provide="datepicker" required
+                                           id="jobExpired" name="expiredtime" type="text"
+                                           placeholder="dd/mm/yyyy">
+                                    <i class="fs-input-icon far fa-calendar"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Complete Address-->
+                        <div class="col-xl-12 col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label class="form-label" for="jobAddress">Địa chỉ <span class="required">*</span></label>
+                                <div class="ls-inputicon-box">
+                                    <input class="form-control" name="address" id="jobAddress" type="text" required
+                                           placeholder="Address">
+                                    <i class="fs-input-icon fa fa-home"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="col-xl-12 col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label for="jobDesc" class="form-label">
+                                    Mô tả công việc <span class="required">*</span>
+                                </label>
+                                <textarea id="description" rows="15" name="description" class="form-control" required></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Requirement -->
+                        <div class="col-xl-12 col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label for="jobRequirement" class="form-label">
+                                    Yêu cầu công việc <span class="required">*</span>
+                                </label>
+                                <textarea id="description" rows="15" name="require" class="form-control" required></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Benefit -->
+                        <div class="col-xl-12 col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label for="jobBenefit" class="form-label">
+                                    Quyền lợi <span class="required">*</span>
+                                </label>
+                                <textarea id="description" rows="15" name="benefit" class="form-control" required></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Is Urgent -->
+                       @*  <div class="col-xl-12 col-lg-12 col-md-12 mb-5">
+                            <div class="form-check">
+                                <label for="jobUrgent" class="form-label form-check-label">Tuyển gấp</label>
+                                <input id="jobUrgent" type="checkbox" class="form-check-input">
+                                </input>
+                            </div>
+                        </div> *@
+
+                        <div class="col-lg-12 col-md-12">
+                            <div class="text-left">
+                                <button type="submit" class="site-button m-r5">Đăng tin</button>
+                                <button type="button" class="site-button m-r5">Lưu nháp</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <script>
+        alert("@Html.Raw(ViewBag.ErrorMessage)");
+    </script>
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+<script>
+    var citis = document.getElementById("city");
+    var districts = document.getElementById("district");
+    var wards = document.getElementById("ward");
+    var Parameter = {
+        url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
+        method: "GET",
+        responseType: "application/json",
+    };
+    var promise = axios(Parameter);
+    promise.then(function (result) {
+        renderCity(result.data);
+    });
+
+    function renderCity(data) {
+        for (const x of data) {
+            var option = new Option(x.Name, x.Name);
+            citis.options[citis.options.length] = option;
+        }
+        citis.onchange = function () {
+            district.length = 1;
+            ward.length = 1;
+            if (this.value != "") {
+                const result = data.filter(n => n.Name === this.value);
+
+                for (const k of result[0].Districts) {
+                    var option = new Option(k.Name, k.Name);
+                    districts.options[districts.options.length] = option;
+                }
+            }
+        };
+        districts.onchange = function () {
+            ward.length = 1;
+            const dataCity = data.filter((n) => n.Name === citis.value);
+            if (this.value != "") {
+                const dataWards = dataCity[0].Districts.filter(n => n.Name === this.value)[0].Wards;
+
+                for (const w of dataWards) {
+                    var option = new Option(w.Name, w.Name);
+                    wards.options[wards.options.length] = option;
+                }
+            }
+        };
+    }
+</script>

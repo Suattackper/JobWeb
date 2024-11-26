@@ -1,0 +1,205 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "RegisterCandidate";
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- META -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="" />
+    <meta name="author" content="" />
+    <meta name="robots" content="" />
+    <meta name="description" content="" />
+
+    <!-- FAVICONS ICON -->
+    <link rel="icon" href="~/Content/images/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="~/Content/images/job_seeker_logo.png" />
+
+    <!-- PAGE TITLE HERE -->
+    <title>Trang Chủ</title>
+
+    <!-- MOBILE SPECIFIC -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="~/Content/css/bootstrap.min.css"><!-- BOOTSTRAP STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/font-awesome.min.css"><!-- FONTAWESOME STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/feather.css"><!-- FEATHER ICON SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/owl.carousel.min.css"><!-- OWL CAROUSEL STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/magnific-popup.min.css"><!-- MAGNIFIC POPUP STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/lc_lightbox.css"><!-- Lc light box popup -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/bootstrap-select.min.css"><!-- BOOTSTRAP SLECT BOX STYLE SHEET  -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/dataTables.bootstrap5.min.css"><!-- DATA table STYLE SHEET  -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/select.bootstrap5.min.css">
+    <!-- DASHBOARD select bootstrap  STYLE SHEET  -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/dropzone.css"><!-- DROPZONE STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/scrollbar.css"><!-- CUSTOM SCROLL BAR STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/datepicker.css"><!-- DATEPICKER STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/flaticon.css"> <!-- Flaticon -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/swiper-bundle.min.css"><!-- Swiper Slider -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/style.css"><!-- MAIN STYLE SHEET -->
+    <!-- THEME COLOR CHANGE STYLE SHEET -->
+    <link rel="stylesheet" class="skin" type="text/css" href="~/Content/css/skins-type/skin-6.css">
+    <!-- SIDE SWITCHER STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/switcher.css">
+
+
+</head>
+
+<body>
+    <!-- LOADING AREA START ===== -->
+    <div class="loading-area">
+        <div class="loading-box"></div>
+        <div class="loading-pic">
+            <div class="wrapper">
+                <div class="cssload-loader"></div>
+            </div>
+        </div>
+    </div>
+    <!-- LOADING AREA  END ====== -->
+
+    <div class="page-wraper">
+        <!-- CONTENT START -->
+        <div class="page-content">
+
+            <div class="section-full site-bg-white">
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-5 twm-log-reg-media-wrap">
+                            <div class="twm-log-reg-media">
+                                <div class="twm-l-media">
+                                    <img src="~/Content/images/login-bg.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-7">
+                            <!-- Info Section -->
+                            <div class="login-section">
+                                <div class="container">
+                                    <div class="card-login">
+                                        <h4 class="card-title text-center mb-4">Đăng ký tài khoản</h4>
+                                        <div class="form-step active" id="step-1">
+                                            <form id="loginForm" action="@Url.Action("RegisterCandidate","Account")" method="post">
+                                                <div class="mb-3">
+                                                    <label for="fullname" class="form-label">
+                                                        Họ và tên <span class="required">*</span>
+                                                    </label>
+                                                    <input type="text" class="form-control" id="fullname" name="fullname"
+                                                           placeholder="Nhập họ và tên" required>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="email" class="form-label">
+                                                        Email <span class="required">*</span>
+                                                    </label>
+                                                    <input type="email" class="form-control" id="email" name="email"
+                                                           placeholder="Nhập email" required>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="password" class="form-label">
+                                                        Mật khẩu <span class="required">*</span>
+                                                    </label>
+                                                    <input type="password" class="form-control" id="password" name="password"
+                                                           placeholder="Nhập mật khẩu" required>
+                                                    <ul class="password-requirements mt-2 m-l10 fa-xs"
+                                                        id="passwordRequirements">
+                                                        <li>Ít nhất 12 ký tự</li>
+                                                        <li>Ít nhất 1 ký tự đặc biệt (! @@ # $ ...)</li>
+                                                        <li>Ít nhất 1 số</li>
+                                                        <li>Ít nhất 1 chữ viết HOA</li>
+                                                        <li>Ít nhất 1 chữ viết thường</li>
+                                                    </ul>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="confirm-password" class="form-label">
+                                                        Mật khẩu xác nhận
+                                                        <span class="required">*</span>
+                                                    </label>
+                                                    <input type="password" class="form-control" id="confirm-password" name="confirmpassword"
+                                                           placeholder="Nhập mật khẩu xác nhận" required>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <button class="theme-btn btn-style-one-login" type="submit"
+                                                            name="Register">
+                                                        Register
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <div class="text-center mt-4 mb-4">
+                                            <a href="@Url.Action("Login","Account")" class="site-text-primary">
+                                                Đã có tài khoản? Đăng nhập
+                                                ngay</a>
+                                        </div>
+
+                                        <div class="bottom-box">
+                                            <div class="btn-box row">
+                                                <div class="col-lg-6 col-md-12">
+                                                    <a href="#" class="theme-btn social-btn-two facebook-btn"><i
+                                                            class="fab fa-facebook-f"></i> Log In via Facebook</a>
+                                                </div>
+                                                <div class="col-lg-6 col-md-12">
+                                                    <a href="#" class="theme-btn social-btn-two google-btn"><i
+                                                            class="fab fa-google"></i> Log In via Gmail</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BUTTON TOP START -->
+        <button class="scroltop"><span class="fa fa-angle-up  relative" id="btn-vibrate"></span></button>
+
+    </div>
+
+
+    <!-- JAVASCRIPT  FILES ========================================= -->
+    <script src="~/Content/js/jquery-3.6.0.min.js"></script><!-- JQUERY.MIN JS -->
+    <script src="~/Content/js/popper.min.js"></script><!-- POPPER.MIN JS -->
+    <script src="~/Content/js/bootstrap.min.js"></script><!-- BOOTSTRAP.MIN JS -->
+    <script src="~/Content/js/magnific-popup.min.js"></script><!-- MAGNIFIC-POPUP JS -->
+    <script src="~/Content/js/waypoints.min.js"></script><!-- WAYPOINTS JS -->
+    <script src="~/Content/js/counterup.min.js"></script><!-- COUNTERUP JS -->
+    <script src="~/Content/js/waypoints-sticky.min.js"></script><!-- STICKY HEADER -->
+    <script src="~/Content/js/isotope.pkgd.min.js"></script><!-- MASONRY  -->
+    <script src="~/Content/js/imagesloaded.pkgd.min.js"></script><!-- MASONRY  -->
+    <script src="~/Content/js/owl.carousel.min.js"></script><!-- OWL  SLIDER  -->
+    <script src="~/Content/js/theia-sticky-sidebar.js"></script><!-- STICKY SIDEBAR  -->
+    <script src="~/Content/js/lc_lightbox.lite.js"></script><!-- IMAGE POPUP -->
+    <script src="~/Content/js/bootstrap-select.min.js"></script><!-- Form js -->
+    <script src="~/Content/js/dropzone.js"></script><!-- IMAGE UPLOAD  -->
+    <script src="~/Content/js/jquery.scrollbar.js"></script><!-- scroller -->
+    <script src="~/Content/js/bootstrap-datepicker.js"></script><!-- scroller -->
+    <script src="~/Content/js/jquery.dataTables.min.js"></script><!-- Datatable -->
+    <script src="~/Content/js/dataTables.bootstrap5.min.js"></script><!-- Datatable -->
+    <script src="~/Content/js/chart.js"></script><!-- Chart -->
+    <script src="~/Content/js/bootstrap-slider.min.js"></script><!-- Price range slider -->
+    <script src="~/Content/js/swiper-bundle.min.js"></script><!-- Swiper JS -->
+    <script src="~/Content/js/custom.js"></script><!-- CUSTOM FUCTIONS  -->
+    <script src="~/Content/js/switcher.js"></script><!-- SHORTCODE FUCTIONS  -->
+
+
+</body>
+
+</html>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <script>
+        alert("@Html.Raw(ViewBag.ErrorMessage)");
+    </script>
+}
+

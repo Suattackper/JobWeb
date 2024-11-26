@@ -1,0 +1,457 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\FE_JobWeb.bundle.scp.css",
+      "PackagePath": "staticwebassets\\FE_JobWeb.bundle.scp.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\bootstrap-select.min.css",
+      "PackagePath": "staticwebassets\\Content\\css\\bootstrap-select.min.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\bootstrap-slider.min.css",
+      "PackagePath": "staticwebassets\\Content\\css\\bootstrap-slider.min.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\Content\\css\\bootstrap.min.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\dataTables.bootstrap5.min.css",
+      "PackagePath": "staticwebassets\\Content\\css\\dataTables.bootstrap5.min.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\datepicker.css",
+      "PackagePath": "staticwebassets\\Content\\css\\datepicker.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\dropzone.css",
+      "PackagePath": "staticwebassets\\Content\\css\\dropzone.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\feather.css",
+      "PackagePath": "staticwebassets\\Content\\css\\feather.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\flaticon.css",
+      "PackagePath": "staticwebassets\\Content\\css\\flaticon.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\font-awesome.min.css",
+      "PackagePath": "staticwebassets\\Content\\css\\font-awesome.min.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\lc_lightbox.css",
+      "PackagePath": "staticwebassets\\Content\\css\\lc_lightbox.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\magnific-popup.min.css",
+      "PackagePath": "staticwebassets\\Content\\css\\magnific-popup.min.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\owl.carousel.min.css",
+      "PackagePath": "staticwebassets\\Content\\css\\owl.carousel.min.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\owl.video.play.html",
+      "PackagePath": "staticwebassets\\Content\\css\\owl.video.play.html"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\scrollbar.css",
+      "PackagePath": "staticwebassets\\Content\\css\\scrollbar.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\select.bootstrap5.min.css",
+      "PackagePath": "staticwebassets\\Content\\css\\select.bootstrap5.min.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\style.css",
+      "PackagePath": "staticwebassets\\Content\\css\\style.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\swiper-bundle.min.css",
+      "PackagePath": "staticwebassets\\Content\\css\\swiper-bundle.min.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\switcher.css",
+      "PackagePath": "staticwebassets\\Content\\css\\switcher.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\anm.js",
+      "PackagePath": "staticwebassets\\Content\\js\\anm.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\bootstrap-datepicker.js",
+      "PackagePath": "staticwebassets\\Content\\js\\bootstrap-datepicker.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\bootstrap-select.min.js",
+      "PackagePath": "staticwebassets\\Content\\js\\bootstrap-select.min.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\bootstrap-slider.min.js",
+      "PackagePath": "staticwebassets\\Content\\js\\bootstrap-slider.min.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\bootstrap.min.js",
+      "PackagePath": "staticwebassets\\Content\\js\\bootstrap.min.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\chart.js",
+      "PackagePath": "staticwebassets\\Content\\js\\chart.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\counterup.min.js",
+      "PackagePath": "staticwebassets\\Content\\js\\counterup.min.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\custom.js",
+      "PackagePath": "staticwebassets\\Content\\js\\custom.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\dataTables.bootstrap5.min.js",
+      "PackagePath": "staticwebassets\\Content\\js\\dataTables.bootstrap5.min.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\dropzone.js",
+      "PackagePath": "staticwebassets\\Content\\js\\dropzone.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\imagesloaded.pkgd.min.js",
+      "PackagePath": "staticwebassets\\Content\\js\\imagesloaded.pkgd.min.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\infobox.min.js",
+      "PackagePath": "staticwebassets\\Content\\js\\infobox.min.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\isotope.pkgd.min.js",
+      "PackagePath": "staticwebassets\\Content\\js\\isotope.pkgd.min.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\jquery-3.6.0.min.js",
+      "PackagePath": "staticwebassets\\Content\\js\\jquery-3.6.0.min.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\jquery.dataTables.min.js",
+      "PackagePath": "staticwebassets\\Content\\js\\jquery.dataTables.min.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\jquery.owl-filter.js",
+      "PackagePath": "staticwebassets\\Content\\js\\jquery.owl-filter.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\jquery.scrollbar.js",
+      "PackagePath": "staticwebassets\\Content\\js\\jquery.scrollbar.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\lc_lightbox.lite.js",
+      "PackagePath": "staticwebassets\\Content\\js\\lc_lightbox.lite.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\magnific-popup.min.js",
+      "PackagePath": "staticwebassets\\Content\\js\\magnific-popup.min.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\maps.js",
+      "PackagePath": "staticwebassets\\Content\\js\\maps.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\markerclusterer.js",
+      "PackagePath": "staticwebassets\\Content\\js\\markerclusterer.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\owl.carousel.min.js",
+      "PackagePath": "staticwebassets\\Content\\js\\owl.carousel.min.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\popper.min.js",
+      "PackagePath": "staticwebassets\\Content\\js\\popper.min.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\script.js",
+      "PackagePath": "staticwebassets\\Content\\js\\script.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\swiper-bundle.min.js",
+      "PackagePath": "staticwebassets\\Content\\js\\swiper-bundle.min.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\switcher.js",
+      "PackagePath": "staticwebassets\\Content\\js\\switcher.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\theia-sticky-sidebar.js",
+      "PackagePath": "staticwebassets\\Content\\js\\theia-sticky-sidebar.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\waypoints-sticky.min.js",
+      "PackagePath": "staticwebassets\\Content\\js\\waypoints-sticky.min.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\waypoints.min.js",
+      "PackagePath": "staticwebassets\\Content\\js\\waypoints.min.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\css\\site.css",
+      "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\favicon.ico",
+      "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\js\\site.js",
+      "PackagePath": "staticwebassets\\js\\site.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\LICENSE",
+      "PackagePath": "staticwebassets\\lib\\bootstrap"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css.map"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js.map"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\LICENSE.md"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.min.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.min.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\jquery\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery\\LICENSE.txt"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\jquery\\dist\\jquery.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\movieapp-2f052-firebase-adminsdk-uqcg4-93bfec4098.json",
+      "PackagePath": "staticwebassets\\movieapp-2f052-firebase-adminsdk-uqcg4-93bfec4098.json"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.FE_JobWeb.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.FE_JobWeb.props",
+      "PackagePath": "build\\FE_JobWeb.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.FE_JobWeb.props",
+      "PackagePath": "buildMultiTargeting\\FE_JobWeb.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.FE_JobWeb.props",
+      "PackagePath": "buildTransitive\\FE_JobWeb.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

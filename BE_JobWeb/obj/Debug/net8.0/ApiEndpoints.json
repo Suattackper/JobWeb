@@ -1,0 +1,441 @@
+[
+  {
+    "ContainingType": "BE_JobWeb.Controllers.AccountController",
+    "Method": "AddCandidate",
+    "RelativePath": "api/Account/addcandidate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "p",
+        "Type": "Data_JobWeb.Entity.JobSeekerUserLoginDatum",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.AccountController",
+    "Method": "AddRecruiter",
+    "RelativePath": "api/Account/addrecruiter",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "p",
+        "Type": "Data_JobWeb.Dtos.RegisterRecruiter",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.AccountController",
+    "Method": "ChangePassword",
+    "RelativePath": "api/Account/changepassword",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "e",
+        "Type": "Data_JobWeb.Entity.JobSeekerUserLoginDatum",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.AccountController",
+    "Method": "Login",
+    "RelativePath": "api/Account/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "e",
+        "Type": "Data_JobWeb.Entity.JobSeekerUserLoginDatum",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.AccountController",
+    "Method": "SendEmail",
+    "RelativePath": "api/Account/sendemail",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "sendmail",
+        "Type": "Data_JobWeb.Dtos.SendMail",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.AccountController",
+    "Method": "UpdateCandidateProfile",
+    "RelativePath": "api/Account/updatecandidateprofile",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "updatedProfile",
+        "Type": "Data_JobWeb.Entity.JobSeekerCandidateProfile",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.AccountController",
+    "Method": "UpdateProfile",
+    "RelativePath": "api/Account/updateprofile",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "e",
+        "Type": "Data_JobWeb.Entity.JobSeekerUserLoginDatum",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.AccountController",
+    "Method": "VerifyEmail",
+    "RelativePath": "api/Account/verifyemail/{email}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.AccountController",
+    "Method": "VerifyResetPassword",
+    "RelativePath": "api/Account/verifyresetpassword/{email}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.CertificateController",
+    "Method": "Add\u1EC4prience",
+    "RelativePath": "api/Certificate/addcertificate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "e",
+        "Type": "Data_JobWeb.Entity.JobSeekerCertificate",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.CertificateController",
+    "Method": "DeleteExperience",
+    "RelativePath": "api/Certificate/deletecertificate/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.CertificateController",
+    "Method": "Update\u1EC4prience",
+    "RelativePath": "api/Certificate/updatecertificate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "e",
+        "Type": "Data_JobWeb.Entity.JobSeekerCertificate",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.CompanyController",
+    "Method": "AddCompany",
+    "RelativePath": "api/Company/addcompany",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "p",
+        "Type": "Data_JobWeb.Entity.JobSeekerEnterprise",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.CompanyController",
+    "Method": "AddJobpost",
+    "RelativePath": "api/Company/addpostjob",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "p",
+        "Type": "Data_JobWeb.Entity.JobSeekerJobPosting",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.CompanyController",
+    "Method": "DeleteJobpost",
+    "RelativePath": "api/Company/deletepostjob/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.CompanyController",
+    "Method": "GetListJobApply",
+    "RelativePath": "api/Company/getlistjobapply",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.CompanyController",
+    "Method": "GetListJobpost",
+    "RelativePath": "api/Company/getlistpostjob",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.CompanyController",
+    "Method": "UpdateCompany",
+    "RelativePath": "api/Company/updatecompany",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "e",
+        "Type": "Data_JobWeb.Entity.JobSeekerEnterprise",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.CompanyController",
+    "Method": "UpdateJobpost",
+    "RelativePath": "api/Company/updatepostjob",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "p",
+        "Type": "Data_JobWeb.Entity.JobSeekerJobPosting",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.EducationController",
+    "Method": "Add\u1EC4prience",
+    "RelativePath": "api/Education/addeducation",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "e",
+        "Type": "Data_JobWeb.Entity.JobSeekerEducationDetail",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.EducationController",
+    "Method": "DeleteExperience",
+    "RelativePath": "api/Education/deleteeducation/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.EducationController",
+    "Method": "Update\u1EC4prience",
+    "RelativePath": "api/Education/updateeducation",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "e",
+        "Type": "Data_JobWeb.Entity.JobSeekerEducationDetail",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.ExperienceController",
+    "Method": "Add\u1EC4prience",
+    "RelativePath": "api/Experience/addexperience",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "e",
+        "Type": "Data_JobWeb.Entity.JobSeekerWorkingExperience",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.ExperienceController",
+    "Method": "DeleteExperience",
+    "RelativePath": "api/Experience/deleteexperience/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.ExperienceController",
+    "Method": "Update\u1EC4prience",
+    "RelativePath": "api/Experience/updateexperience",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "e",
+        "Type": "Data_JobWeb.Entity.JobSeekerWorkingExperience",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.JobController",
+    "Method": "GetJobcategory",
+    "RelativePath": "api/Job/getjobcategory",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.JobController",
+    "Method": "GetJobfield",
+    "RelativePath": "api/Job/getjobfield",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.JobController",
+    "Method": "GetJoblevel",
+    "RelativePath": "api/Job/getjoblevel",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.WeatherForecastController",
+    "Method": "Get",
+    "RelativePath": "api/WeatherForecast",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [],
+    "EndpointName": "GetWeatherForecast"
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.WeatherForecastController",
+    "Method": "getdemo",
+    "RelativePath": "api/WeatherForecast/demo",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  }
+]

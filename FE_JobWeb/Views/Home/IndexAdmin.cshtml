@@ -1,0 +1,102 @@
+﻿@{
+    ViewData["Title"] = "IndexAdmin";
+    Layout = "~/Views/Shared/_LayoutRecuiter.cshtml";
+}
+<div id="content">
+    <div class="content-admin-main">
+        <div class="wt-admin-right-page-header clearfix">
+            <h3>Job Admin Dashboard</h3>
+            <div class="breadcrumbs"><a href="@Url.Action("Index","Home")">Trang chủ</a><span>Dasboard</span></div>
+        </div>
+
+        <div class="twm-dash-b-blocks mb-5">
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 mb-3">
+                    <div class="panel panel-default">
+                        <div class="panel-body wt-panel-body dashboard-card-2 block-gradient">
+                            <div class="wt-card-wrap-2">
+                                <div class="wt-card-icon-2"><i class="feather-file-text"></i></div>
+                                <div class="wt-card-right wt-total-active-listing  ">25</div>
+                                <div class="wt-card-bottom-2 ">
+                                    <p class="m-b0 panel-title">Tổng số công việc</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 mb-3">
+                    <div class="panel panel-default">
+                        <div class="panel-body wt-panel-body dashboard-card-2 block-gradient-4">
+                            <div class="wt-card-wrap-2">
+                                <div class="wt-card-icon-2"><i class="feather-briefcase"></i></div>
+                                <div class="wt-card-right wt-total-listing-bookmarked  ">18</div>
+                                <div class="wt-card-bottom-2">
+                                    <p class="m-b0 panel-title">Tổng số ngành nghề</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 mb-3">
+                    <div class="panel panel-default">
+                        <div class="panel-body wt-panel-body dashboard-card-2 block-gradient-3">
+                            <div class="wt-card-wrap-2">
+                                <div class="wt-card-icon-2"><i class="feather-file-plus"></i></div>
+                                <div class="wt-card-right wt-total-listing-bookmarked  ">18</div>
+                                <div class="wt-card-bottom-2">
+                                    <p class="m-b0 panel-title">Tổng số bài đăng</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 mb-3">
+                    <div class="panel panel-default">
+                        <div class="panel-body wt-panel-body dashboard-card-2 block-gradient-2">
+                            <div class="wt-card-wrap-2">
+                                <div class="wt-card-icon-2"><i class="feather-clock"></i></div>
+                                <div class="wt-card-right wt-total-listing-review  ">28</div>
+                                <div class="wt-card-bottom-2">
+                                    <p class="m-b0 panel-title">Bài đăng chờ duyệt</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 mb-3">
+                    <div class="panel panel-default">
+                        <div class="panel-body wt-panel-body dashboard-card-2 block-gradient-3">
+                            <div class="wt-card-wrap-2">
+                                <div class="wt-card-icon-2"><i class="feather-users"></i></div>
+                                <div class="wt-card-right  wt-total-listing-view  ">435</div>
+                                <div class="wt-card-bottom-2">
+                                    <p class="m-b0 panel-title">Tổng số tài khoản</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 mb-3">
+                    <div class="panel panel-default">
+                        <div class="panel-body wt-panel-body dashboard-card-2 block-gradient">
+                            <div class="wt-card-wrap-2">
+                                <div class="wt-card-icon-2"><i class="fa fa-building"></i></div>
+                                <div class="wt-card-right wt-total-listing-bookmarked  ">18</div>
+                                <div class="wt-card-bottom-2">
+                                    <p class="m-b0 panel-title">Tổng số doanh nghiệp</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+@if (ViewBag.ErrorMessage != null)
+{
+    <script>
+        alert("@Html.Raw(ViewBag.ErrorMessage)");
+    </script>
+}

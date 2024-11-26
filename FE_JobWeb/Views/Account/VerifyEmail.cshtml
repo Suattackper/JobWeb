@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewData["Title"] = "VerifyEmail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-content">
+    <!-- FAQ START -->
+    <div class="section-full p-t120  p-b90 site-bg-white">
+        <div class="container">
+            <div class="verification-container">
+                <h4 class="text-dark fw-bold">Xác nhận email</h4>
+                <p class="text-secondary">Cảm ơn bạn đã đăng ký tài khoản Grabwork</p>
+
+                <div class="my-4">
+                    <img src="https://img.icons8.com/fluency/96/000000/secured-letter.png" alt="Email Icon">
+                </div>
+
+                <h6 class="text-dark fw-bold">Xác nhận địa chỉ email của bạn</h6>
+                <p class="text-secondary">
+                    Email xác nhận đã được gửi đến: <br>
+                    <strong id="email-address" class="email-text fw-bold ">1951050027huy@ou.edu.vn</strong>
+                </p>
+                <p class="text-secondary">Nhấp vào liên kết trong email để kích hoạt tài khoản của bạn</p>
+
+                <p class="mt-4 text-secondary">Không nhận được email? <a href="#" class="resend-link">Gửi lại email</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <script>
+        alert("@Html.Raw(ViewBag.ErrorMessage)");
+    </script>
+}
