@@ -27,6 +27,7 @@ namespace BE_JobWeb.Controllers
             Hasher hasher = new Hasher();
             JobSeekerUserLoginDatum c = db.JobSeekerUserLoginData.FirstOrDefault(p => p.Email == e.Email);
             if(c == null) return BadRequest("Login fail!");
+            if(c.EmailVerified == false) return BadRequest("Login fail!");
             bool checkpass = hasher.VerifyPassword(c.Password, e.Password);
             if (checkpass)
             {
@@ -113,9 +114,10 @@ namespace BE_JobWeb.Controllers
                 else
                 {
                     x.EmailVerified = true;
+                    x.StatusCode = "SC9";
                     db.SaveChanges();
                     //return Ok("Xác nhận email thành công");
-                    return RedirectToAction("http://localhost:5080/Account/Login");
+                    return Redirect("http://localhost:5080/Account/Login");
                 }
             }
             else return BadRequest(email + " không tồn tại trong hệ thống");
@@ -159,7 +161,7 @@ namespace BE_JobWeb.Controllers
 
                     return Ok("Url verify reset password đã được gửi đến " + sendmail.Email);
                 }
-                else
+                else //verifyemail
                 {
                     string url = $"http://localhost:5281/api/Account/verifyemail/{sendmail.Email}";
 

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "pmaxCiuN2i8IjcZGwSSoWEkU28rPeKPwXBfv+zUmIlE=",
+  "Hash": "sSh1/v5X/LQDC7z5iuW8YlxqSuHfnMjiqSrKKGhnrso=",
   "Source": "FE_JobWeb",
   "BasePath": "_content/FE_JobWeb",
   "Mode": "Default",
@@ -806,6 +806,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Content\\js\\markerclusterer.js"
+    },
+    {
+      "Identity": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\notification.js",
+      "SourceId": "FE_JobWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\",
+      "BasePath": "_content/FE_JobWeb",
+      "RelativePath": "Content/js/notification.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Content\\js\\notification.js"
     },
     {
       "Identity": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\owl.carousel.min.js",

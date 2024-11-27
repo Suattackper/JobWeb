@@ -69,7 +69,7 @@
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="ls-inputicon-box">
-                                                <select name="jobfield" id="field" class="form-select form-control" required>
+                                                <select name="jobfield" id="field" class="wt-select-box selectpicker" required>
                                                     @if (ViewBag.Jobfield != null)
                                                     {
                                                         foreach (var i in ViewBag.Jobfield)
@@ -100,7 +100,7 @@
                                                 Quy mô công ty <span class="required">*</span>
                                             </label>
                                             <div class="ls-inputicon-box">
-                                                <select name="companysize" id="company-size" class="form-select form-control" required>
+                                                <select name="companysize" id="company-size" class="wt-select-box selectpicker" required>
                                                     @* <option value="">Chọn quy mô công ty</option> *@
                                                     @if (Model.EnterpriseSize == "small")
                                                     {
@@ -404,12 +404,6 @@
     </div>
 </div>
 
-@if (ViewBag.ErrorMessage != null)
-{
-    <script>
-        alert("@Html.Raw(ViewBag.ErrorMessage)");
-    </script>
-}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
 <script>
     // function previewBanner() {

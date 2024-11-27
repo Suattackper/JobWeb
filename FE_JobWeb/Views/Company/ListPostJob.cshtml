@@ -580,12 +580,6 @@
         </div>
     </div>
 </div>
-@if (ViewBag.ErrorMessage != null)
-{
-    <script>
-        alert("@Html.Raw(ViewBag.ErrorMessage)");
-    </script>
-}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
 <script>
     function loadEditForm(id, title, quantity, category, worktype, exp, level, salarymin, salarymax, degree, gender, city, district, ward, expiredtime, address, description, require, benefit) {

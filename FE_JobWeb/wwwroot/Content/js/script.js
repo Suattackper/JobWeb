@@ -109,112 +109,110 @@ function previewBanner() {
 let fileUrl = ""; // To store the temporary URL for the uploaded file
 
 // Xử lý sự kiện tải file lên
-//async function handleFileUpload(event) {
-//  const file = event.target.files[0];
-//  if (!file) return;
+async function handleFileUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
 
-//  // Kiểm tra kích thước file (tối đa 5 MB)
-//  if (file.size > 5 * 1024 * 1024) {
-//    alert("File không được vượt quá 5MB.");
-//    return;
-//  }
+  // Kiểm tra kích thước file (tối đa 5 MB)
+  if (file.size > 5 * 1024 * 1024) {
+    alert("File không được vượt quá 5MB.");
+    return;
+  }
 
-//  // Cập nhật thông tin file
-//  //document.getElementById("fileName").textContent = file.name;
-//  //document.getElementById(
-//  //  "fileUpdateTime"
-//  //).textContent = `Cập nhật lần cuối ${new Date().toLocaleString()}`;
+  // Cập nhật thông tin file
+  document.getElementById("fileName").textContent = file.name;
+  document.getElementById(
+    "fileUpdateTime"
+  ).textContent = `Cập nhật lần cuối ${new Date().toLocaleString()}`;
 
-//  // Tạo URL tạm thời cho file
-//  if (fileUrl) URL.revokeObjectURL(fileUrl); // Hủy URL trước đó nếu có
-//  fileUrl = URL.createObjectURL(file);
+  // Tạo URL tạm thời cho file
+  if (fileUrl) URL.revokeObjectURL(fileUrl); // Hủy URL trước đó nếu có
+  fileUrl = URL.createObjectURL(file);
 
-//  // Hiển thị vùng xem trước CV
-//  const cvPreview = document.getElementById("cvPreview");
-//  const pdfThumbnail = document.getElementById("pdfThumbnail");
-//  const wordIcon = document.getElementById("wordIcon");
-//  cvPreview.style.display = "block";
+  // Hiển thị vùng xem trước CV
+  const cvPreview = document.getElementById("cvPreview");
+  const pdfThumbnail = document.getElementById("pdfThumbnail");
+  const wordIcon = document.getElementById("wordIcon");
+  cvPreview.style.display = "block";
 
-//  // Kiểm tra loại file (PDF hoặc Word)
-//  const fileExtension = file.name.split(".").pop().toLowerCase();
-//  if (fileExtension === "pdf") {
-//    // Hiển thị thumbnail PDF
-//    pdfThumbnail.style.display = "block";
-//    wordIcon.style.display = "none";
+  // Kiểm tra loại file (PDF hoặc Word)
+  const fileExtension = file.name.split(".").pop().toLowerCase();
+  if (fileExtension === "pdf") {
+    // Hiển thị thumbnail PDF
+    pdfThumbnail.style.display = "block";
+    wordIcon.style.display = "none";
 
-//    // Xử lý hiển thị nội dung PDF (nếu cần)
-//    const pdf = await pdfjsLib.getDocument(fileUrl).promise;
-//    const page = await pdf.getPage(1);
-//    const scale = 1.5;
-//    const viewport = page.getViewport({ scale });
-//    const canvas = document.getElementById("pdfThumbnail");
-//    const context = canvas.getContext("2d");
+    // Xử lý hiển thị nội dung PDF (nếu cần)
+    const pdf = await pdfjsLib.getDocument(fileUrl).promise;
+    const page = await pdf.getPage(1);
+    const scale = 1.5;
+    const viewport = page.getViewport({ scale });
+    const canvas = document.getElementById("pdfThumbnail");
+    const context = canvas.getContext("2d");
 
-//    canvas.width = viewport.width;
-//    canvas.height = viewport.height;
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
 
-//    const renderContext = {
-//      canvasContext: context,
-//      viewport: viewport,
-//    };
-//    await page.render(renderContext).promise;
-//  } else {
-//    // Hiển thị icon Word cho file Word
-//    //pdfThumbnail.style.display = "none";
-//      //wordIcon.style.display = "flex";
-//      alert("Vui lòng tải lên file pdf!");
-//  }
-//}
+    const renderContext = {
+      canvasContext: context,
+      viewport: viewport,
+    };
+    await page.render(renderContext).promise;
+  } else {
+    // Hiển thị icon Word cho file Word
+    pdfThumbnail.style.display = "none";
+    wordIcon.style.display = "flex";
+  }
+}
 
+// Mở file xem trước
+function openFilePreview() {
+  if (!fileUrl) {
+    alert("Không có file nào để xem trước.");
+    return;
+  }
 
-//// Mở file xem trước
-//function openFilePreview() {
-//  if (!fileUrl) {
-//    alert("Không có file nào để xem trước.");
-//    return;
-//  }
+  const fileExtension = document
+    .getElementById("fileName")
+    .textContent.split(".")
+    .pop()
+    .toLowerCase();
 
-//  const fileExtension = document
-//    .getElementById("fileName")
-//    .textContent.split(".")
-//    .pop()
-//    .toLowerCase();
+  if (fileExtension === "pdf") {
+    // Mở file PDF trong tab mới
+    window.open(fileUrl, "_blank");
+  } else {
+    // Kích hoạt tải xuống cho file Word
+    const link = document.createElement("a");
+    link.href = fileUrl;
+    link.download = document.getElementById("fileName").textContent;
+    link.click();
+  }
+}
 
-//  if (fileExtension === "pdf") {
-//    // Mở file PDF trong tab mới
-//    window.open(fileUrl, "_blank");
-//  } else {
-//    // Kích hoạt tải xuống cho file Word
-//    const link = document.createElement("a");
-//    link.href = fileUrl;
-//    link.download = document.getElementById("fileName").textContent;
-//    link.click();
-//  }
-//}
+// Hàm xử lý xóa CV
+function deleteCV() {
+  const cvPreview = document.getElementById("cvPreview");
+  const fileName = document.getElementById("fileName");
 
-//// Hàm xử lý xóa CV
-//function deleteCV() {
-//  const cvPreview = document.getElementById("cvPreview");
-//  const fileName = document.getElementById("fileName");
+  // Ẩn vùng xem trước và reset thông tin
+  cvPreview.style.display = "none";
+  fileName.textContent = "Không có CV nào được tải lên.";
+  document.getElementById("fileUpdateTime").textContent = "";
 
-//  // Ẩn vùng xem trước và reset thông tin
-//  cvPreview.style.display = "none";
-//  fileName.textContent = "Không có CV nào được tải lên.";
-//  document.getElementById("fileUpdateTime").textContent = "";
+  // Xóa URL tạm thời
+  if (fileUrl) URL.revokeObjectURL(fileUrl);
+  fileUrl = "";
 
-//  // Xóa URL tạm thời
-//  if (fileUrl) URL.revokeObjectURL(fileUrl);
-//  fileUrl = "";
+  // Reset lại input file
+  const fileInput = document.getElementById("fileInput");
+  fileInput.value = ""; // Reset input file
 
-//  // Reset lại input file
-//  const fileInput = document.getElementById("fileInput");
-//  fileInput.value = ""; // Reset input file
-
-//  // Ẩn modal xác nhận
-//  const deleteModal = document.getElementById("delete-cv");
-//  const modal = bootstrap.Modal.getInstance(deleteModal);
-//  modal.hide();
-//}
+  // Ẩn modal xác nhận
+  const deleteModal = document.getElementById("delete-cv");
+  const modal = bootstrap.Modal.getInstance(deleteModal);
+  modal.hide();
+}
 
 /*=============================================*/
 
@@ -277,3 +275,27 @@ fileInput.addEventListener("change", () => {
 });
 
 /*=============================================*/
+function previewFileJobCategory() {
+  const previewContainer = document.getElementById('img-job-category-preview');
+  const file = document.getElementById('img-upload-job-category').files[0]; // Lấy file đầu tiên
+
+  // Xóa nội dung hiện tại trong vùng xem trước
+  previewContainer.innerHTML = '';
+
+  if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+          const previewBox = document.createElement('div');
+          previewBox.classList.add('preview-box');
+          
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.alt = 'Uploaded Image';
+          img.style.maxWidth = '100%'; // Đảm bảo ảnh không vượt quá kích thước container
+          previewBox.appendChild(img);
+          
+          previewContainer.appendChild(previewBox);
+      };
+      reader.readAsDataURL(file);
+  }
+}

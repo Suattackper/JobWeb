@@ -161,6 +161,10 @@
       "PackagePath": "staticwebassets\\Content\\js\\markerclusterer.js"
     },
     {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\notification.js",
+      "PackagePath": "staticwebassets\\Content\\js\\notification.js"
+    },
+    {
       "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\owl.carousel.min.js",
       "PackagePath": "staticwebassets\\Content\\js\\owl.carousel.min.js"
     },

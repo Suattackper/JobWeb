@@ -171,7 +171,34 @@ namespace FE_JobWeb.Controllers
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("add candidate thanh cong");
-                return View("Login");
+                HttpClient client1 = new HttpClient();
+                //Call api
+                var apiUrl1 = "http://localhost:5281/api/account/sendemail";
+                string type = "verifyemail";
+                SendMail o1 = new SendMail();
+                o1.Email = email;
+                o1.Type = type;
+                // Convert đối tượng thành JSON
+                var content1 = new StringContent(JsonConvert.SerializeObject(o1), Encoding.UTF8, "application/json");
+                Console.WriteLine("json\n" + JsonConvert.SerializeObject(o1));
+                // Gửi yêu cầu POST tới API
+                HttpResponseMessage response1 = await client.PostAsync(apiUrl1, content1);
+
+                if (response1.IsSuccessStatusCode)
+                {
+                    ViewBag.ErrorMessage = "Chúng tôi đã gửi cho bạn một mail xác minh, vui lòng check mail và làm theo hướng dẫn để hoàn tất quy trình đăng ký!";
+                    Console.WriteLine("gui mail xac nhan email thanh cong");
+                    return View("Login");
+                }
+                else
+                {
+                    // Ghi log lỗi chi tiết từ API
+                    string errorDetails = await response1.Content.ReadAsStringAsync();
+                    Console.WriteLine("Register Candidate: Gui mail that bai voi ma loi: " + response1.StatusCode);
+                    Console.WriteLine("Chi tiet loi API: " + errorDetails);
+                    ViewBag.ErrorMessage = "Có 1 vấn đề nào đó xả ra, vui lòng kết nối tới chúng tôi để được giúp đỡ!";
+                    return View();
+                }
             }
             else
             {
@@ -191,10 +218,10 @@ namespace FE_JobWeb.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> RegisterRecruiterAsync(string fullname, string password, string email, string confirmpassword, string gender, string phone, string companyname, string companyemail, string companyphone, string taxcode, string companysize, string websiteurl, string city, string district, string ward, string jobfield, string addressdetail, DateTime foundeddate)
+        public async Task<IActionResult> RegisterRecruiter(string fullname, string password, string email, string confirmpassword, string gender, string phone, string companyname, string companyphone, string taxcode, string companysize, string websiteurl, string city, string district, string ward, string jobfield, string addressdetail, DateTime foundeddate)
         {
             #region validate
-            if (string.IsNullOrEmpty(fullname) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(confirmpassword) || string.IsNullOrEmpty(phone) || string.IsNullOrEmpty(gender) || string.IsNullOrEmpty(companyname) || string.IsNullOrEmpty(companyemail) || string.IsNullOrEmpty(companyphone) || string.IsNullOrEmpty(taxcode) || string.IsNullOrEmpty(companysize) || string.IsNullOrEmpty(websiteurl) || string.IsNullOrEmpty(city) || string.IsNullOrEmpty(district) || string.IsNullOrEmpty(ward) || string.IsNullOrEmpty(jobfield) || string.IsNullOrEmpty(addressdetail) || foundeddate == null)
+            if (string.IsNullOrEmpty(fullname) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(confirmpassword) || string.IsNullOrEmpty(phone) || string.IsNullOrEmpty(gender) || string.IsNullOrEmpty(companyname) || string.IsNullOrEmpty(companyphone) || string.IsNullOrEmpty(taxcode) || string.IsNullOrEmpty(companysize) || string.IsNullOrEmpty(websiteurl) || string.IsNullOrEmpty(city) || string.IsNullOrEmpty(district) || string.IsNullOrEmpty(ward) || string.IsNullOrEmpty(jobfield) || string.IsNullOrEmpty(addressdetail) || foundeddate == null)
             {
                 ViewBag.ErrorMessage = "Vui lòng nhập đầy đủ!";
                 ViewBag.Jobfield = await GetJobfield();
@@ -238,22 +265,15 @@ namespace FE_JobWeb.Controllers
                 ViewBag.Jobfield = await GetJobfield();
                 return View();
             }
-            if (!IsValidEmail(companyemail))
-            {
-                ViewBag.ErrorMessage = "Email công ty không hợp lệ!";
-                ViewBag.Jobfield = await GetJobfield();
-                return View();
-            }
-            JobSeekerEnterprise ll = db.JobSeekerEnterprises.FirstOrDefault(p => p.CompanyEmail == companyemail);
-            if (ll != null)
-            {
-                ViewBag.ErrorMessage = "Email công ty đã tồn tại!";
-                ViewBag.Jobfield = await GetJobfield();
-                return View();
-            }
             if (!IsValidPhoneNumber(companyphone))
             {
                 ViewBag.ErrorMessage = "Số điện thoại công ty không hợp lệ!";
+                ViewBag.Jobfield = await GetJobfield();
+                return View();
+            }
+            if (phone.Equals(companyphone))
+            {
+                ViewBag.ErrorMessage = "Số điện thoại công ty phải khác số điện thoại cá nhân!";
                 ViewBag.Jobfield = await GetJobfield();
                 return View();
             }
@@ -261,6 +281,12 @@ namespace FE_JobWeb.Controllers
             if (r1 != null)
             {
                 ViewBag.ErrorMessage = "Số điện thoại đã tồn tại!";
+                ViewBag.Jobfield = await GetJobfield();
+                return View();
+            }
+            if (DateOnly.FromDateTime(foundeddate) > DateOnly.FromDateTime(DateTime.UtcNow))
+            {
+                ViewBag.ErrorMessage = "Ngày thành lập không hợp lệ";
                 ViewBag.Jobfield = await GetJobfield();
                 return View();
             }
@@ -281,7 +307,7 @@ namespace FE_JobWeb.Controllers
             JobSeekerEnterprise e = new JobSeekerEnterprise();
             e.EnterpriseId = Guid.NewGuid();
             e.FullCompanyName = companyname;
-            e.CompanyEmail = companyemail;
+            e.CompanyEmail = email;
             e.CompanyPhoneContact = companyphone;
             e.TaxCode = taxcode;
             e.EnterpriseSize = companysize;
@@ -313,7 +339,34 @@ namespace FE_JobWeb.Controllers
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("add recruiter thanh cong");
-                return View("Login");
+                HttpClient client1 = new HttpClient();
+                //Call api
+                var apiUrl1 = "http://localhost:5281/api/account/sendemail";
+                string type = "verifyemail";
+                SendMail o1 = new SendMail();
+                o1.Email = email;
+                o1.Type = type;
+                // Convert đối tượng thành JSON
+                var content1 = new StringContent(JsonConvert.SerializeObject(o1), Encoding.UTF8, "application/json");
+                Console.WriteLine("json\n" + JsonConvert.SerializeObject(o1));
+                // Gửi yêu cầu POST tới API
+                HttpResponseMessage response1 = await client.PostAsync(apiUrl1, content1);
+
+                if (response1.IsSuccessStatusCode)
+                {
+                    ViewBag.ErrorMessage = "Chúng tôi đã gửi cho bạn một mail xác minh, vui lòng check mail và làm theo hướng dẫn để hoàn tất quy trình đăng ký!";
+                    Console.WriteLine("gui mail xac nhan email thanh cong");
+                    return View("Login");
+                }
+                else
+                {
+                    // Ghi log lỗi chi tiết từ API
+                    string errorDetails = await response1.Content.ReadAsStringAsync();
+                    Console.WriteLine("Register Candidate: Gui mail that bai voi ma loi: " + response1.StatusCode);
+                    Console.WriteLine("Chi tiet loi API: " + errorDetails);
+                    ViewBag.ErrorMessage = "Có 1 vấn đề nào đó xả ra, vui lòng kết nối tới chúng tôi để được giúp đỡ!";
+                    return View();
+                }
             }
             else
             {
@@ -370,7 +423,7 @@ namespace FE_JobWeb.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                ViewBag.ErrorMessage = "Chúng tôi đã gửi cho bạn một mail xác minh, vui lòng check mail và làm theo hướng dẫn để hoàn tất quy trình lấy lại mật khẩu!";
+                ViewBag.SuccessMessage = "Chúng tôi đã gửi cho bạn một mail xác minh, vui lòng check mail và làm theo hướng dẫn để hoàn tất quy trình lấy lại mật khẩu!";
                 Console.WriteLine("gui mail xac nhan forgotpass thanh cong");
                 return View("Login");
             }
@@ -455,7 +508,7 @@ namespace FE_JobWeb.Controllers
             if (response.IsSuccessStatusCode)
             {
                 user.User = c;
-                ViewBag.ErrorMessage = $"Cật nhật thông tin tài khoản thành công!";
+                ViewBag.SuccessMessage = $"Cật nhật thông tin tài khoản thành công!";
                 Console.WriteLine("cat nhat thong tin tai khoan thanh cong thanh cong");
                 return View();
             }
@@ -526,7 +579,7 @@ namespace FE_JobWeb.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                ViewBag.ErrorMessage = $"Mật khẩu mới là {newpassword}!";
+                ViewBag.SuccessMessage = $"Mật khẩu mới là {newpassword}!";
                 Console.WriteLine("change password thanh cong");
                 return View("MyProfile");
             }
@@ -545,7 +598,7 @@ namespace FE_JobWeb.Controllers
         {
             return View();
         }
-        public IActionResult CandidateProfile(string? error)
+        public IActionResult CandidateProfile(string? error, string? success)
         {
             JobSeekerCandidateProfile j = db.JobSeekerCandidateProfiles.FirstOrDefault(p => p.CandidateId == user.User.Id);
             if (j == null) return RedirectToAction("CandidateProfile", "Account", new { error = "Không tìm thấy profile candidate!" });
@@ -560,6 +613,7 @@ namespace FE_JobWeb.Controllers
             ViewBag.Certificate = m;
 
             if (error != null) ViewBag.ErrorMessage = error;
+            if (success != null) ViewBag.SuccessMessage = success;
             return View(j);
         }
         [HttpPost]
@@ -720,7 +774,7 @@ namespace FE_JobWeb.Controllers
                 {
                     user.User.AvartarUrl = o.AvartarUrl;
                     Console.WriteLine("cat nhat thong tin ho so thanh cong");
-                    return RedirectToAction("CandidateProfile", "Account", new { error = "Cật nhật thông tin hồ sơ thành công!" });
+                    return RedirectToAction("CandidateProfile", "Account", new { success = "Cật nhật thông tin hồ sơ thành công!" });
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
                 {
@@ -778,7 +832,7 @@ namespace FE_JobWeb.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     Console.WriteLine("cat nhat thong tin ho so thanh cong");
-                    return RedirectToAction("CandidateProfile", "Account", new { error = "Cật nhật thông tin hồ sơ thành công!" });
+                    return RedirectToAction("CandidateProfile", "Account", new { success = "Cật nhật thông tin hồ sơ thành công!" });
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
                 {
@@ -845,7 +899,7 @@ namespace FE_JobWeb.Controllers
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("cat nhat thong tin kinh nghiem tai khoan thanh cong thanh cong");
-                return RedirectToAction("CandidateProfile", "Account", new { error = "Cật nhật thông tin kinh nghiệm tài khoản thành công!" });
+                return RedirectToAction("CandidateProfile", "Account", new { success = "Cật nhật thông tin kinh nghiệm tài khoản thành công!" });
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
             {
@@ -911,7 +965,7 @@ namespace FE_JobWeb.Controllers
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("cat nhat thong tin kinh nghiem tai khoan thanh cong thanh cong");
-                return RedirectToAction("CandidateProfile", "Account", new { error = "Cật nhật thông tin kinh nghiệm tài khoản thành công!" });
+                return RedirectToAction("CandidateProfile", "Account", new { success = "Cật nhật thông tin kinh nghiệm tài khoản thành công!" });
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
             {
@@ -949,7 +1003,7 @@ namespace FE_JobWeb.Controllers
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("cat nhat thong tin kinh nghiem tai khoan thanh cong thanh cong");
-                return RedirectToAction("CandidateProfile", "Account", new { error = "Cật nhật thông tin kinh nghiệm tài khoản thành công!" });
+                return RedirectToAction("CandidateProfile", "Account", new { success = "Cật nhật thông tin kinh nghiệm tài khoản thành công!" });
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
             {
@@ -1016,7 +1070,7 @@ namespace FE_JobWeb.Controllers
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("cat nhat thong tin hoc van tai khoan thanh cong thanh cong");
-                return RedirectToAction("CandidateProfile", "Account", new { error = "Cật nhật thông tin học vấn tài khoản thành công!" });
+                return RedirectToAction("CandidateProfile", "Account", new { success = "Cật nhật thông tin học vấn tài khoản thành công!" });
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
             {
@@ -1083,7 +1137,7 @@ namespace FE_JobWeb.Controllers
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("cat nhat thong tin hoc van tai khoan thanh cong thanh cong");
-                return RedirectToAction("CandidateProfile", "Account", new { error = "Cật nhật thông tin học vấn tài khoản thành công!" });
+                return RedirectToAction("CandidateProfile", "Account", new { success = "Cật nhật thông tin học vấn tài khoản thành công!" });
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
             {
@@ -1121,7 +1175,7 @@ namespace FE_JobWeb.Controllers
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("cat nhat thong tin hoc van tai khoan thanh cong thanh cong");
-                return RedirectToAction("CandidateProfile", "Account", new { error = "Cật nhật thông tin học vấn tài khoản thành công!" });
+                return RedirectToAction("CandidateProfile", "Account", new { success = "Cật nhật thông tin học vấn tài khoản thành công!" });
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
             {
@@ -1179,7 +1233,7 @@ namespace FE_JobWeb.Controllers
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("cat nhat thong tin chung chi tai khoan thanh cong thanh cong");
-                return RedirectToAction("CandidateProfile", "Account", new { error = "Cật nhật thông tin chứng chỉ tài khoản thành công!" });
+                return RedirectToAction("CandidateProfile", "Account", new { success = "Cật nhật thông tin chứng chỉ tài khoản thành công!" });
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
             {
@@ -1237,7 +1291,7 @@ namespace FE_JobWeb.Controllers
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("cat nhat thong tin chung chi tai khoan thanh cong thanh cong");
-                return RedirectToAction("CandidateProfile", "Account", new { error = "Cật nhật thông tin chứng chỉ tài khoản thành công!" });
+                return RedirectToAction("CandidateProfile", "Account", new { success = "Cật nhật thông tin chứng chỉ tài khoản thành công!" });
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
             {
@@ -1275,7 +1329,7 @@ namespace FE_JobWeb.Controllers
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("cat nhat thong tin chung chi tai khoan thanh cong thanh cong");
-                return RedirectToAction("CandidateProfile", "Account", new { error = "Cật nhật thông tin chứng chỉ tài khoản thành công!" });
+                return RedirectToAction("CandidateProfile", "Account", new { success = "Cật nhật thông tin chứng chỉ tài khoản thành công!" });
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
             {

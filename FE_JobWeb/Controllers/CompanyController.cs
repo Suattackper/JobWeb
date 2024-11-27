@@ -25,7 +25,7 @@ namespace FE_JobWeb.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> CompanyProfile(string? error)
+        public async Task<IActionResult> CompanyProfile(string? error, string? success)
         {
             JobSeekerRecruiterProfile r = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == user.User.Id);
             if (r == null) return RedirectToAction("CompanyProfile", "Company", new { error = "Không tìm thấy profile recruiter!" });
@@ -34,6 +34,7 @@ namespace FE_JobWeb.Controllers
             if (e == null) return RedirectToAction("CompanyProfile", "Company", new { error = "Không tìm thấy profile company!" });
 
             if (error != null) ViewBag.ErrorMessage = error;
+            if (success != null) ViewBag.SuccessMessage = success;
 
             ViewBag.Jobfield = await GetJobfield();
 
@@ -112,7 +113,7 @@ namespace FE_JobWeb.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     Console.WriteLine("cat nhat thong tin cong ty thanh cong");
-                    return RedirectToAction("CompanyProfile", "Company", new { error = "Cật nhật thông tin công ty thành công!" });
+                    return RedirectToAction("CompanyProfile", "Company", new { success = "Cật nhật thông tin công ty thành công!" });
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
                 {
@@ -199,7 +200,7 @@ namespace FE_JobWeb.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     Console.WriteLine("cat nhat thong tin cong ty thanh cong");
-                    return RedirectToAction("CompanyProfile", "Company", new { error = "Cật nhật thông tin công ty thành công!" });
+                    return RedirectToAction("CompanyProfile", "Company", new { success = "Cật nhật thông tin công ty thành công!" });
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
                 {
@@ -259,7 +260,7 @@ namespace FE_JobWeb.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     Console.WriteLine("cat nhat thong tin cong ty thanh cong");
-                    return RedirectToAction("CompanyProfile", "Company", new { error = "Cật nhật thông tin công ty thành công!" });
+                    return RedirectToAction("CompanyProfile", "Company", new { success = "Cật nhật thông tin công ty thành công!" });
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
                 {
@@ -323,7 +324,7 @@ namespace FE_JobWeb.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     Console.WriteLine("cat nhat thong tin cong ty thanh cong");
-                    return RedirectToAction("CompanyProfile", "Company", new { error = "Cật nhật thông tin công ty thành công!" });
+                    return RedirectToAction("CompanyProfile", "Company", new { success = "Cật nhật thông tin công ty thành công!" });
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
                 {
@@ -421,7 +422,7 @@ namespace FE_JobWeb.Controllers
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("add job post thanh cong");
-                return RedirectToAction("PostJob", "Company", new { error = "Tạo bài đăng tuyển thành công!" });
+                return RedirectToAction("PostJob", "Company", new { success = "Tạo bài đăng tuyển thành công!" });
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
             {
@@ -454,6 +455,15 @@ namespace FE_JobWeb.Controllers
             {
                 string jobPostingsJson = TempData["JobPostings"] as string;
                 List<JobSeekerJobPosting> data = JsonConvert.DeserializeObject<List<JobSeekerJobPosting>>(jobPostingsJson);
+
+                if (!data.Any())
+                {
+                    data = await GetListPostJob();
+
+                    PaginatedList<JobSeekerJobPosting> paginatedJobs2 = PaginatedList<JobSeekerJobPosting>.Create(data, page, pageSize);
+
+                    return View(paginatedJobs2);
+                }
 
                 PaginatedList<JobSeekerJobPosting> paginatedJobs1 = PaginatedList<JobSeekerJobPosting>.Create(data, page, pageSize);
 
@@ -565,7 +575,7 @@ namespace FE_JobWeb.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     Console.WriteLine("update job post thanh cong");
-                    return RedirectToAction("ListPostJob", "Company", new { error = "Cật nhật bài đăng tuyển thành công!" });
+                    return RedirectToAction("ListPostJob", "Company", new { success = "Cật nhật bài đăng tuyển thành công!" });
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
                 {
@@ -607,7 +617,7 @@ namespace FE_JobWeb.Controllers
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("delete job post thanh cong");
-                return RedirectToAction("ListPostJob", "Company", new { error = "Xóa bài đăng tuyển thành công!" });
+                return RedirectToAction("ListPostJob", "Company", new { success = "Xóa bài đăng tuyển thành công!" });
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
             {

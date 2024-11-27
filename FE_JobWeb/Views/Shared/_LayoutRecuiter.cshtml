@@ -996,10 +996,34 @@
     <script src="~/Content/js/switcher.js"></script><!-- SHORTCODE FUCTIONS  -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
     <script src="~/Content/js/script.js"></script>
+    <script src="~/Content/js/notification.js"></script>
 
     
 
 </body>
 
 </html>
+<div id="toast-notification"></div>
+@if (ViewBag.ErrorMessage != null)
+{
+    <script>
+        toastNoti({
+            title: "Error!",
+            message: "@ViewBag.ErrorMessage",
+            type: "error",
+            duration: 3000
+        });
+    </script>
+}
+@if (ViewBag.SuccessMessage != null)
+{
+    <script>
+        toastNoti({
+            title: "Success!",
+            message: "@ViewBag.SuccessMessage",
+            type: "success",
+            duration: 3000
+        });
+    </script>
+}
 

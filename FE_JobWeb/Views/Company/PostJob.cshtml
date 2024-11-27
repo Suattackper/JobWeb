@@ -335,10 +335,27 @@
 
 </div>
 
+<div id="toast-notification"></div>
 @if (ViewBag.ErrorMessage != null)
 {
     <script>
-        alert("@Html.Raw(ViewBag.ErrorMessage)");
+        toastNoti({
+            title: "Error!",
+            message: "@ViewBag.ErrorMessage",
+            type: "error",
+            duration: 3000
+        });
+    </script>
+}
+@if (ViewBag.SuccessMessage != null)
+{
+    <script>
+        toastNoti({
+            title: "Error!",
+            message: "@ViewBag.SuccessMessage",
+            type: "success",
+            duration: 3000
+        });
     </script>
 }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
