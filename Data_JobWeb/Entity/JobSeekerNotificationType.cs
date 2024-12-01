@@ -10,6 +10,7 @@ public partial class JobSeekerNotificationType
     public string? TypeName { get; set; }
 
     public string? Description { get; set; }
+    public Guid? IdUser { get; set; }
+    public DateTime? IsCreateAt { get; set; }
 
-    public virtual ICollection<JobSeekerNotification> JobSeekerNotifications { get; set; } = new List<JobSeekerNotification>();
 }

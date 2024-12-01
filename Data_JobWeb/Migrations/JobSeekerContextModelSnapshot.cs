@@ -474,6 +474,12 @@ namespace Data_JobWeb.Migrations
                         .HasColumnType("nvarchar(500)")
                         .HasColumnName("full_company_name");
 
+                    b.Property<bool?>("IsCensorship")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_censorship");
+
                     b.Property<DateTime?>("IsCreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
@@ -536,6 +542,49 @@ namespace Data_JobWeb.Migrations
                     b.HasIndex("JobFieldId");
 
                     b.ToTable("job_seeker_enterprise", (string)null);
+                });
+
+            modelBuilder.Entity("Data_JobWeb.Entity.JobSeekerEnterpriseFollowed", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid?>("CandidateId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("candidate_id");
+
+                    b.Property<Guid?>("EnterpriseId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("enterprise_id");
+
+                    b.Property<DateTime?>("IsCreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasColumnName("is_created_at")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<DateTime?>("IsDeletedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("is_deleted_at");
+
+                    b.Property<DateTime?>("IsUpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasColumnName("is_updated_at")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.HasKey("Id")
+                        .HasName("PK__job_seek__3213E83F1E4AB212");
+
+                    b.HasIndex("CandidateId");
+
+                    b.HasIndex("EnterpriseId");
+
+                    b.ToTable("job_seeker_enterprise_followed", (string)null);
                 });
 
             modelBuilder.Entity("Data_JobWeb.Entity.JobSeekerJobCategory", b =>
@@ -812,17 +861,24 @@ namespace Data_JobWeb.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("id");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnName("description");
+
+                    b.Property<Guid?>("IdConcern")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("concern_id");
+
+                    b.Property<Guid?>("IdUserReceive")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("user_id");
+
                     b.Property<DateTime?>("IsCreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasColumnName("is_created_at")
                         .HasDefaultValueSql("(getdate())");
-
-                    b.Property<bool?>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false)
-                        .HasColumnName("is_deleted");
 
                     b.Property<bool?>("IsSeen")
                         .HasColumnType("bit")
@@ -832,28 +888,18 @@ namespace Data_JobWeb.Migrations
                         .HasColumnType("bit")
                         .HasColumnName("is_sent");
 
-                    b.Property<Guid?>("JobId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("job_id");
+                    b.Property<string>("Title")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("title");
 
-                    b.Property<string>("NotifyTypeId")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("notify_type_id");
-
-                    b.Property<Guid?>("UserLoginDataId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("user_login_data_id");
+                    b.Property<string>("Type")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
+                        .HasColumnName("type_name");
 
                     b.HasKey("Id")
                         .HasName("PK__job_seek__3213E83F63136065");
-
-                    b.HasIndex("JobId");
-
-                    b.HasIndex("NotifyTypeId");
-
-                    b.HasIndex("UserLoginDataId");
 
                     b.ToTable("job_seeker_notification", (string)null);
                 });
@@ -870,6 +916,15 @@ namespace Data_JobWeb.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)")
                         .HasColumnName("description");
+
+                    b.Property<Guid?>("IdUser")
+                        .HasMaxLength(100)
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id_user");
+
+                    b.Property<DateTime?>("IsCreateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("is_create_at");
 
                     b.Property<string>("TypeName")
                         .HasMaxLength(100)
@@ -1119,6 +1174,12 @@ namespace Data_JobWeb.Migrations
                         .HasColumnName("is_created_at")
                         .HasDefaultValueSql("(getdate())");
 
+                    b.Property<bool?>("IsDisable")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_disable");
+
                     b.Property<DateTime?>("IsUpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
@@ -1338,9 +1399,27 @@ namespace Data_JobWeb.Migrations
                     b.HasOne("Data_JobWeb.Entity.JobSeekerJobField", "JobField")
                         .WithMany("JobSeekerEnterprises")
                         .HasForeignKey("JobFieldId")
+                        .OnDelete(DeleteBehavior.SetNull)
                         .HasConstraintName("job_field_id_fk");
 
                     b.Navigation("JobField");
+                });
+
+            modelBuilder.Entity("Data_JobWeb.Entity.JobSeekerEnterpriseFollowed", b =>
+                {
+                    b.HasOne("Data_JobWeb.Entity.JobSeekerCandidateProfile", "Candidate")
+                        .WithMany("JobSeekerEnterpriseFolloweds")
+                        .HasForeignKey("CandidateId")
+                        .HasConstraintName("enterprise_followed_candidate_id_fk");
+
+                    b.HasOne("Data_JobWeb.Entity.JobSeekerEnterprise", "Enterprise")
+                        .WithMany("JobSeekerEnterpriseFolloweds")
+                        .HasForeignKey("EnterpriseId")
+                        .HasConstraintName("enterprise_followed_enterprise_id_fk");
+
+                    b.Navigation("Candidate");
+
+                    b.Navigation("Enterprise");
                 });
 
             modelBuilder.Entity("Data_JobWeb.Entity.JobSeekerJobPosting", b =>
@@ -1353,6 +1432,7 @@ namespace Data_JobWeb.Migrations
                     b.HasOne("Data_JobWeb.Entity.JobSeekerJobCategory", "JobCategory")
                         .WithMany("JobSeekerJobPostings")
                         .HasForeignKey("JobCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("job_posting_job_category_id_fk");
 
                     b.HasOne("Data_JobWeb.Entity.JobSeekerJobLevel", "JobLevelCodeNavigation")
@@ -1384,6 +1464,7 @@ namespace Data_JobWeb.Migrations
                     b.HasOne("Data_JobWeb.Entity.JobSeekerJobPosting", "JobPosting")
                         .WithMany("JobSeekerJobPostingApplies")
                         .HasForeignKey("JobPostingId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("job_posting_id_fk");
 
                     b.HasOne("Data_JobWeb.Entity.JobSeekerStatusCode", "StatusCodeNavigation")
@@ -1396,30 +1477,6 @@ namespace Data_JobWeb.Migrations
                     b.Navigation("JobPosting");
 
                     b.Navigation("StatusCodeNavigation");
-                });
-
-            modelBuilder.Entity("Data_JobWeb.Entity.JobSeekerNotification", b =>
-                {
-                    b.HasOne("Data_JobWeb.Entity.JobSeekerJobPosting", "Job")
-                        .WithMany("JobSeekerNotifications")
-                        .HasForeignKey("JobId")
-                        .HasConstraintName("job_posting_notify_id_fk");
-
-                    b.HasOne("Data_JobWeb.Entity.JobSeekerNotificationType", "NotifyType")
-                        .WithMany("JobSeekerNotifications")
-                        .HasForeignKey("NotifyTypeId")
-                        .HasConstraintName("notify_type_id_fk");
-
-                    b.HasOne("Data_JobWeb.Entity.JobSeekerUserLoginDatum", "UserLoginData")
-                        .WithMany("JobSeekerNotifications")
-                        .HasForeignKey("UserLoginDataId")
-                        .HasConstraintName("user_login_data_id_fk");
-
-                    b.Navigation("Job");
-
-                    b.Navigation("NotifyType");
-
-                    b.Navigation("UserLoginData");
                 });
 
             modelBuilder.Entity("Data_JobWeb.Entity.JobSeekerRecruiterProfile", b =>
@@ -1457,6 +1514,7 @@ namespace Data_JobWeb.Migrations
                     b.HasOne("Data_JobWeb.Entity.JobSeekerJobPosting", "JobPosting")
                         .WithMany("JobSeekerSavedJobPostings")
                         .HasForeignKey("JobPostingId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("saved_job_posting_id_fk");
 
                     b.Navigation("Candidate");
@@ -1516,6 +1574,8 @@ namespace Data_JobWeb.Migrations
 
                     b.Navigation("JobSeekerEducationDetails");
 
+                    b.Navigation("JobSeekerEnterpriseFolloweds");
+
                     b.Navigation("JobSeekerJobPostingApplies");
 
                     b.Navigation("JobSeekerSavedJobPostings");
@@ -1531,6 +1591,8 @@ namespace Data_JobWeb.Migrations
             modelBuilder.Entity("Data_JobWeb.Entity.JobSeekerEnterprise", b =>
                 {
                     b.Navigation("JobSeekerApplicantProfileSaveds");
+
+                    b.Navigation("JobSeekerEnterpriseFolloweds");
 
                     b.Navigation("JobSeekerJobPostings");
 
@@ -1556,14 +1618,7 @@ namespace Data_JobWeb.Migrations
                 {
                     b.Navigation("JobSeekerJobPostingApplies");
 
-                    b.Navigation("JobSeekerNotifications");
-
                     b.Navigation("JobSeekerSavedJobPostings");
-                });
-
-            modelBuilder.Entity("Data_JobWeb.Entity.JobSeekerNotificationType", b =>
-                {
-                    b.Navigation("JobSeekerNotifications");
                 });
 
             modelBuilder.Entity("Data_JobWeb.Entity.JobSeekerProvince", b =>
@@ -1588,8 +1643,6 @@ namespace Data_JobWeb.Migrations
             modelBuilder.Entity("Data_JobWeb.Entity.JobSeekerUserLoginDatum", b =>
                 {
                     b.Navigation("JobSeekerCandidateProfile");
-
-                    b.Navigation("JobSeekerNotifications");
 
                     b.Navigation("JobSeekerRecruiterProfile");
                 });

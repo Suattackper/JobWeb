@@ -1,4 +1,6 @@
-﻿using Data_JobWeb.Entity;
+﻿using BE_JobWeb.Others;
+using Data_JobWeb.Dtos;
+using Data_JobWeb.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -46,7 +48,8 @@ namespace BE_JobWeb.Controllers
             jobSeekerEnterprise.District = e.District;
             jobSeekerEnterprise.Ward = e.Ward;
             jobSeekerEnterprise.Address = e.Address;
-            jobSeekerEnterprise.IsUpdatedAt = DateTime.UtcNow; // Ghi nhận thời gian cập nhật
+            jobSeekerEnterprise.IsCensorship = e.IsCensorship;
+            jobSeekerEnterprise.IsUpdatedAt = DateTime.Now; // Ghi nhận thời gian cập nhật
 
             db.SaveChanges();
 
@@ -57,13 +60,37 @@ namespace BE_JobWeb.Controllers
         {
             return Ok(db.JobSeekerJobPostings.OrderByDescending(p => p.IsCreatedAt).ToList());
         }
+        [HttpGet("getlistenterprise")]
+        public IActionResult GetListEnterprise()
+        {
+            return Ok(db.JobSeekerEnterprises.OrderByDescending(p => p.IsCreatedAt).ToList());
+        }
         [HttpPost("addpostjob")]
         [Authorize(Roles = "1,2")]
         public IActionResult AddJobpost(JobSeekerJobPosting p)
         {
-            //Thêm công ty
             db.JobSeekerJobPostings.Add(p);
             db.SaveChanges();
+
+            JobSeekerUserLoginDatum admin = db.JobSeekerUserLoginData.FirstOrDefault(p => p.RoleId == 1);
+            if (admin == null) return Ok("Add job post success, create notification for admin fail!");
+
+            JobSeekerNotification notification = new JobSeekerNotification();
+            notification.Id = Guid.NewGuid().ToString();
+            notification.Type = "admin_newpostjob";
+            notification.Description = $"Bạn có 1 bài đăng mới đang chờ duyệt!";
+            notification.IsSeen = false;
+            notification.IsCreatedAt = DateTime.Now;
+            notification.IdConcern = p.Id;
+            db.JobSeekerNotifications.Add(notification);
+            db.SaveChanges();
+
+            EmailService e = new EmailService();
+            string title = $"Bạn có 1 bài đăng mới đang chờ duyệt! - JobWeb";
+            string url = $"http://localhost:5281/api/Account/notification/{admin.Id}";
+            string message = $"<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <title>{title}</title>\r\n</head>\r\n<body>\r\n    <h2>Chào {admin.FullName},</h2>\r\n    <p>Kiểm tra các thông báo của bạn tại đây:</p>\r\n    <a href=\"{url}\" style=\"background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; display: inline-block;\">Thông báo</a>\r\n    <p>Cảm ơn bạn,</p>\r\n    <p>Đội ngũ JobWeb</p>\r\n</body>\r\n</html>";
+
+            e.SendEmail(admin.Email, title, message);
 
             return Ok("Add job post success!");
         }
@@ -94,7 +121,7 @@ namespace BE_JobWeb.Controllers
             o.JobRequirement = p.JobRequirement;
             o.BenefitEnjoyed = p.BenefitEnjoyed;
             o.StatusCode = p.StatusCode;
-            o.IsUpdatedAt = DateTime.UtcNow;
+            o.IsUpdatedAt = DateTime.Now;
 
             db.SaveChanges();
 

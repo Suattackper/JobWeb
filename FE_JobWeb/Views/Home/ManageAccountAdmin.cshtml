@@ -1,0 +1,515 @@
+﻿@using Data_JobWeb.Entity;
+@using FE_JobWeb.Others
+@model PaginatedList<JobSeekerUserLoginDatum>
+@{
+    ViewData["Title"] = "ManageAccountAdmin";
+    Layout = "~/Views/Shared/_LayoutRecuiter.cshtml";
+}
+
+<div id="content">
+    <div class="content-admin-main">
+        <div class="wt-admin-right-page-header clearfix">
+            <h3>Admin - Danh sách tài khoản</h3>
+            <div class="breadcrumbs">
+                <a href="index.html">Trang chủ</a><a href="admin-dashboard.html">Dashboard</a><span>
+                    Danh
+                    sách tài khoản
+                </span>
+            </div>
+        </div>
+
+        <div class="twm-pro-view-chart-wrap">
+            <div class="panel panel-default site-bg-white m-t30">
+                <div class="panel-heading wt-panel-heading p-a20">
+                    <h4 class="panel-tittle m-a0"><i class="far fa-list-alt"></i>Danh sách các tài khoản</h4>
+                </div>
+                <form action="@Url.Action("ManageAccountAdmin","Home")" method="post">
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-8 mt-3">
+                            <div class="ls-inputicon-box">
+                                <input class="form-control" name="search" type="text" placeholder="Tìm kiếm" />
+                                <i class="fs-input-icon feather-search"></i>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-3 col-md-6 mt-3">
+                            <div class="ls-inputicon-box">
+                                <select class="wt-select-box selectpicker" data-live-search="true" title="" name="status" required
+                                        id="candidateMajor" data-bv-field="size">
+                                    <option class="bs-title-option" value="all">
+                                        Trạng thái
+                                    </option>
+                                    <option value="SC9">Đã xác thực</option>
+                                    <option value="SC8">Chưa xác thực</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-3 col-md-6 mt-3">
+                            <div class="ls-inputicon-box">
+                                <select class="wt-select-box selectpicker" data-live-search="true" title="" name="type" required
+                                        id="candidateMajor" data-bv-field="size">
+                                    <option selected class="bs-title-option" value="all">
+                                        Tài khoản
+                                    </option>
+                                    <option value="2">Nhà tuyển dụng</option>
+                                    <option value="3">Ứng viên</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-3 col-md-6 mt-3">
+                            <button type="submit" class="theme-btn w-100">Tìm kiếm</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Table -->
+                <div class="table-responsive profile-applied-job mt-3">
+                    <table class="table text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Họ tên</th>
+                                <th>Email</th>
+                                <th>Ngày đăng ký</th>
+                                <th>Tài khoản</th>
+                                <th>Email</th>
+                                <th>Trạng thái</th>
+                                @* <th>Hành động</th> *@
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Items != null && Model.Items.Count > 0)
+                            {
+                                JobSeekerContext db = new JobSeekerContext();
+                                int d = 0;
+                                foreach (JobSeekerUserLoginDatum i in Model.Items)
+                                {
+                                    if (i.RoleId == 1) continue;
+                                    d++;
+                                    <tr>
+                                        <td>@d</td>
+                                        <td class="candidate-name">
+                                            @i.FullName
+                                        </td>
+                                        @{
+                                            int maskLength1 = i.Email.Length - 3; // Số ký tự cần che.
+                                            string firstThreeChars1 = i.Email.Substring(0, 3); // Lấy 3 ký tự đầu.
+                                            string maskedPart1 = new string('*', maskLength1); // Tạo chuỗi dấu '*
+                                            string email = firstThreeChars1 + maskedPart1;
+                                        }
+                                        <td>@email</td>
+                                        <td>
+                                            @(i.IsCreatedAt.HasValue ? i.IsCreatedAt.Value.ToString("dd/MM/yyyy HH:mm:ss") : "Error")
+                                        </td>
+                                        @if (i.RoleId == 3)
+                                        {
+                                            <td><span class="candidate-account-tag">Ứng viên</span></td>
+                                        }
+                                        else
+                                        {
+                                            <td><span class="recruiter-account-tag">Nhà tuyển dụng</span></td>
+                                        }
+                                        @if (i.EmailVerified == true)
+                                        {
+                                            <td><span class="job-tag-new">Đã xác thực</span></td>
+                                        }
+                                        else
+                                        {
+                                            <td><span class="job-tag-urgent">Chưa xác thực</span></td>
+                                        }
+                                        @if (i.IsDisable == false)
+                                        {
+                                            if (i.IsActive == true)
+                                            {
+                                                <td><span class="job-tag-new">Đang hoạt động</span></td>
+                                            }
+                                            else
+                                            {
+                                                <td><span class="job-tag-urgent">Last @(i.LastActiveTime.HasValue ? i.LastActiveTime.Value.ToString("dd/MM/yyyy HH:mm:ss") : "Error")</span></td>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <td><span class="recruiter-account-tag">Vô hiệu hóa</span></td>
+                                        }
+                                        @if(i.RoleId == 3)
+                                        {
+                                            JobSeekerCandidateProfile r = db.JobSeekerCandidateProfiles.FirstOrDefault(p => p.CandidateId == i.Id);
+                                            if (r == null) r = new JobSeekerCandidateProfile();
+                                            var dateString = r.Dob.HasValue ? r.Dob.Value.ToString("dd/MM/yyyy") : "N/A";
+                                            var dateString1 = i.IsCreatedAt.HasValue ? i.IsCreatedAt.Value.ToString("dd/MM/yyyy") : "N/A";
+
+                                            int maskLength = r.PhoneNumb.Length - 3; // Số ký tự cần che.
+                                            string maskedPart = new string('*', maskLength); // Tạo chuỗi dấu '*'.
+                                            string lastThreeChars = r.PhoneNumb.Substring(r.PhoneNumb.Length - 3); // Lấy 3 ký tự cuối.
+                                            string phone = maskedPart + lastThreeChars;
+
+                                            <td>
+                                                <a data-bs-toggle="modal" href="#CandidateAccountModal" onclick="loadFormCandidate('@Html.Raw(i.FullName)', '@Html.Raw(email)', '@Html.Raw(phone)', '@Html.Raw(r.Gender)', '@Html.Raw(dateString)', '@Html.Raw(dateString1)', '@Html.Raw(r.LinkedinLink)', '@Html.Raw(r.PortfolioUrl)')"
+                                                   class="btn btn-outline-secondary btn-sm"><i class="feather-eye"></i></a>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            JobSeekerRecruiterProfile r = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == i.Id);
+                                            if (r == null) r = new JobSeekerRecruiterProfile();
+                                            JobSeekerEnterprise e = db.JobSeekerEnterprises.FirstOrDefault(p => p.EnterpriseId == r.EnterpriseId);
+                                            if (e == null) e = new JobSeekerEnterprise();
+                                            var dateString = i.IsCreatedAt.HasValue ? i.IsCreatedAt.Value.ToString("dd/MM/yyyy") : "N/A";
+
+
+                                            int maskLength = r.PhoneNumb.Length - 3; // Số ký tự cần che.
+                                            string maskedPart = new string('*', maskLength); // Tạo chuỗi dấu '*'.
+                                            string lastThreeChars = r.PhoneNumb.Substring(r.PhoneNumb.Length - 3); // Lấy 3 ký tự cuối.
+                                            string phone = maskedPart + lastThreeChars;
+
+                                            <td>
+                                                <a data-bs-toggle="modal" href="#RecruiterAccountModal" onclick="loadFormRecruiter('@Html.Raw(i.FullName)', '@Html.Raw(email)', '@Html.Raw(phone)', '@Html.Raw(e.CompanyPhoneContact)', '@Html.Raw(r.Gender)', '@Html.Raw(e.FullCompanyName)', '@Html.Raw(dateString)', '@Html.Raw(e.WebsiteUrl)')"
+                                                   class="btn btn-outline-secondary btn-sm"><i class="feather-eye"></i></a>
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination-outer">
+                    <div class="pagination-style1">
+                        <ul class="clearfix">
+                            <!-- Previous Page -->
+                            @if (Model.HasPreviousPage)
+                            {
+                                <li class="prev">
+                                    <a href="@Url.Action("ManageAccountAdmin", "Home", new { page = Model.CurrentPage - 1 })">
+                                        <span>
+                                            <i class="fa fa-angle-left"></i>
+                                        </span>
+                                    </a>
+                                </li>
+                            }
+                            <!-- Page Numbers -->
+                            @for (var i = 1; i <= Model.TotalPages; i++)
+                            {
+                                if (Model.TotalPages >= 5)
+                                {
+                                    if (i == Model.CurrentPage - 1)
+                                    {
+                                        if (i > 3)
+                                        {
+                                            <li>
+                                                <a class="javascript:;" href="javascript:;">
+                                                    <i class="fa fa-ellipsis-h"></i>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    if (i == 1 || i == 2 || i == Model.TotalPages || i == Model.TotalPages - 1 || i == Model.CurrentPage || i == Model.CurrentPage - 1 || i == Model.CurrentPage + 1)
+                                    {
+                                        <li class="@(i == Model.CurrentPage ? "active" : "")">
+                                            <a href="@Url.Action("ManageAccountAdmin", "Home", new { page = i })">@i</a>
+                                        </li>
+                                    }
+                                    if (i == Model.CurrentPage + 1)
+                                    {
+                                        if (i < Model.TotalPages - 2)
+                                        {
+                                            <li>
+                                                <a class="javascript:;" href="javascript:;">
+                                                    <i class="fa fa-ellipsis-h"></i>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <li class="@(i == Model.CurrentPage ? "active" : "")">
+                                        <a href="@Url.Action("ManageAccountAdmin", "Home", new { page = i })">@i</a>
+                                    </li>
+                                }
+                            }
+                            <!-- Next Page -->
+                            @if (Model.HasNextPage)
+                            {
+                                <li class="next">
+                                    <a href="@Url.Action("ManageAccountAdmin", "Home", new { page = Model.CurrentPage + 1 })">
+                                        <span>
+                                            <i class="fa fa-angle-right"></i>
+                                        </span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade twm-saved-jobs-view" id="RecruiterAccountModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h3 class="modal-title">Thông tin tài khoản nhà tuyển dụng</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="panel panel-default">
+                            <div class="panel-body wt-panel-body m-b20 ">
+                                <form>
+                                    <div class="row">
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="recruiterName" class="form-label">
+                                                    Họ tên
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                            <input class="form-control" name="recruiter_name" type="text" id="recruitername" disabled />
+                                                    <i class="fs-input-icon fa fa-user"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="recruiterEmail" class="form-label">
+                                                    Email (công ty)
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="recruiter_emai" type="email" id="recruiteremail" disabled />
+                                                    <i class="fs-input-icon fa fa-envelope"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="recruiterPhone" class="form-label">
+                                                    Số điện thoại cá nhân
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="recruiter_phone" type="text" id="recruiterphone" disabled />
+                                                    <i class="fs-input-icon fa fa-envelope"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="gender" class="form-label">
+                                                    Giới tính
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="gender" type="text" id="recruitergender" disabled />
+                                                    <i class="fs-input-icon fa fa-genderless"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="registerDate" class="form-label">
+                                                    Ngày đăng ký
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="register_date" type="text" id="recruitercreateday" disabled />
+                                                    <i class="fs-input-icon fa fa-calendar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="registerDate" class="form-label">
+                                                    Địa chỉ website
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="register_date" type="text" id="recruitercompanywebsite" disabled />
+                                                    <i class="fs-input-icon fa fa-calendar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="recruiterPhone" class="form-label">
+                                                    Số điện thoại công ty
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="recruiter_phone" type="text" id="recruitercompanyphone" disabled />
+                                                    <i class="fs-input-icon fa fa-envelope"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="companyName" class="form-label">
+                                                    Tên công ty
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="recruiter_company_name" type="text" id="recruitercompanyname" disabled />
+                                                    <i class="fs-input-icon fa fa-building"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade twm-saved-jobs-view" id="CandidateAccountModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h3 class="modal-title">Thông tin tài khoản ứng viên</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="panel panel-default">
+                            <div class="panel-body wt-panel-body m-b20 ">
+                                <form>
+                                    <div class="row">
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="candidateName" class="form-label">
+                                                    Họ tên
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="candidate_name" type="text" id="candidatename" disabled />
+                                                    <i class="fs-input-icon fa fa-user"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="candidateEmail" class="form-label">
+                                                    Email
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="candidate_emai" type="email" id="candidateemail" disabled />
+                                                    <i class="fs-input-icon fa fa-envelope"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="candidatePhone" class="form-label">
+                                                    Số điện thoại
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="candidate_phone" type="text" id="candidatephone" disabled />
+                                                    <i class="fs-input-icon fa fa-envelope"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="gender" class="form-label">
+                                                    Giới tính
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="gender" type="text" id="candidategender" disabled />
+                                                    <i class="fs-input-icon fa fa-genderless"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="companyName" class="form-label">
+                                                    Ngày sinh
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="recruiter_company_name" type="text" id="candidatedob" disabled />
+                                                    <i class="fs-input-icon fa fa-building"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="registerDate" class="form-label">
+                                                    Ngày đăng ký
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="register_date" type="text" id="candidatecreateday" disabled/>
+                                                    <i class="fs-input-icon fa fa-calendar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="registerDate" class="form-label">
+                                                    Linkedin
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="register_date" type="text" id="candidatelinkedin" disabled/>
+                                                    <i class="fs-input-icon fa fa-calendar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="registerDate" class="form-label">
+                                                    Portfolio
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="register_date" type="text" id="candidateportfolio" disabled/>
+                                                    <i class="fs-input-icon fa fa-calendar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function loadFormRecruiter(recruitername, recruiteremail, recruiterphone, recruitercompanyphone, recruitergender, recruitercompanyname, recruitercreateday, recruitercompanywebsite) {
+        document.getElementById('recruitername').value = recruitername;
+        document.getElementById('recruiteremail').value = recruiteremail;
+        document.getElementById('recruiterphone').value = recruiterphone;
+        document.getElementById('recruitercompanyphone').value = recruitercompanyphone;
+        document.getElementById('recruitercompanyname').value = recruitercompanyname;
+        document.getElementById('recruitercreateday').value = recruitercreateday;
+        document.getElementById('recruitercompanywebsite').value = recruitercompanywebsite; 
+
+        if (recruitergender === 'male') {
+            document.getElementById('recruitergender').value = 'Nam';
+        } else if (recruitergender === 'female') {
+            document.getElementById('recruitergender').value = 'Nữ';
+        } else {
+            document.getElementById('recruitergender').value = 'Khác';
+        }
+    } 
+    function loadFormCandidate(candidatename, candidateemail, candidatephone, candidategender, candidatedob, candidatecreateday, candidatelinkedin, candidateportfolio) {
+        document.getElementById('candidatename').value = candidatename;
+        document.getElementById('candidateemail').value = candidateemail;
+        document.getElementById('candidatephone').value = candidatephone;
+        document.getElementById('candidatedob').value = candidatedob;
+        document.getElementById('candidatecreateday').value = candidatecreateday;
+        document.getElementById('candidatelinkedin').value = candidatelinkedin;
+        document.getElementById('candidateportfolio').value = candidateportfolio;
+
+        if (candidategender === 'male') {
+            document.getElementById('candidategender').value = 'Nam';
+        } else if (candidategender === 'female') {
+            document.getElementById('candidategender').value = 'Nữ';
+        } else {
+            document.getElementById('candidategender').value = 'Khác';
+        }
+    }
+
+</script>

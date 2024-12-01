@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "sSh1/v5X/LQDC7z5iuW8YlxqSuHfnMjiqSrKKGhnrso=",
+  "Hash": "TzksRtYvn9feJqWSt9M1cNuiu9eoHGDBuEkTU/nyOjA=",
   "Source": "FE_JobWeb",
   "BasePath": "_content/FE_JobWeb",
   "Mode": "Default",
@@ -274,6 +274,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Content\\css\\magnific-popup.min.css"
+    },
+    {
+      "Identity": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\nice-select.min.css",
+      "SourceId": "FE_JobWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\",
+      "BasePath": "_content/FE_JobWeb",
+      "RelativePath": "Content/css/nice-select.min.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Content\\css\\nice-select.min.css"
     },
     {
       "Identity": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\owl.carousel.min.css",
@@ -806,6 +825,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Content\\js\\markerclusterer.js"
+    },
+    {
+      "Identity": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\nice-select.min.js",
+      "SourceId": "FE_JobWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\",
+      "BasePath": "_content/FE_JobWeb",
+      "RelativePath": "Content/js/nice-select.min.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Content\\js\\nice-select.min.js"
     },
     {
       "Identity": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\notification.js",

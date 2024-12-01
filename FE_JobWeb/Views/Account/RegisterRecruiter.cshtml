@@ -44,9 +44,16 @@
     <link rel="stylesheet" class="skin" type="text/css" href="~/Content/css/skins-type/skin-6.css">
     <!-- SIDE SWITCHER STYLE SHEET -->
     <link rel="stylesheet" type="text/css" href="~/Content/css/switcher.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/css/nice-select.min.css">
 
 
 </head>
+
+<style>
+    .form-select.form-control {
+        width: 100%; /* Chiếm toàn bộ chiều rộng container */
+    }
+</style>
 
 <body>
     <!-- LOADING AREA START ===== -->
@@ -261,7 +268,7 @@
 
                                                 <!-- Tỉnh/Thành phố and Quận/Huyện on the same row -->
                                                 <div class="row">
-                                                    <div class="col-md-6 mb-3">
+                                                    <div class="col-md-6">
                                                         <label for="city" class="form-label">
                                                             Tỉnh/ Thành phố <span class="required">*</span>
                                                         </label>
@@ -362,6 +369,7 @@
     <script src="~/Content/js/custom.js"></script><!-- CUSTOM FUCTIONS  -->
     <script src="~/Content/js/switcher.js"></script><!-- SHORTCODE FUCTIONS  -->
     <script src="~/Content/js/notification.js"></script>
+    <script src="~/Content/js/nice-select.min.js"></script>
 
 
 </body>

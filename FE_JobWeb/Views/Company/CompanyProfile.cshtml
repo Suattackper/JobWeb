@@ -72,6 +72,7 @@
                                                 <select name="jobfield" id="field" class="wt-select-box selectpicker" required>
                                                     @if (ViewBag.Jobfield != null)
                                                     {
+                                                        <option value="">Chọn lĩnh vực hoạt động</option>
                                                         foreach (var i in ViewBag.Jobfield)
                                                         {
                                                             if (Model.JobFieldId == i.JobFieldId)
@@ -122,6 +123,7 @@
                                                     }
                                                     else
                                                     {
+                                                        <option value="">Chọn quy mô công ty</option>
                                                         <option value="small">Dưới 50 nhân viên</option>
                                                         <option value="medium">50-200 nhân viên</option>
                                                         <option value="large">Trên 200 nhân viên</option>

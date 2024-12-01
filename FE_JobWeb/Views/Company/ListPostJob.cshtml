@@ -117,9 +117,9 @@
                                                 }
                                                 <td>
                                                     @{
-                                                        var dateString = i.TimePost.HasValue ? i.TimePost.Value.ToString("dd/MM/yyyy") : "N/A";
+                                                        var dateString = i.ExpiredTime.HasValue ? i.ExpiredTime.Value.ToString("dd/MM/yyyy") : "N/A";
                                                     }
-                                                    <a data-bs-toggle="modal" href="#JobPostingEditModal" onclick="loadEditForm('@i.Id', '@i.JobTitle', '@i.Quantity', '@i.JobCategoryId', '@i.WorkingType', '@i.ExpRequirement', '@i.JobLevelCode', '@i.SalaryMin', '@i.SalaryMax', '@i.AcademicLevel', '@i.GenderRequire', '@i.Province', '@i.District', '@i.Ward', '@dateString', ' @i.Address', '@i.JobDesc' , '@i.JobRequirement' , '@i.BenefitEnjoyed' )"
+                                                    <a data-bs-toggle="modal" href="#JobPostingEditModal" onclick="loadEditForm('@Html.Raw(i.Id)', '@Html.Raw(i.JobTitle)', '@Html.Raw(i.Quantity)', '@Html.Raw(i.JobCategoryId)', '@Html.Raw(i.WorkingType)', '@Html.Raw(i.ExpRequirement)', '@Html.Raw(i.JobLevelCode)', '@Html.Raw(i.SalaryMin)', '@Html.Raw(i.SalaryMax)', '@Html.Raw(i.AcademicLevel)', '@Html.Raw(i.GenderRequire)', '@Html.Raw(i.Province)', '@Html.Raw(i.District)', '@Html.Raw(i.Ward)', '@Html.Raw(dateString)', '@Html.Raw(i.Address)', '@Html.Raw(i.JobDesc)', '@Html.Raw(i.JobRequirement)', '@Html.Raw(i.BenefitEnjoyed)')"
                                                        class="btn btn-outline-secondary btn-sm">
                                                         <i class="feather-edit"></i>
                                                     </a>
@@ -309,10 +309,11 @@
                                         Ngành nghề <span class="required">*</span>
                                     </label>
                                     <div class="ls-inputicon-box">
-                                        <select class="wt-select-box selectpicker" data-live-search="true" title="" name="category" required
+                                        <select class="form-select form-control" data-live-search="true" title="" name="category" required
                                                 id="category" data-bv-field="size">
                                             @if (ViewBag.Jobcategory != null)
                                             {
+                                                <option value="">Chọn ngành nghề</option>
                                                 foreach (var i in ViewBag.Jobcategory)
                                                 {
                                                     <option value="@i.Id">@i.JobCategoryName</option>
@@ -336,9 +337,9 @@
                                         Hình thức làm việc <span class="required">*</span>
                                     </label>
                                     <div class="ls-inputicon-box">
-                                        <select class="wt-select-box selectpicker" data-live-search="true" title="" required
+                                        <select class="form-select form-control" data-live-search="true" title="" required
                                                 name="worktype" id="worktype" data-bv-field="size">
-                                            @* <option class="bs-title-option" value="">Hình thức</option> *@
+                                            <option class="bs-title-option" value="">Hình thức</option>
                                             <option selected value="fulltime">Toàn thời gian</option>
                                             <option value="parttime">Bán thời gian</option>
                                             <option value="intern">Thực tập</option>
@@ -355,9 +356,9 @@
                                         Kinh nghiệm <span class="required">*</span>
                                     </label>
                                     <div class="ls-inputicon-box">
-                                        <select class="wt-select-box selectpicker" data-live-search="true" title="" required
+                                        <select class="form-select form-control" data-live-search="true" title="" required
                                                 name="exp" id="exp" data-bv-field="size">
-                                            @* <option class="bs-title-option" value="">Chọn kinh nghiệm</option> *@
+                                            <option class="bs-title-option" value="">Chọn kinh nghiệm</option>
                                             <option selected value="0">Không yêu cầu kinh nghiệm</option>
                                             <option value="1">1 năm</option>
                                             <option value="2">2 năm</option>
@@ -378,11 +379,12 @@
                                         Vị trí/ Cấp bậc <span class="required">*</span>
                                     </label>
                                     <div class="ls-inputicon-box">
-                                        <select class="wt-select-box selectpicker" data-live-search="true" title="" required
+                                        <select class="form-select form-control" data-live-search="true" title="" required
                                                 name="level" id="level" data-bv-field="size">
                                             @* <option class="bs-title-option" value="">Chọn vị trí - cấp bậc</option> *@
                                             @if (ViewBag.Joblevel != null)
                                             {
+                                                <option value="">Chọn vị trí - cấp bậc</option>
                                                 foreach (var i in ViewBag.Joblevel)
                                                 {
                                                     <option value="@i.Id">@i.JobLevelName</option>
@@ -428,10 +430,10 @@
                                         Yêu cầu bằng cấp <span class="required">*</span>
                                     </label>
                                     <div class="ls-inputicon-box">
-                                        <select class="wt-select-box selectpicker" data-live-search="true" title="" required
+                                        <select class="form-select form-control" data-live-search="true" title="" required
                                                 name="degree" id="degree" data-bv-field="size">
-                                            @* <option class="bs-title-option" value="">Chọn yêu cầu học vấn</option> *@
-                                            <option selected value="Không">Không yêu cầu</option>
+                                            <option class="bs-title-option" value="">Chọn yêu cầu học vấn</option>
+                                            <option value="Không">Không yêu cầu</option>
                                             <option value="Cử nhân">Cử nhân</option>
                                             <option value="Kỹ sư">Kỹ sư</option>
                                             <option value="Thạc sĩ">Thạc sĩ</option>
@@ -449,9 +451,9 @@
                                         Giới tính <span class="required">*</span>
                                     </label>
                                     <div class="ls-inputicon-box">
-                                        <select class="wt-select-box selectpicker" data-live-search="true" title="" required
+                                        <select class="form-select form-control" data-live-search="true" title="" required
                                                 name="gender" id="gender" data-bv-field="size">
-                                            @* <option class="bs-title-option" value="">Chọn giới tính</option> *@
+                                            <option class="bs-title-option" value="">Chọn giới tính</option>
                                             <option value="male">Nam</option>
                                             <option value="female">Nữ</option>
                                         </select>
@@ -573,7 +575,7 @@
 
                     <div class="modal-footer">
                         <button type="submit" class="site-button m-r10">Cập nhật</button>
-                        <button type="button" class="site-button">Hủy</button>
+                        <button type="button" class="site-button" data-bs-dismiss="modal">Hủy</button>
                     </div>
                 </form>
             </div>

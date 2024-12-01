@@ -35,7 +35,7 @@ namespace BE_JobWeb.Controllers
             c.EndDate = e.EndDate;
             c.CandidateId = e.CandidateId;
             // Cập nhật thời gian chỉnh sửa
-            c.IsUpdatedAt = DateTime.UtcNow;
+            c.IsUpdatedAt = DateTime.Now;
 
             db.SaveChanges();
 

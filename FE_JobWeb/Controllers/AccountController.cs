@@ -27,9 +27,8 @@ namespace FE_JobWeb.Controllers
         {
             this.user = user;
         }
-        public IActionResult Login(string? error)
+        public IActionResult Login()
         {
-            if (error != null) ViewBag.ErrorMessage = error;
             return View();
         }
         [HttpPost]
@@ -78,7 +77,7 @@ namespace FE_JobWeb.Controllers
                     {
                         HttpOnly = true, // Cookie chỉ có thể truy cập từ server
                         Secure = true, // Cookie chỉ được truyền qua HTTPS
-                        Expires = DateTime.UtcNow.AddHours(1) // Thời gian hết hạn
+                        Expires = DateTime.Now.AddHours(1) // Thời gian hết hạn
                     };
                     Response.Cookies.Append("jwtToken", token, options);
 
@@ -104,13 +103,31 @@ namespace FE_JobWeb.Controllers
             }
         }
         [HttpGet]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            user.User = null;
-            // Xóa token 
-            Response.Cookies.Delete("jwtToken");
+            HttpClient client = new HttpClient();
+            //Call api
+            var apiUrl = $"http://localhost:5281/api/account/logout/{user.User.Id}";
+            HttpResponseMessage response = await client.GetAsync(apiUrl);
 
-            return RedirectToAction("Index", "Home");
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("logout thanh cong");
+                user.User = null;
+                // Xóa token 
+                Response.Cookies.Delete("jwtToken");
+
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                // Ghi log lỗi chi tiết từ API
+                string errorDetails = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("Logout: Logout that bai: " + response.StatusCode);
+                Console.WriteLine("Chi tiet loi API: " + errorDetails);
+                ViewBag.ErrorMessage = "Có 1 vấn đề nào đó xả ra, vui lòng kết nối tới chúng tôi để được giúp đỡ!";
+                return RedirectToAction("Index", "Home");
+            }
         }
         //Đăng kí úng viên
         public IActionResult RegisterCandidate()
@@ -158,7 +175,7 @@ namespace FE_JobWeb.Controllers
             p.Id = Guid.NewGuid();
             p.EmailVerified = false;
             p.StatusCode = "SC8"; // email chưa xác thực
-            p.IsCreatedAt = DateTime.UtcNow;
+            p.IsCreatedAt = DateTime.Now;
             p.AvartarUrl = "https://firebasestorage.googleapis.com/v0/b/movieapp-2f052.appspot.com/o/JobWeb%2FImageUsers%2Fprofile_1.png?alt=media";
 
             //Call api
@@ -284,7 +301,7 @@ namespace FE_JobWeb.Controllers
                 ViewBag.Jobfield = await GetJobfield();
                 return View();
             }
-            if (DateOnly.FromDateTime(foundeddate) > DateOnly.FromDateTime(DateTime.UtcNow))
+            if (DateOnly.FromDateTime(foundeddate) > DateOnly.FromDateTime(DateTime.Now))
             {
                 ViewBag.ErrorMessage = "Ngày thành lập không hợp lệ";
                 ViewBag.Jobfield = await GetJobfield();
@@ -301,7 +318,7 @@ namespace FE_JobWeb.Controllers
             p.RoleId = 2;
             p.EmailVerified = false;
             p.StatusCode = "SC8"; // email chưa xác thực
-            p.IsCreatedAt = DateTime.UtcNow;
+            p.IsCreatedAt = DateTime.Now;
             p.AvartarUrl = "https://firebasestorage.googleapis.com/v0/b/movieapp-2f052.appspot.com/o/JobWeb%2FImageUsers%2Fprofile_1.png?alt=media";
 
             JobSeekerEnterprise e = new JobSeekerEnterprise();
@@ -318,6 +335,7 @@ namespace FE_JobWeb.Controllers
             e.JobFieldId = int.Parse(jobfield);
             e.Address = addressdetail;
             e.FoundedDate = DateOnly.FromDateTime(foundeddate);
+            e.IsCensorship = false;
             e.LogoUrl = "https://firebasestorage.googleapis.com/v0/b/movieapp-2f052.appspot.com/o/JobWeb%2FImageUsers%2Fprofile_1.png?alt=media";
             e.CoverImgUrl = "https://firebasestorage.googleapis.com/v0/b/movieapp-2f052.appspot.com/o/JobWeb%2FImageUsers%2Fprofile_1.png?alt=media";
 
@@ -644,7 +662,7 @@ namespace FE_JobWeb.Controllers
                 }
                 else return RedirectToAction("CandidateProfile", "Account", new { error = "Không tìm thấy hồ sơ candiate!" });
 
-                if (DateOnly.FromDateTime(dob) > DateOnly.FromDateTime(DateTime.UtcNow)) return RedirectToAction("CandidateProfile", "Account", new { error = "Ngày sinh không hợp lệ!" });
+                if (DateOnly.FromDateTime(dob) > DateOnly.FromDateTime(DateTime.Now)) return RedirectToAction("CandidateProfile", "Account", new { error = "Ngày sinh không hợp lệ!" });
                 #endregion
                 HttpClient client = new HttpClient();
                 //Call api
@@ -860,10 +878,10 @@ namespace FE_JobWeb.Controllers
             #region validate
             if (string.IsNullOrEmpty(jobtitle) || string.IsNullOrEmpty(companyname) || string.IsNullOrEmpty(description) || startday == null) return RedirectToAction("CandidateProfile", "Account", new { error = "Vui lòng nhập đầy đủ!" });
 
-            if (startday > DateTime.UtcNow) return RedirectToAction("CandidateProfile", "Account", new { error = "Ngày bắt đầu không hợp lệ!" });
+            if (startday > DateTime.Now) return RedirectToAction("CandidateProfile", "Account", new { error = "Ngày bắt đầu không hợp lệ!" });
             if (endday != null && endday != DateTime.MinValue)
             {
-                if (endday > DateTime.UtcNow) return RedirectToAction("CandidateProfile", "Account", new { error = "Ngày kết thúc không hợp lệ!" });
+                if (endday > DateTime.Now) return RedirectToAction("CandidateProfile", "Account", new { error = "Ngày kết thúc không hợp lệ!" });
                 if (endday < startday) return RedirectToAction("CandidateProfile", "Account", new { error = "Ngày kết thúc phải lớn hơn ngày bắt đầu!" });
             }
             #endregion
@@ -926,10 +944,10 @@ namespace FE_JobWeb.Controllers
             #region validate
             if (string.IsNullOrEmpty(jobtitle) || string.IsNullOrEmpty(companyname) || string.IsNullOrEmpty(description) || startday == null) return RedirectToAction("CandidateProfile", "Account", new { error = "Vui lòng nhập đầy đủ!" });
 
-            if (startday > DateTime.UtcNow) return RedirectToAction("CandidateProfile", "Account", new { error = "Ngày bắt đầu không hợp lệ!" });
+            if (startday > DateTime.Now) return RedirectToAction("CandidateProfile", "Account", new { error = "Ngày bắt đầu không hợp lệ!" });
             if (endday != null && endday != DateTime.MinValue)
             {
-                if (endday > DateTime.UtcNow) return RedirectToAction("CandidateProfile", "Account", new { error = "Ngày kết thúc không hợp lệ!" });
+                if (endday > DateTime.Now) return RedirectToAction("CandidateProfile", "Account", new { error = "Ngày kết thúc không hợp lệ!" });
                 if (endday < startday) return RedirectToAction("CandidateProfile", "Account", new { error = "Ngày kết thúc phải lớn hơn ngày bắt đầu!" });
             }
             #endregion
@@ -1030,10 +1048,10 @@ namespace FE_JobWeb.Controllers
             #region validate
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(major) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(degree) || startday == null) return RedirectToAction("CandidateProfile", "Account", new { error = "Vui lòng nhập đầy đủ!" });
 
-            if (startday > DateTime.UtcNow) return RedirectToAction("CandidateProfile", "Account", new { error = "Ngày bắt đầu không hợp lệ!" });
+            if (startday > DateTime.Now) return RedirectToAction("CandidateProfile", "Account", new { error = "Ngày bắt đầu không hợp lệ!" });
             if (endday != null && endday != DateTime.MinValue)
             {
-                if (endday > DateTime.UtcNow) return RedirectToAction("CandidateProfile", "Account", new { error = "Ngày kết thúc không hợp lệ!" });
+                if (endday > DateTime.Now) return RedirectToAction("CandidateProfile", "Account", new { error = "Ngày kết thúc không hợp lệ!" });
                 if (endday < startday) return RedirectToAction("CandidateProfile", "Account", new { error = "Ngày kết thúc phải lớn hơn ngày bắt đầu!" });
             }
             #endregion
@@ -1097,10 +1115,10 @@ namespace FE_JobWeb.Controllers
             #region validate
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(major) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(degree) || startday == null) return RedirectToAction("CandidateProfile", "Account", new { error = "Vui lòng nhập đầy đủ!" });
 
-            if (startday > DateTime.UtcNow) return RedirectToAction("CandidateProfile", "Account", new { error = "Ngày bắt đầu không hợp lệ!" });
+            if (startday > DateTime.Now) return RedirectToAction("CandidateProfile", "Account", new { error = "Ngày bắt đầu không hợp lệ!" });
             if (endday != null && endday != DateTime.MinValue)
             {
-                if (endday > DateTime.UtcNow) return RedirectToAction("CandidateProfile", "Account", new { error = "Ngày kết thúc không hợp lệ!" });
+                if (endday > DateTime.Now) return RedirectToAction("CandidateProfile", "Account", new { error = "Ngày kết thúc không hợp lệ!" });
                 if (endday < startday) return RedirectToAction("CandidateProfile", "Account", new { error = "Ngày kết thúc phải lớn hơn ngày bắt đầu!" });
             }
             #endregion

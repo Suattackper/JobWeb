@@ -1,7 +1,9 @@
-﻿@{
+﻿@using Data_JobWeb.Entity;
+@{
     ViewData["Title"] = "IndexAdmin";
     Layout = "~/Views/Shared/_LayoutRecuiter.cshtml";
 }
+
 <div id="content">
     <div class="content-admin-main">
         <div class="wt-admin-right-page-header clearfix">
@@ -11,7 +13,7 @@
 
         <div class="twm-dash-b-blocks mb-5">
             <div class="row">
-                <div class="col-xl-4 col-lg-4 col-md-12 mb-3">
+                @* <div class="col-xl-4 col-lg-4 col-md-12 mb-3">
                     <div class="panel panel-default">
                         <div class="panel-body wt-panel-body dashboard-card-2 block-gradient">
                             <div class="wt-card-wrap-2">
@@ -23,13 +25,13 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> *@
                 <div class="col-xl-4 col-lg-4 col-md-12 mb-3">
                     <div class="panel panel-default">
                         <div class="panel-body wt-panel-body dashboard-card-2 block-gradient-4">
                             <div class="wt-card-wrap-2">
                                 <div class="wt-card-icon-2"><i class="feather-briefcase"></i></div>
-                                <div class="wt-card-right wt-total-listing-bookmarked  ">18</div>
+                                <div class="wt-card-right wt-total-listing-bookmarked  ">@(ViewBag.Totaljobcategory != null ? ViewBag.Totaljobcategory : 0) </div>
                                 <div class="wt-card-bottom-2">
                                     <p class="m-b0 panel-title">Tổng số ngành nghề</p>
                                 </div>
@@ -42,7 +44,7 @@
                         <div class="panel-body wt-panel-body dashboard-card-2 block-gradient-3">
                             <div class="wt-card-wrap-2">
                                 <div class="wt-card-icon-2"><i class="feather-file-plus"></i></div>
-                                <div class="wt-card-right wt-total-listing-bookmarked  ">18</div>
+                                <div class="wt-card-right wt-total-listing-bookmarked  ">@(ViewBag.Totaljob != null ? ViewBag.Totaljob : 0)</div>
                                 <div class="wt-card-bottom-2">
                                     <p class="m-b0 panel-title">Tổng số bài đăng</p>
                                 </div>
@@ -55,7 +57,7 @@
                         <div class="panel-body wt-panel-body dashboard-card-2 block-gradient-2">
                             <div class="wt-card-wrap-2">
                                 <div class="wt-card-icon-2"><i class="feather-clock"></i></div>
-                                <div class="wt-card-right wt-total-listing-review  ">28</div>
+                                <div class="wt-card-right wt-total-listing-review  ">@(ViewBag.Totaljobnotapprove != null ? ViewBag.Totaljobnotapprove : 0)</div>
                                 <div class="wt-card-bottom-2">
                                     <p class="m-b0 panel-title">Bài đăng chờ duyệt</p>
                                 </div>
@@ -68,9 +70,22 @@
                         <div class="panel-body wt-panel-body dashboard-card-2 block-gradient-3">
                             <div class="wt-card-wrap-2">
                                 <div class="wt-card-icon-2"><i class="feather-users"></i></div>
-                                <div class="wt-card-right  wt-total-listing-view  ">435</div>
+                                <div class="wt-card-right  wt-total-listing-view  ">@(ViewBag.Totalcandidate != null ? ViewBag.Totalcandidate : 0)</div>
                                 <div class="wt-card-bottom-2">
-                                    <p class="m-b0 panel-title">Tổng số tài khoản</p>
+                                    <p class="m-b0 panel-title">Tổng số ứng viên</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 mb-3">
+                    <div class="panel panel-default">
+                        <div class="panel-body wt-panel-body dashboard-card-2 block-gradient">
+                            <div class="wt-card-wrap-2">
+                                <div class="wt-card-icon-2"><i class="feather-users"></i></div>
+                                <div class="wt-card-right  wt-total-listing-view  ">@(ViewBag.Totalrecruiter != null ? ViewBag.Totalrecruiter : 0)</div>
+                                <div class="wt-card-bottom-2">
+                                    <p class="m-b0 panel-title">Tổng số nhà tuyển dụng</p>
                                 </div>
                             </div>
                         </div>
@@ -81,7 +96,7 @@
                         <div class="panel-body wt-panel-body dashboard-card-2 block-gradient">
                             <div class="wt-card-wrap-2">
                                 <div class="wt-card-icon-2"><i class="fa fa-building"></i></div>
-                                <div class="wt-card-right wt-total-listing-bookmarked  ">18</div>
+                                <div class="wt-card-right wt-total-listing-bookmarked  ">@(ViewBag.Totalenterprise != null ? ViewBag.Totalenterprise : 0)</div>
                                 <div class="wt-card-bottom-2">
                                     <p class="m-b0 panel-title">Tổng số doanh nghiệp</p>
                                 </div>
@@ -91,6 +106,1036 @@
                 </div>
             </div>
         </div>
+        <div class="col-lg-12">
+            <div class="user-profile-card">
+                <div class="panel-heading wt-panel-heading p-a20">
+                    <h4 class="panel-tittle m-a0"><i class="fa fa-bell"></i> Các thông báo</h4>
+                </div>
+                <div class="user-notification mt-4">
+                    @if (ViewBag.NotificationAdmin != null && ViewBag.NotificationAdmin.Count > 0)
+                    {
+                        int d = 0;
+                        foreach (JobSeekerNotification i in ViewBag.NotificationAdmin)
+                        {
+                            if (i.IsSeen == true) continue;
+                            if (d == 5) break;
+                            d++;
+                            <div class="user-notification-item">
+                                @* <div class="user-notification-icon">
+                                    <img src="images/jobs-company/axon-active-logo.jpg" alt="">
+                                </div> *@
+                                <div class="user-notification-info">
+                                    <p>@i.Description</p>
+                                    <span>@(i.IsCreatedAt.HasValue ? i.IsCreatedAt.Value.ToString("dd/MM/yyyy HH:mm") : "Error")</span>
+                                </div>
+                                <i class="feather-trash"></i>
+                            </div>
+                        }
+                    }
+                    @* <div class="user-notification-item">
+                        <div class="user-notification-icon">
+                        <img src="images/jobs-company/axon-active-logo.jpg" alt="">
+                        </div>
+                        <div class="user-notification-info">
+                            <p>You Have New Application For <b>Web Designer</b>!</p>
+                            <span>just now</span>
+                        </div>
+                        <i class="feather-trash"></i>
+                    </div> *@
+                </div>
+            </div>
+        </div>
+        <div id="taikhoandangki" class="twm-pro-view-chart-wrap">
+            <div class="panel panel-default site-bg-white m-t30">
+                <div class="panel-heading wt-panel-heading p-a20">
+                    <h4 class="panel-tittle m-a0"><i class="fa fa-user"></i>Các tài khoản đăng ký gần đây</h4>
+                </div>
 
+                <div class="table-responsive profile-applied-job mt-3">
+                    <table class="table text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Họ tên</th>
+                                <th>Email</th>
+                                <th>Ngày đăng ký</th>
+                                <th>Tài khoản</th>
+                                <th>Email</th>
+                                <th>Trạng thái</th>
+                                @* <th>Hành động</th> *@
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.Account != null && ViewBag.Account.Count > 0)
+                            {
+                                int d = 0;
+                                foreach (JobSeekerUserLoginDatum i in ViewBag.Account)
+                                {
+                                    if (i.RoleId == 1) continue;
+                                    JobSeekerContext db = new JobSeekerContext();
+                                    d++;
+                                    <tr>
+                                        <td>@d</td>
+                                        <td class="candidate-name">
+                                            @i.FullName
+                                        </td>
+                                        @{
+                                            int maskLength1 = i.Email.Length - 3; // Số ký tự cần che.
+                                            string firstThreeChars1 = i.Email.Substring(0, 3); // Lấy 3 ký tự đầu.
+                                            string maskedPart1 = new string('*', maskLength1); // Tạo chuỗi dấu '*
+                                            string email = firstThreeChars1 + maskedPart1;
+                                        }
+                                        <td>@email</td>
+                                        <td>
+                                            @(i.IsCreatedAt.HasValue ? i.IsCreatedAt.Value.ToString("dd/MM/yyyy HH:mm:ss") : "Error")
+                                        </td>
+                                        @if(i.RoleId == 3)
+                                        {
+                                            <td><span class="candidate-account-tag">Ứng viên</span></td>
+                                        }
+                                        else
+                                        {
+                                            <td><span class="recruiter-account-tag">Nhà tuyển dụng</span></td>
+                                        }
+                                        @if (i.EmailVerified == true)
+                                        {
+                                            <td><span class="job-tag-new">Đã xác thực</span></td>
+                                        }
+                                        else
+                                        {
+                                            <td><span class="job-tag-urgent">Chưa xác thực</span></td>
+                                        }
+                                        @if(i.IsDisable == false)
+                                        {
+                                            if(i.IsActive == true)
+                                            {
+                                                <td><span class="job-tag-new">Đang hoạt động</span></td>
+                                            }
+                                            else
+                                            {
+                                                <td><span class="job-tag-urgent">Last @(i.LastActiveTime.HasValue ? i.LastActiveTime.Value.ToString("dd/MM/yyyy HH:mm:ss") : "Error")</span></td>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <td><span class="recruiter-account-tag">Vô hiệu hóa</span></td>
+                                        }
+                                        @if(i.RoleId == 3)
+                                        {
+                                            JobSeekerCandidateProfile r = db.JobSeekerCandidateProfiles.FirstOrDefault(p => p.CandidateId == i.Id);
+                                            if (r == null) r = new JobSeekerCandidateProfile();
+                                            var dateString = r.Dob.HasValue ? r.Dob.Value.ToString("dd/MM/yyyy") : "N/A";
+                                            var dateString1 = i.IsCreatedAt.HasValue ? i.IsCreatedAt.Value.ToString("dd/MM/yyyy") : "N/A";
+
+                                            int maskLength = r.PhoneNumb.Length - 3; // Số ký tự cần che.
+                                            string maskedPart = new string('*', maskLength); // Tạo chuỗi dấu '*'.
+                                            string lastThreeChars = r.PhoneNumb.Substring(r.PhoneNumb.Length - 3); // Lấy 3 ký tự cuối.
+                                            string phone = maskedPart + lastThreeChars;
+
+                                            <td>
+                                                <a data-bs-toggle="modal" href="#CandidateAccountModal" onclick="loadFormCandidate('@Html.Raw(i.FullName)', '@Html.Raw(email)', '@Html.Raw(phone)', '@Html.Raw(r.Gender)', '@Html.Raw(dateString)', '@Html.Raw(dateString1)', '@Html.Raw(r.LinkedinLink)', '@Html.Raw(r.PortfolioUrl)')"
+                                                   class="btn btn-outline-secondary btn-sm"><i class="feather-eye"></i></a>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            JobSeekerRecruiterProfile r = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == i.Id);
+                                            if (r == null) r = new JobSeekerRecruiterProfile();
+                                            JobSeekerEnterprise e = db.JobSeekerEnterprises.FirstOrDefault(p => p.EnterpriseId == r.EnterpriseId);
+                                            if (e == null) e = new JobSeekerEnterprise();
+                                            var dateString = i.IsCreatedAt.HasValue ? i.IsCreatedAt.Value.ToString("dd/MM/yyyy") : "N/A";
+
+
+                                            int maskLength = r.PhoneNumb.Length - 3; // Số ký tự cần che.
+                                            string maskedPart = new string('*', maskLength); // Tạo chuỗi dấu '*'.
+                                            string lastThreeChars = r.PhoneNumb.Substring(r.PhoneNumb.Length - 3); // Lấy 3 ký tự cuối.
+                                            string phone = maskedPart + lastThreeChars;
+
+                                            <td>
+                                                <a data-bs-toggle="modal" href="#RecruiterAccountModal" onclick="loadFormRecruiter('@Html.Raw(i.FullName)', '@Html.Raw(email)', '@Html.Raw(phone)', '@Html.Raw(e.CompanyPhoneContact)', '@Html.Raw(r.Gender)', '@Html.Raw(e.FullCompanyName)', '@Html.Raw(dateString)', '@Html.Raw(e.WebsiteUrl)')"
+                                                   class="btn btn-outline-secondary btn-sm"><i class="feather-eye"></i></a>
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="twm-pro-view-chart-wrap">
+            <div class="panel panel-default site-bg-white m-t30">
+                <div class="panel-heading wt-panel-heading p-a20">
+                    <h4 class="panel-tittle m-a0"><i class="fa fa-briefcase"></i>Các bài đăng tuyển gần đây</h4>
+                </div>
+
+                <div class="table-responsive profile-applied-job mt-3">
+                    <table class="table text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Tên doanh nghiệp</th>
+                                <th>Tên công việc</th>
+                                <th>Cấp bậc</th>
+                                <th>Địa điểm</th>
+                                <th>Thời gian đăng tuyển</th>
+                                <th>Trạng thái</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.Jobpost != null && ViewBag.Jobpost.Count > 0)
+                            {
+                                JobSeekerContext db = new JobSeekerContext();
+                                int d = 0;
+                                foreach(JobSeekerJobPosting i in ViewBag.JobPost)
+                                {
+                                    d++;
+                                    <tr>
+                                    <td>@d</td>
+                                    @{
+                                        JobSeekerEnterprise jobSeekerEnterprise = db.JobSeekerEnterprises.FirstOrDefault(p => p.EnterpriseId == i.EnterpriseId);
+
+                                        if(jobSeekerEnterprise != null)
+                                        {
+                                                <td class="candidate-name">@jobSeekerEnterprise.FullCompanyName</td>
+                                        }
+                                        else
+                                        {
+                                                <td class="candidate-name">Error</td>
+                                        }
+                                    }
+                                    <td>@i.JobTitle</td>
+                                    @{
+                                        JobSeekerJobLevel jobSeekerJobLevel = db.JobSeekerJobLevels.FirstOrDefault(p => p.Id == i.JobLevelCode);
+
+                                        if (jobSeekerJobLevel != null)
+                                        {
+                                                <td>@jobSeekerJobLevel.JobLevelName</td>
+                                        }
+                                        else
+                                        {
+                                                <td>Error</td>
+                                        }
+                                    }
+                                    <td>@i.Province</td>
+                                    <td>@(i.IsCreatedAt.HasValue ? i.IsCreatedAt.Value.ToString("dd/MM/yyyy") : "Error")</td>
+                                        @{
+                                            switch (i.StatusCode)
+                                            {
+                                                case "SC5":
+                                                        <td><span class="job-tag-pending">Đã duyệt</span></td>
+                                                    break;
+                                                case "SC6":
+                                                        <td><span class="job-tag-danger">Đã từ chối</span></td>
+                                                    break;
+                                                case "SC7":
+                                                        <td><span class="job-tag-new">Đang chờ duyệt</span></td>
+                                                    break;
+                                                default:
+                                                        <td><span class="job-tag-danger">Error</span></td>
+                                                    break;
+                                            }
+                                        }
+                                        <td>
+                                            @{
+                                                var dateString = i.TimePost.HasValue ? i.TimePost.Value.ToString("dd/MM/yyyy") : "N/A";
+
+                                                List<JobSeekerJobPostingApply> apply = db.JobSeekerJobPostingApplies.Where(p => p.JobPostingId == i.Id).ToList();
+                                            }
+                                            <a data-bs-toggle="modal" href="#JobPostingDetailModal" onclick="loadFormJobPost('@Html.Raw(i.Id)', '@Html.Raw(i.JobTitle)', '@Html.Raw(i.Quantity)', '@Html.Raw(i.JobCategoryId)', '@Html.Raw(i.WorkingType)', '@Html.Raw(i.ExpRequirement)', '@Html.Raw(i.JobLevelCode)', '@Html.Raw(i.SalaryMin)', '@Html.Raw(i.SalaryMax)', '@Html.Raw(i.AcademicLevel)', '@Html.Raw(i.GenderRequire)', '@Html.Raw(i.Province)', '@Html.Raw(i.District)', '@Html.Raw(i.Ward)', '@Html.Raw(dateString)', '@Html.Raw(i.Address)', '@Html.Raw(i.JobDesc)', '@Html.Raw(i.JobRequirement)', '@Html.Raw(i.BenefitEnjoyed)', '@Html.Raw(jobSeekerEnterprise.FullCompanyName)', '@Html.Raw(jobSeekerEnterprise.CompanyEmail)', '@Html.Raw(apply.Count)', '@Html.Raw(i.StatusCode)')"
+                                               class="btn btn-outline-secondary btn-sm"><i class="feather-eye"></i></a>
+                                    </td>
+                                </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+<div class="modal fade twm-saved-jobs-view" id="RecruiterAccountModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h3 class="modal-title">Thông tin tài khoản nhà tuyển dụng</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="panel panel-default">
+                            <div class="panel-body wt-panel-body m-b20 ">
+                                <form>
+                                    <div class="row">
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="recruiterName" class="form-label">
+                                                    Họ tên
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                            <input class="form-control" name="recruiter_name" type="text" id="recruitername" disabled />
+                                                    <i class="fs-input-icon fa fa-user"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="recruiterEmail" class="form-label">
+                                                    Email (công ty)
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="recruiter_emai" type="email" id="recruiteremail" disabled />
+                                                    <i class="fs-input-icon fa fa-envelope"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="recruiterPhone" class="form-label">
+                                                    Số điện thoại cá nhân
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="recruiter_phone" type="text" id="recruiterphone" disabled />
+                                                    <i class="fs-input-icon fa fa-envelope"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="gender" class="form-label">
+                                                    Giới tính
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="gender" type="text" id="recruitergender" disabled />
+                                                    <i class="fs-input-icon fa fa-genderless"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="registerDate" class="form-label">
+                                                    Ngày đăng ký
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="register_date" type="text" id="recruitercreateday" disabled />
+                                                    <i class="fs-input-icon fa fa-calendar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="registerDate" class="form-label">
+                                                    Địa chỉ website
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="register_date" type="text" id="recruitercompanywebsite" disabled />
+                                                    <i class="fs-input-icon fa fa-calendar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="recruiterPhone" class="form-label">
+                                                    Số điện thoại công ty
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="recruiter_phone" type="text" id="recruitercompanyphone" disabled />
+                                                    <i class="fs-input-icon fa fa-envelope"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="companyName" class="form-label">
+                                                    Tên công ty
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="recruiter_company_name" type="text" id="recruitercompanyname" disabled />
+                                                    <i class="fs-input-icon fa fa-building"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade twm-saved-jobs-view" id="CandidateAccountModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h3 class="modal-title">Thông tin tài khoản ứng viên</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="panel panel-default">
+                            <div class="panel-body wt-panel-body m-b20 ">
+                                <form>
+                                    <div class="row">
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="candidateName" class="form-label">
+                                                    Họ tên
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="candidate_name" type="text" id="candidatename" disabled />
+                                                    <i class="fs-input-icon fa fa-user"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="candidateEmail" class="form-label">
+                                                    Email
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="candidate_emai" type="email" id="candidateemail" disabled />
+                                                    <i class="fs-input-icon fa fa-envelope"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="candidatePhone" class="form-label">
+                                                    Số điện thoại
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="candidate_phone" type="text" id="candidatephone" disabled />
+                                                    <i class="fs-input-icon fa fa-envelope"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="gender" class="form-label">
+                                                    Giới tính
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="gender" type="text" id="candidategender" disabled />
+                                                    <i class="fs-input-icon fa fa-genderless"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="companyName" class="form-label">
+                                                    Ngày sinh
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="recruiter_company_name" type="text" id="candidatedob" disabled />
+                                                    <i class="fs-input-icon fa fa-building"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="registerDate" class="form-label">
+                                                    Ngày đăng ký
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="register_date" type="text" id="candidatecreateday" disabled/>
+                                                    <i class="fs-input-icon fa fa-calendar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="registerDate" class="form-label">
+                                                    Linkedin
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="register_date" type="text" id="candidatelinkedin" disabled/>
+                                                    <i class="fs-input-icon fa fa-calendar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6 col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <label for="registerDate" class="form-label">
+                                                    Portfolio
+                                                </label>
+                                                <div class="ls-inputicon-box">
+                                                    <input class="form-control" name="register_date" type="text" id="candidateportfolio" disabled/>
+                                                    <i class="fs-input-icon fa fa-calendar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade twm-saved-jobs-view" id="JobPostingDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <form action="@Url.Action("IndexAdmin","Home")" method="post">
+            <input name="id" type="hidden" id="id" required> 
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">
+                        Chi tiết bài đăng
+                        tuyển
+                    </h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="panel panel-default">
+                            <div class="panel-body wt-panel-body m-b20">
+                                <h4 class="panel-tittle m-a0">
+                                    <i class="far fa-list-alt"></i>Thông tin chi tiết
+                                </h4>
+                            </div>
+                            <div class="panel-body wt-panel-body m-b20 ">
+                                <div class="row">
+                                    <!--Job title-->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="jobTitle" class="form-label">
+                                                Tên công việc
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <input class="form-control" name="title" type="text" id="title" disabled 
+                                                       placeholder="Name">
+                                                <i class="fs-input-icon fa fa-address-card"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Quantity -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="jobSalaryMin" class="form-label">Số lượng</label>
+                                            <div class="ls-inputicon-box">
+                                                <input class="form-control" name="quantity" id="quantity" type="number" min="1" disabled 
+                                                       placeholder="Quantity" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                                <i class="fs-input-icon fa fa-dollar-sign"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--Job Category-->
+                                    <div class="col-md-6">
+                                        <div class="form-group city-outer-bx has-feedback">
+                                            <label for="jobCategory" class="form-label">
+                                                Ngành nghề
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <select class="form-select form-control" data-live-search="true" title="" name="category" disabled
+                                                        id="category" data-bv-field="size">
+                                                    @if (ViewBag.Jobcategory != null)
+                                                    {
+                                                        foreach (var i in ViewBag.Jobcategory)
+                                                        {
+                                                            <option value="@i.Id">@i.JobCategoryName</option>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="">Chọn ngành nghề</option>
+                                                    }
+                                                </select>
+                                                <i class="fs-input-icon fa fa-border-all"></i>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- Job Type -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label" for="jobWorkingType">
+                                                Hình thức làm việc
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <select class="form-select form-control" data-live-search="true" title="" disabled
+                                                        name="worktype" id="worktype" data-bv-field="size">
+                                                    @* <option class="bs-title-option" value="">Hình thức</option> *@
+                                                    <option selected value="fulltime">Toàn thời gian</option>
+                                                    <option value="parttime">Bán thời gian</option>
+                                                    <option value="intern">Thực tập</option>
+                                                </select>
+                                                <i class="fs-input-icon fa fa-file-alt"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Experience -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label" for="jobExperience">
+                                                Kinh nghiệm
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <select class="form-select form-control" data-live-search="true" title="" disabled
+                                                        name="exp" id="exp" data-bv-field="size">
+                                                    @* <option class="bs-title-option" value="">Chọn kinh nghiệm</option> *@
+                                                    <option selected value="0">Không yêu cầu kinh nghiệm</option>
+                                                    <option value="1">1 năm</option>
+                                                    <option value="2">2 năm</option>
+                                                    <option value="3">3 năm</option>
+                                                    <option value="4">4 năm</option>
+                                                    <option value="5">5 năm</option>
+                                                    <option value="5+">Trên 5 năm</option>
+                                                </select>
+                                                <i class="fs-input-icon fa fa-user-edit"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Level -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label" for="jobLevel">
+                                                Vị trí/ Cấp bậc
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <select class="form-select form-control" data-live-search="true" title="" disabled
+                                                        name="level" id="level" data-bv-field="size">
+                                                    @* <option class="bs-title-option" value="">Chọn vị trí - cấp bậc</option> *@
+                                                    @if (ViewBag.Joblevel != null)
+                                                    {
+                                                        foreach (var i in ViewBag.Joblevel)
+                                                        {
+                                                            <option value="@i.Id">@i.JobLevelName</option>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="">Chọn vị trí - cấp bậc</option>
+                                                    }
+                                                </select>
+                                                <i class="fs-input-icon fa fa-user-edit"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Salary Min -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="jobSalaryMin" class="form-label">Mức lương tối thiểu</label>
+                                            <div class="ls-inputicon-box">
+                                                <input class="form-control" name="salarymin" id="salarymin" type="number" min="0" disabled 
+                                                       placeholder="Min" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                                <i class="fs-input-icon fa fa-dollar-sign"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Salary Max -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="jobSalaryMax" class="form-label">Mức lương tối đa</label>
+                                            <div class="ls-inputicon-box">
+                                                <input class="form-control" name="salarymax" id="salarymax" type="number" min="1" disabled 
+                                                       placeholder="Max" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                                <i class="fs-input-icon fa fa-dollar-sign"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label" for="jobAcademicLevel">
+                                                Yêu cầu bằng cấp
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <select class="form-select form-control" data-live-search="true" title="" disabled
+                                                        name="degree" id="degree" data-bv-field="size">
+                                                    @* <option class="bs-title-option" value="">Chọn yêu cầu học vấn</option> *@
+                                                    <option selected value="Không">Không yêu cầu</option>
+                                                    <option value="Cử nhân">Cử nhân</option>
+                                                    <option value="Kỹ sư">Kỹ sư</option>
+                                                    <option value="Thạc sĩ">Thạc sĩ</option>
+                                                    <option value="Tiến sĩ">Tiến sĩ</option>
+                                                </select>
+                                                <i class="fs-input-icon fa fa-user-graduate"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--Gender-->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label" for="jobGender">
+                                                Giới tính
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <select class="form-select form-control" data-live-search="true" title="" disabled
+                                                        name="gender" id="gender" data-bv-field="size">
+                                                    @* <option class="bs-title-option" value="">Chọn giới tính</option> *@
+                                                    <option value="male">Nam</option>
+                                                    <option value="female">Nữ</option>
+                                                </select>
+                                                <i class="fs-input-icon fa fa-venus-mars"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--City-->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="city" class="form-label">
+                                                Tỉnh/ Thành phố
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <select class="form-select form-control" data-live-search="true" title="" name="city" disabled
+                                                        id="city" data-bv-field="size">
+                                                    <option class="bs-title-option" value="">
+                                                        Tỉnh/ Thành phố
+                                                    </option>
+                                                </select>
+                                                <i class="fs-input-icon fa fa-city"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- District -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="district" class="form-label">
+                                                Quận/ Huyện
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <select class="form-select form-control" data-live-search="true" title="" name="district" disabled
+                                                        id="district" data-bv-field="size">
+                                                    <option class="bs-title-option" value="">
+                                                        Quận/ Huyện
+                                                    </option>
+                                                </select>
+                                                <i class="fs-input-icon fa fa-map-marker-alt"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Ward -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="ward" class="form-label">Phường/ Xã</label>
+                                            <div class="ls-inputicon-box">
+                                                <select class="form-select form-control" data-live-search="true" title="" name="ward" disabled
+                                                        id="ward" data-bv-field="size">
+                                                    <option class="bs-title-option" value="">
+                                                        Phường/ Xã
+                                                    </option>
+                                                </select>
+                                                <i class="fs-input-icon fa fa-map-marker-alt"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--End Date-->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label" for="jobExpired">
+                                                Hạn nộp
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <input class="form-select form-control" data-provide="datepicker" disabled
+                                                       id="expiredtime" name="expiredtime" type="text"
+                                                       placeholder="dd/mm/yyyy">
+                                                <i class="fs-input-icon far fa-calendar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--Complete Address-->
+                                    <div class="col-xl-12 col-lg-12 col-md-12">
+                                        <div class="form-group">
+                                            <label class="form-label" for="jobAddress">Địa chỉ</label>
+                                            <div class="ls-inputicon-box">
+                                                <input class="form-control" name="address" id="address" type="text" disabled 
+                                                       placeholder="Address">
+                                                <i class="fs-input-icon fa fa-home"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Description -->
+                                    <div class="col-xl-12 col-lg-12 col-md-12">
+                                        <div class="form-group">
+                                            <label for="jobDesc" class="form-label">
+                                                Mô tả công việc
+                                            </label>
+                                            <textarea id="description" rows="5" name="description" class="form-control" disabled  style="height: 150px"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <!-- Requirement -->
+                                    <div class="col-xl-12 col-lg-12 col-md-12">
+                                        <div class="form-group">
+                                            <label for="jobRequirement" class="form-label">
+                                                Yêu cầu công việc
+                                            </label>
+                                            <textarea id="require" rows="5" name="require" class="form-control" disabled  style="height: 150px"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <!-- Benefit -->
+                                    <div class="col-xl-12 col-lg-12 col-md-12">
+                                        <div class="form-group">
+                                            <label for="jobBenefit" class="form-label">
+                                                Quyền lợi
+                                            </label>
+                                            <textarea id="benefit" rows="5" name="benefit" class="form-control" disabled  style="height: 150px"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading wt-panel-heading p-a20">
+                                <h4 class="panel-tittle m-a0">
+                                    <i class="far fa-building"></i>Thông tin công ty
+                                </h4>
+                            </div>
+                            <div class="panel-body wt-panel-body m-b20 ">
+                                <div class="row">
+                                    @* <div class="col-xl-12 col-lg-12 pt-3 col-md-12">
+                                    <div class="form-group">
+                                    <label for="userEmail" class="form-label">
+                                    Người dùng<span class="required">*</span>
+                                    </label>
+                                    <div class="ls-inputicon-box">
+                                    <input disabled class="form-control" name="user_email" type="email"
+                                    id="userEmail" placeholder="dfhks23@gmail.com">
+                                    <i class="fs-input-icon fa fa-envelope"></i>
+                                    </div>
+                                    </div>
+                                    </div> *@
+                                    <div class="col-xl-12 col-lg-12 pt-3 col-md-12">
+                                        <div class="form-group">
+                                            <label for="companyName" class="form-label">
+                                                Công ty
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <input disabled class="form-control" name="company_name" type="email"
+                                                       id="companyname" placeholder="Axon Active">
+                                                <i class="fs-input-icon fa fa-building"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-12 col-lg-12 col-md-12">
+                                        <div class="form-group">
+                                            <label for="companyEmail" class="form-label">
+                                                Email công ty
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <input disabled class="form-control" name="company_email"
+                                                       type="email" id="companyemail"
+                                                       placeholder="active12@utc.com">
+                                                <i class="fs-input-icon fa fa-envelope"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading wt-panel-heading">
+                                <h4 class="panel-tittle m-a0"><i class="far fa-chart-bar"></i>Thống kế</h4>
+                            </div>
+                            <div class="panel-body wt-panel-body m-b20 ">
+                                <div class="row">
+                                    @* <div class="col-xl-6 col-lg-12 pt-3 col-md-12">
+                                    <div class="form-group">
+                                    <label for="viewNumber" class="form-label">
+                                    Lượt xem<span class="required">*</span>
+                                    </label>
+                                    <div class="ls-inputicon-box">
+                                    <input class="form-control" name="view_number" type="number"
+                                    id="viewNumber" placeholder="20">
+                                    <i class="fs-input-icon fa fa-eye"></i>
+                                    </div>
+                                    </div>
+                                    </div> *@
+                                    <div class="col-xl-12 col-lg-12 pt-3 col-md-12">
+                                        <div class="form-group">
+                                            <label for="applyNumber" class="form-label">
+                                                Lượt ứng tuyển
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <input disabled class="form-control" name="apply_number" type="email"
+                                                       id="applynumber" placeholder="Axon Active">
+                                                <i class="fs-input-icon fa fa-paper-plane"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading wt-panel-heading">
+                                <h4 class="panel-tittle m-a0"><i class="far fa-chart-bar"></i>Trạng thái</h4>
+                            </div>
+                            <div class="panel-body wt-panel-body m-b20 ">
+                                <div class="row">
+                                    <div class="col-xl-6 col-lg-12 pt-3 col-md-12">
+                                        <div class="form-group city-outer-bx has-feedback">
+                                            <label for="jobPostingStatus" class="form-label">
+                                                Trạng thái
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="ls-inputicon-box">
+                                                <select class="form-select form-control"
+                                                        data-live-search="true" title="" id="statuscode" required
+                                                        name="statuscode" data-bv-field="size">
+                                                    <option class="bs-title-option" value="">
+                                                        Trạng thái
+                                                    </option>
+                                                    <option value="SC7">Đang chờ duyệt</option>
+                                                    <option value="SC6">Từ chối</option>
+                                                    <option value="SC5">Đã duyệt</option>
+                                                </select>
+                                                <i class="fs-input-icon fa fa-chart-area"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="subbmit" class="site-button m-r10">Lưu và Cập nhật</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+<script>
+    function loadFormRecruiter(recruitername, recruiteremail, recruiterphone, recruitercompanyphone, recruitergender, recruitercompanyname, recruitercreateday, recruitercompanywebsite) {
+        document.getElementById('recruitername').value = recruitername;
+        document.getElementById('recruiteremail').value = recruiteremail;
+        document.getElementById('recruiterphone').value = recruiterphone;
+        document.getElementById('recruitercompanyphone').value = recruitercompanyphone;
+        document.getElementById('recruitercompanyname').value = recruitercompanyname;
+        document.getElementById('recruitercreateday').value = recruitercreateday;
+        document.getElementById('recruitercompanywebsite').value = recruitercompanywebsite; 
+
+        if (recruitergender === 'male') {
+            document.getElementById('recruitergender').value = 'Nam';
+        } else if (recruitergender === 'female') {
+            document.getElementById('recruitergender').value = 'Nữ';
+        } else {
+            document.getElementById('recruitergender').value = 'Khác';
+        }
+    } 
+    function loadFormCandidate(candidatename, candidateemail, candidatephone, candidategender, candidatedob, candidatecreateday, candidatelinkedin, candidateportfolio) {
+        document.getElementById('candidatename').value = candidatename;
+        document.getElementById('candidateemail').value = candidateemail;
+        document.getElementById('candidatephone').value = candidatephone;
+        document.getElementById('candidatedob').value = candidatedob;
+        document.getElementById('candidatecreateday').value = candidatecreateday;
+        document.getElementById('candidatelinkedin').value = candidatelinkedin;
+        document.getElementById('candidateportfolio').value = candidateportfolio;
+
+        if (candidategender === 'male') {
+            document.getElementById('candidategender').value = 'Nam';
+        } else if (candidategender === 'female') {
+            document.getElementById('candidategender').value = 'Nữ';
+        } else {
+            document.getElementById('candidategender').value = 'Khác';
+        }
+    }
+    function loadFormJobPost(id, title, quantity, category, worktype, exp, level, salarymin, salarymax, degree, gender, city, district, ward, expiredtime, address, description, require, benefit, companyname, companyemail, applynumber, statuscode) {
+        document.getElementById('id').value = id;
+        document.getElementById('title').value = title;
+        document.getElementById('quantity').value = quantity;
+        document.getElementById('category').value = category;
+        document.getElementById('worktype').value = worktype;
+        document.getElementById('exp').value = exp;
+        document.getElementById('level').value = level;
+        document.getElementById('salarymin').value = salarymin;
+        document.getElementById('salarymax').value = salarymax;
+        document.getElementById('degree').value = degree;
+        document.getElementById('gender').value = gender;
+        document.getElementById('city').value = city;
+        citis.onchange();
+        document.getElementById('district').value = district;
+        districts.onchange();
+        document.getElementById('ward').value = ward;
+        document.getElementById('expiredtime').value = expiredtime;
+        document.getElementById('address').value = address;
+        document.getElementById('description').value = description;
+        document.getElementById('require').value = require;
+        document.getElementById('benefit').value = benefit;
+        document.getElementById('companyname').value = companyname;
+        document.getElementById('companyemail').value = companyemail;
+        document.getElementById('applynumber').value = applynumber;
+        document.getElementById('statuscode').value = statuscode;
+    }
+    var citis = document.getElementById("city");
+    var districts = document.getElementById("district");
+    var wards = document.getElementById("ward");
+    var Parameter = {
+        url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
+        method: "GET",
+        responseType: "application/json",
+    };
+    var promise = axios(Parameter);
+    promise.then(function (result) {
+        renderCity(result.data);
+    });
+
+    function renderCity(data) {
+        for (const x of data) {
+            var option = new Option(x.Name, x.Name);
+            citis.options[citis.options.length] = option;
+        }
+        citis.onchange = function () {
+            district.length = 1;
+            ward.length = 1;
+            if (this.value != "") {
+                const result = data.filter(n => n.Name === this.value);
+
+                for (const k of result[0].Districts) {
+                    var option = new Option(k.Name, k.Name);
+                    districts.options[districts.options.length] = option;
+                }
+            }
+        };
+        districts.onchange = function () {
+            ward.length = 1;
+            const dataCity = data.filter((n) => n.Name === citis.value);
+            if (this.value != "") {
+                const dataWards = dataCity[0].Districts.filter(n => n.Name === this.value)[0].Wards;
+
+                for (const w of dataWards) {
+                    var option = new Option(w.Name, w.Name);
+                    wards.options[wards.options.length] = option;
+                }
+            }
+        };
+    }
+    // document.addEventListener("DOMContentLoaded", function () {
+    //     const section = document.getElementById("taikhoandangki");
+    //     section.scrollIntoView({ behavior: "smooth", block: "start" });
+    // });
+</script>

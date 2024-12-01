@@ -18,30 +18,30 @@ function goToPreviousStep() {
   document.getElementById("circle-1").classList.remove("inactive");
 }
 
-tinymce.init({
-  selector: "#richTextEditor", // Textarea được chuyển đổi thành TinyMCE
-  plugins: [
-    // Các plugin chỉnh sửa miễn phí
-    "anchor",
-    "autolink",
-    "charmap",
-    "codesample",
-    "emoticons",
-    "image",
-    "link",
-    "lists",
-    "media",
-    "searchreplace",
-    "table",
-    "visualblocks",
-    "wordcount",
-  ],
-  toolbar:
-    "undo redo | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media | emoticons charmap codesample | table | removeformat",
-  menubar: false, // Tùy chọn: Ẩn thanh menu
-  branding: false, // Tùy chọn: Loại bỏ nhãn hiệu "Powered by TinyMCE"
-  elementpath: false, // Loại bỏ đường dẫn của phần tử (để loại bỏ "p")
-});
+//tinymce.init({
+//  selector: "#richTextEditor", // Textarea được chuyển đổi thành TinyMCE
+//  plugins: [
+//    // Các plugin chỉnh sửa miễn phí
+//    "anchor",
+//    "autolink",
+//    "charmap",
+//    "codesample",
+//    "emoticons",
+//    "image",
+//    "link",
+//    "lists",
+//    "media",
+//    "searchreplace",
+//    "table",
+//    "visualblocks",
+//    "wordcount",
+//  ],
+//  toolbar:
+//    "undo redo | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media | emoticons charmap codesample | table | removeformat",
+//  menubar: false, // Tùy chọn: Ẩn thanh menu
+//  branding: false, // Tùy chọn: Loại bỏ nhãn hiệu "Powered by TinyMCE"
+//  elementpath: false, // Loại bỏ đường dẫn của phần tử (để loại bỏ "p")
+//});
 
 // ========================== Export Js Start ==============================
 // document.getElementById("exportOptions").addEventListener('change', function () {
@@ -216,63 +216,63 @@ function deleteCV() {
 
 /*=============================================*/
 
-// Cho chuc nang apply cv
-const existingCV = document.getElementById("existingCV");
-const uploadCV = document.getElementById("uploadCV");
-const uploadButton = document.getElementById("uploadButton");
-const fileInput = document.getElementById("fileInput");
-const fileInfo = document.getElementById("fileInfo");
+//// Cho chuc nang apply cv
+//const existingCV = document.getElementById("existingCV");
+//const uploadCV = document.getElementById("uploadCV");
+//const uploadButton = document.getElementById("uploadButton");
+//const fileInput = document.getElementById("fileInput");
+//const fileInfo = document.getElementById("fileInfo");
 
-// Bật/tắt nút "Chọn File" dựa trên radio được chọn
-existingCV.addEventListener("change", () => {
-  if (existingCV.checked) {
-    uploadButton.disabled = true;
-    fileInput.value = "";
-    fileInfo.textContent = "";
-  }
-});
+//// Bật/tắt nút "Chọn File" dựa trên radio được chọn
+//existingCV.addEventListener("change", () => {
+//  if (existingCV.checked) {
+//    uploadButton.disabled = true;
+//    fileInput.value = "";
+//    fileInfo.textContent = "";
+//  }
+//});
 
-uploadCV.addEventListener("change", () => {
-  if (uploadCV.checked) {
-    uploadButton.disabled = false;
-  }
-});
+//uploadCV.addEventListener("change", () => {
+//  if (uploadCV.checked) {
+//    uploadButton.disabled = false;
+//  }
+//});
 
-// Khi nhấn nút "Chọn File", mở trình quản lý file
-uploadButton.addEventListener("click", () => {
-  fileInput.click();
-});
+//// Khi nhấn nút "Chọn File", mở trình quản lý file
+//uploadButton.addEventListener("click", () => {
+//  fileInput.click();
+//});
 
-// Kiểm tra file khi người dùng tải lên
-fileInput.addEventListener("change", () => {
-  const file = fileInput.files[0];
-  if (file) {
-    // Kiểm tra định dạng file
-    const validExtensions = [
-      "application/pdf",
-      "application/msword",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    ];
-    if (!validExtensions.includes(file.type)) {
-      alert("Chỉ chấp nhận file .pdf, .doc, .docx!");
-      fileInput.value = "";
-      fileInfo.textContent = "";
-      return;
-    }
+//// Kiểm tra file khi người dùng tải lên
+//fileInput.addEventListener("change", () => {
+//  const file = fileInput.files[0];
+//  if (file) {
+//    // Kiểm tra định dạng file
+//    const validExtensions = [
+//      "application/pdf",
+//      "application/msword",
+//      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+//    ];
+//    if (!validExtensions.includes(file.type)) {
+//      alert("Chỉ chấp nhận file .pdf, .doc, .docx!");
+//      fileInput.value = "";
+//      fileInfo.textContent = "";
+//      return;
+//    }
 
-    // Kiểm tra dung lượng file
-    if (file.size > 5 * 1024 * 1024) {
-      // 5MB
-      alert("Dung lượng file không được vượt quá 5MB!");
-      fileInput.value = "";
-      fileInfo.textContent = "";
-      return;
-    }
+//    // Kiểm tra dung lượng file
+//    if (file.size > 5 * 1024 * 1024) {
+//      // 5MB
+//      alert("Dung lượng file không được vượt quá 5MB!");
+//      fileInput.value = "";
+//      fileInfo.textContent = "";
+//      return;
+//    }
 
-    // Hiển thị thông tin file đã chọn
-    fileInfo.textContent = `Đã chọn: ${file.name}`;
-  }
-});
+//    // Hiển thị thông tin file đã chọn
+//    fileInfo.textContent = `Đã chọn: ${file.name}`;
+//  }
+//});
 
 /*=============================================*/
 function previewFileJobCategory() {

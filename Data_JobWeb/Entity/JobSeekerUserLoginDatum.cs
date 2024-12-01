@@ -22,6 +22,7 @@ public partial class JobSeekerUserLoginDatum
     public DateTime? LastActiveTime { get; set; }
 
     public bool? IsActive { get; set; }
+    public bool? IsDisable { get; set; }
 
     public DateTime? IsCreatedAt { get; set; }
 
@@ -29,8 +30,6 @@ public partial class JobSeekerUserLoginDatum
     public string? AvartarUrl { get; set; }
 
     public virtual JobSeekerCandidateProfile? JobSeekerCandidateProfile { get; set; }
-
-    public virtual ICollection<JobSeekerNotification> JobSeekerNotifications { get; set; } = new List<JobSeekerNotification>();
 
     public virtual JobSeekerRecruiterProfile? JobSeekerRecruiterProfile { get; set; }
 

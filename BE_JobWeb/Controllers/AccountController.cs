@@ -31,6 +31,8 @@ namespace BE_JobWeb.Controllers
             bool checkpass = hasher.VerifyPassword(c.Password, e.Password);
             if (checkpass)
             {
+                c.IsActive = true;
+                db.SaveChanges();
                 //Tạo token
                 //AuthenticationRole a = db.AuthenticationRoles.FirstOrDefault(p => p.RoleId == c.RoleId);
                 Token t = new Token();
@@ -41,13 +43,30 @@ namespace BE_JobWeb.Controllers
                 {
                     HttpOnly = true, // Cookie chỉ có thể truy cập từ server
                     Secure = true, // Cookie chỉ được truyền qua HTTPS
-                    Expires = DateTime.UtcNow.AddHours(1) // Thời gian hết hạn
+                    Expires = DateTime.Now.AddHours(1) // Thời gian hết hạn
                 };
                 Response.Cookies.Append("jwtToken", token, options);
 
                 return Ok(new { message = "Login success!", token = token , data = c});
             }
             else return Unauthorized("Login error");
+        }
+        [HttpGet("logout/{id}")]
+        public IActionResult Logout(Guid id)
+        {
+            JobSeekerUserLoginDatum c = db.JobSeekerUserLoginData.FirstOrDefault(p => p.Id == id);
+            if(c == null) return BadRequest("Logout fail!");
+
+            c.IsActive = false;
+            c.LastActiveTime = DateTime.Now;
+            db.SaveChanges();
+            
+            return Ok("Logout success!");
+        }
+        [HttpGet("getlistuser")]
+        public IActionResult GetListUser()
+        {
+            return Ok(db.JobSeekerUserLoginData.OrderByDescending(p => p.IsCreatedAt).ToList());
         }
         [HttpPost("addcandidate")]
         public IActionResult AddCandidate(JobSeekerUserLoginDatum p)
@@ -116,6 +135,36 @@ namespace BE_JobWeb.Controllers
                     x.EmailVerified = true;
                     x.StatusCode = "SC9";
                     db.SaveChanges();
+
+                    if(x.RoleId == 2)
+                    {
+                        JobSeekerRecruiterProfile recruiterProfile = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == x.Id);
+                        if (recruiterProfile == null) return Redirect("http://localhost:5080/Account/Login");
+
+                        JobSeekerEnterprise enterprise = db.JobSeekerEnterprises.FirstOrDefault(p => p.EnterpriseId == recruiterProfile.EnterpriseId);
+                        if (enterprise == null) return Redirect("http://localhost:5080/Account/Login");
+
+                        JobSeekerUserLoginDatum admin = db.JobSeekerUserLoginData.FirstOrDefault(p => p.RoleId == 1);
+                        if (admin == null) return Redirect("http://localhost:5080/Account/Login");
+
+                        JobSeekerNotification notification = new JobSeekerNotification();
+                        notification.Id = Guid.NewGuid().ToString();
+                        notification.Type = "admin_newenterprise";
+                        notification.Description = $"Bạn có 1 công ty mới đang chờ duyệt!";
+                        notification.IsSeen = false;
+                        notification.IsCreatedAt = DateTime.Now;
+                        notification.IdConcern = enterprise.EnterpriseId;
+                        db.JobSeekerNotifications.Add(notification);
+                        db.SaveChanges();
+
+                        EmailService e = new EmailService();
+                        string title = $"Bạn có 1 công ty mới đang chờ duyệt! - JobWeb";
+                        string url = $"http://localhost:5281/api/Account/notification/{admin.Id}";
+                        string message = $"<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <title>{title}</title>\r\n</head>\r\n<body>\r\n    <h2>Chào {admin.FullName},</h2>\r\n    <p>Kiểm tra các thông báo của bạn tại đây:</p>\r\n    <a href=\"{url}\" style=\"background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; display: inline-block;\">Thông báo</a>\r\n    <p>Cảm ơn bạn,</p>\r\n    <p>Đội ngũ JobWeb</p>\r\n</body>\r\n</html>";
+
+                        e.SendEmail("khidot705@gmail.com", title, message);
+                    }
+
                     //return Ok("Xác nhận email thành công");
                     return Redirect("http://localhost:5080/Account/Login");
                 }
@@ -135,7 +184,7 @@ namespace BE_JobWeb.Controllers
                 EmailService e = new EmailService();
                 string message = $"<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <title>Đặt lại mật khẩu - JobWeb</title>\r\n</head>\r\n<body>\r\n    <h2>Chào {x.FullName},</h2>\r\n    <p>Chúng tôi đã nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn. Nếu bạn không thực hiện yêu cầu này, vui lòng bỏ qua email này.</p>\r\n    <p>Mật khẩu mới của bạn là: {passnew}</p>\r\n    <p>Nếu bạn có bất kỳ câu hỏi nào, vui lòng <a href=\"mailto:baitoan88@gmail.com\">liên hệ với bộ phận hỗ trợ</a>.</p>\r\n    <p>Cảm ơn bạn,</p>\r\n    <p>Đội ngũ JobWeb</p>\r\n</body>\r\n</html>";
 
-                e.SendEmail(email, "Reset Password JobWeb", message);
+                e.SendEmail(email, "Đặt lại mật khẩu - JobWeb", message);
                 x.Password = encrypepassnew;
                 db.SaveChanges();
 
@@ -157,7 +206,7 @@ namespace BE_JobWeb.Controllers
                     EmailService e = new EmailService();
                     string message = $"<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <title>Xác nhận đặt lại mật khẩu - JobWeb</title>\r\n</head>\r\n<body>\r\n    <h2>Chào {x.FullName},</h2>\r\n    <p>Cảm ơn bạn đã sử dụng website JobWeb của chúng tôi. Để hoàn tất quá trình đặt lại mật khẩu, vui lòng xác nhận đặt lại mật khẩu của bạn bằng cách nhấn vào liên kết dưới đây:</p>\r\n    <a href=\"{url}\" style=\"background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; display: inline-block;\">Xác minh Email</a>\r\n    <p>Nếu bạn không thực hiện yêu cầu đặt lại mật khẩu tại JobWeb, vui lòng bỏ qua email này.</p>\r\n    <p>Cảm ơn bạn,</p>\r\n    <p>Đội ngũ JobWeb</p>\r\n</body>\r\n</html>\r\n";
 
-                    e.SendEmail(sendmail.Email, "Verify Email JobWeb", message);
+                    e.SendEmail(sendmail.Email, "Xác nhận đặt lại mật khẩu - JobWeb", message);
 
                     return Ok("Url verify reset password đã được gửi đến " + sendmail.Email);
                 }
@@ -168,7 +217,7 @@ namespace BE_JobWeb.Controllers
                     EmailService e = new EmailService();
                     string message = $"<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <title>Xác minh email - JobWeb</title>\r\n</head>\r\n<body>\r\n    <h2>Chào {x.FullName},</h2>\r\n    <p>Cảm ơn bạn đã đăng ký tài khoản tại JobWeb. Để hoàn tất quá trình đăng ký, vui lòng xác minh địa chỉ email của bạn bằng cách nhấn vào liên kết dưới đây:</p>\r\n    <a href=\"{url}\" style=\"background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; display: inline-block;\">Xác minh Email</a>\r\n    <p>Nếu bạn không đăng ký tài khoản tại JobWeb, vui lòng bỏ qua email này.</p>\r\n    <p>Cảm ơn bạn,</p>\r\n    <p>Đội ngũ JobWeb</p>\r\n</body>\r\n</html>\r\n";
 
-                    e.SendEmail(sendmail.Email, "Verify Email JobWeb", message);
+                    e.SendEmail(sendmail.Email, "Xác minh email - JobWeb", message);
 
                     return Ok("Url verify email đã được gửi đến " + sendmail.Email);
                 }
@@ -261,7 +310,7 @@ namespace BE_JobWeb.Controllers
             candidateProfile.District = updatedProfile.District;
             candidateProfile.Ward = updatedProfile.Ward;
             candidateProfile.IsAllowedPublic = updatedProfile.IsAllowedPublic;
-            candidateProfile.IsUpdatedAt = DateTime.UtcNow; // Ghi nhận thời gian cập nhật
+            candidateProfile.IsUpdatedAt = DateTime.Now; // Ghi nhận thời gian cập nhật
             candidateProfile.AddressDetail = updatedProfile.AddressDetail;
 
             userlogin.AvartarUrl = updatedProfile.AvartarUrl;

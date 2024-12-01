@@ -47,10 +47,12 @@ public partial class JobSeekerEnterprise
     public DateTime? IsCreatedAt { get; set; }
 
     public DateTime? IsUpdatedAt { get; set; }
+    public bool? IsCensorship { get; set; }
 
     public virtual JobSeekerJobField? JobField { get; set; }
 
     public virtual ICollection<JobSeekerApplicantProfileSaved> JobSeekerApplicantProfileSaveds { get; set; } = new List<JobSeekerApplicantProfileSaved>();
+    public virtual ICollection<JobSeekerEnterpriseFollowed> JobSeekerEnterpriseFolloweds { get; set; } = new List<JobSeekerEnterpriseFollowed>();
 
     public virtual ICollection<JobSeekerJobPosting> JobSeekerJobPostings { get; set; } = new List<JobSeekerJobPosting>();
 

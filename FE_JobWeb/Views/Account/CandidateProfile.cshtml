@@ -433,7 +433,7 @@
                                                             <span class="job-duration">@i.StartDate - Hiện tại</span>
                                                         }
                                                         <div class="actions">
-                                                            <button class="btn" data-bs-toggle="modal" onclick="loadEditFormEx('@i.WorkingExpId', '@i.JobTitle', '@i.CompanyName', '@i.StartDate', '@i.EndDate', '@i.Description')"
+                                                            <button class="btn" data-bs-toggle="modal" onclick="loadEditFormEx('@Html.Raw(i.WorkingExpId)', '@Html.Raw(i.JobTitle)', '@Html.Raw(i.CompanyName)', '@Html.Raw(i.StartDate)', '@Html.Raw(i.EndDate)', '@Html.Raw(i.Description)')"
                                                                     data-bs-target="#EditJobExpModal">
                                                                 <i class="feather-edit"></i>
                                                             </button>
@@ -711,7 +711,7 @@
                                                             <span class="job-duration">@i.StartDate - Hiện tại</span>
                                                         }
                                                         <div class="actions">
-                                                            <button class="btn" data-bs-toggle="modal" onclick="loadEditFormEd('@i.EducationId', '@i.SchoolName', '@i.Major', '@i.Degree', '@i.StartDate', '@i.EndDate', '@i.Description')"
+                                                            <button class="btn" data-bs-toggle="modal" onclick="loadEditFormEd('@Html.Raw(i.EducationId)', '@Html.Raw(i.SchoolName)', '@Html.Raw(i.Major)', '@Html.Raw(i.Degree)', '@Html.Raw(i.StartDate)', '@Html.Raw(i.EndDate)', '@Html.Raw(i.Description)')"
                                                                     data-bs-target="#EditEducationModal">
                                                                 <i class="feather-edit"></i>
                                                             </button>
@@ -912,7 +912,7 @@
                                                                     Bằng cấp <span class="required">*</span>
                                                                 </label>
                                                                 <div class="ls-inputicon-box">
-                                                                    <select class="wt-select-box selectpicker" name="degree" required
+                                                                    <select class="form-select form-control" name="degree" required
                                                                             data-live-search="true" title=""
                                                                             id="editeddegree"
                                                                             data-bv-field="size">
@@ -1014,7 +1014,7 @@
                                                     <div class="content">
                                                         <span class="job-title">@i.CertificateName</span>
                                                         <div class="actions">
-                                                            <button class="btn" data-bs-toggle="modal" onclick="loadEditFormCe('@i.CertificateId', '@i.CertificateName', '@i.Organization', '@i.CertificateLink', '@i.Description')"
+                                                            <button class="btn" data-bs-toggle="modal" onclick="loadEditFormCe('@Html.Raw(i.CertificateId)', '@Html.Raw(i.CertificateName)', '@Html.Raw(i.Organization)', '@Html.Raw(i.CertificateLink)', '@Html.Raw(i.Description)')"
                                                                     data-bs-target="#EditCertificateModal">
                                                                 <i class="feather-edit"></i>
                                                             </button>

@@ -67,8 +67,6 @@ public partial class JobSeekerJobPosting
 
     public virtual ICollection<JobSeekerJobPostingApply> JobSeekerJobPostingApplies { get; set; } = new List<JobSeekerJobPostingApply>();
 
-    public virtual ICollection<JobSeekerNotification> JobSeekerNotifications { get; set; } = new List<JobSeekerNotification>();
-
     public virtual ICollection<JobSeekerSavedJobPosting> JobSeekerSavedJobPostings { get; set; } = new List<JobSeekerSavedJobPosting>();
 
     public virtual JobSeekerStatusCode? StatusCodeNavigation { get; set; }

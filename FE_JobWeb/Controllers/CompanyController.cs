@@ -43,7 +43,7 @@ namespace FE_JobWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> CompanyProfile(int type, string companyname, string jobfield, string companysize, string taxcode, DateTime foundeddate, string companyemail, string companyphone, string companydecription, IFormFile imagelogo, IFormFile imagebackground, string facebookurl, string linkedinurl, string websiteurl, string city, string district, string ward, string address)
         {
-            if(type == 1)
+            if (type == 1)
             {
                 #region validate
                 if (string.IsNullOrEmpty(companyname) || string.IsNullOrEmpty(jobfield) || string.IsNullOrEmpty(companysize) || string.IsNullOrEmpty(taxcode) || string.IsNullOrEmpty(companyemail) || string.IsNullOrEmpty(companyphone) || string.IsNullOrEmpty(companydecription) || foundeddate == null) return RedirectToAction("CompanyProfile", "Company", new { error = "Vui lòng nhập đầy đủ!" });
@@ -73,7 +73,7 @@ namespace FE_JobWeb.Controllers
                 }
                 else return RedirectToAction("CompanyProfile", "Company", new { error = "Không tìm thấy hồ sơ recruiter!" });
 
-                if (DateOnly.FromDateTime(foundeddate) > DateOnly.FromDateTime(DateTime.UtcNow)) return RedirectToAction("CompanyProfile", "Company", new { error = "Ngày thành lập không hợp lệ!" });
+                if (DateOnly.FromDateTime(foundeddate) > DateOnly.FromDateTime(DateTime.Now)) return RedirectToAction("CompanyProfile", "Company", new { error = "Ngày thành lập không hợp lệ!" });
                 #endregion
                 HttpClient client = new HttpClient();
                 //Call api
@@ -358,11 +358,19 @@ namespace FE_JobWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> PostJob(string title, string quantity, string category, string worktype, string exp, string level, string salarymin, string salarymax, string degree, string gender, string city, string district, string ward, DateTime expiredtime, string address, string description, string require, string benefit)
         {
+            JobSeekerRecruiterProfile r1 = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == user.User.Id);
+            if (r1 == null) return RedirectToAction("ListPostJob", "Company", new { error = "Không tìm thấy hồ sơ nhà tuyển dụng!" });
+
+            JobSeekerEnterprise e1 = db.JobSeekerEnterprises.FirstOrDefault(p => p.EnterpriseId == r1.EnterpriseId);
+            if (e1 == null) return RedirectToAction("ListPostJob", "Company", new { error = "Không tìm thấy công ty!" });
+
+            if (e1.IsCensorship == null || e1.IsCensorship == false) return RedirectToAction("ListPostJob", "Company", new { error = "Công ty chưa được kiểm duyệt!" });
+
             #region validate
             if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(category) || string.IsNullOrEmpty(worktype) || string.IsNullOrEmpty(exp) || string.IsNullOrEmpty(salarymin) | string.IsNullOrEmpty(salarymax) || string.IsNullOrEmpty(degree) || string.IsNullOrEmpty(gender) || string.IsNullOrEmpty(city) || string.IsNullOrEmpty(district) || string.IsNullOrEmpty(ward) || string.IsNullOrEmpty(address) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(require) || string.IsNullOrEmpty(benefit) || expiredtime == null) 
                 return RedirectToAction("PostJob","Company", new {error = "Vui lòng nhập đầy đủ!"});
 
-            if (DateOnly.FromDateTime(expiredtime) < DateOnly.FromDateTime(DateTime.UtcNow)) return RedirectToAction("PostJob", "Company", new { error = "Ngày hết hạn không hợp lệ!" });
+            if (DateOnly.FromDateTime(expiredtime) < DateOnly.FromDateTime(DateTime.Now)) return RedirectToAction("PostJob", "Company", new { error = "Ngày hết hạn không hợp lệ!" });
 
             if (int.Parse(salarymin) > int.Parse(salarymax)) return RedirectToAction("PostJob", "Company", new { error = "Mức lương tối đa phải lớn hơn tối thiểu!" });
             #endregion
@@ -399,7 +407,7 @@ namespace FE_JobWeb.Controllers
             o.BenefitEnjoyed = benefit;
             o.EnterpriseId = enterprise.EnterpriseId;
             o.StatusCode = "SC7";
-            o.IsCreatedAt = DateTime.UtcNow;
+            o.IsCreatedAt = DateTime.Now;
 
 
             // Convert đối tượng thành JSON
@@ -443,9 +451,10 @@ namespace FE_JobWeb.Controllers
                 return RedirectToAction("PostJob", "Company", new { error = "Có 1 vấn đề nào đó xả ra, vui lòng kết nối tới chúng tôi để được giúp đỡ!" });
             }
         }
-        public async Task<IActionResult> ListPostJob(string? error, int page = 1)
+        public async Task<IActionResult> ListPostJob(string? error, string? success, int page = 1)
         {
             if (error != null) ViewBag.ErrorMessage = error;
+            if (success != null) ViewBag.SuccessMessage = success;
 
             ViewBag.JobApply = await GetListJobApply();
             ViewBag.Jobcategory = await GetJobCategory();
@@ -478,7 +487,15 @@ namespace FE_JobWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> ListPostJob(string type, string search, string status, Guid id, string title, string quantity, string category, string worktype, string exp, string level, string salarymin, string salarymax, string degree, string gender, string city, string district, string ward, DateTime expiredtime, string address, string description, string require, string benefit)
         {
-            if(type == "1")
+            JobSeekerRecruiterProfile r1 = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == user.User.Id);
+            if (r1 == null) return RedirectToAction("ListPostJob", "Company", new { error = "Không tìm hồ sơ nhà tuyển dụng!" });
+
+            JobSeekerEnterprise e1 = db.JobSeekerEnterprises.FirstOrDefault(p => p.EnterpriseId == r1.EnterpriseId);
+            if (e1 == null) return RedirectToAction("ListPostJob", "Company", new { error = "Không tìm thấy công ty!" });
+
+            if (e1.IsCensorship == null || e1.IsCensorship == false) return RedirectToAction("ListPostJob", "Company", new { error = "Công ty chưa được kiểm duyệt!" });
+
+            if (type == "1")
             {
                 #region validate
                 if (string.IsNullOrEmpty(status)) return RedirectToAction("ListPostJob", "Company", new { error = "Vui lòng nhập đầy đủ!" });
@@ -518,7 +535,7 @@ namespace FE_JobWeb.Controllers
                 if (id == null || string.IsNullOrEmpty(title) || string.IsNullOrEmpty(category) || string.IsNullOrEmpty(worktype) || string.IsNullOrEmpty(exp) || string.IsNullOrEmpty(salarymin) | string.IsNullOrEmpty(salarymax) || string.IsNullOrEmpty(degree) || string.IsNullOrEmpty(gender) || string.IsNullOrEmpty(city) || string.IsNullOrEmpty(district) || string.IsNullOrEmpty(ward) || string.IsNullOrEmpty(address) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(require) || string.IsNullOrEmpty(benefit) || expiredtime == null)
                     return RedirectToAction("ListPostJob", "Company", new { error = "Vui lòng nhập đầy đủ!" });
 
-                if (DateOnly.FromDateTime(expiredtime) < DateOnly.FromDateTime(DateTime.UtcNow)) return RedirectToAction("ListPostJob", "Company", new { error = "Ngày hết hạn không hợp lệ!" });
+                if (DateOnly.FromDateTime(expiredtime) < DateOnly.FromDateTime(DateTime.Now)) return RedirectToAction("ListPostJob", "Company", new { error = "Ngày hết hạn không hợp lệ!" });
 
                 if (int.Parse(salarymin) > int.Parse(salarymax)) return RedirectToAction("ListPostJob", "Company", new { error = "Mức lương tối đa phải lớn hơn tối thiểu!" });
                 #endregion
@@ -552,7 +569,7 @@ namespace FE_JobWeb.Controllers
                 o.JobDesc = description;
                 o.JobRequirement = require;
                 o.BenefitEnjoyed = benefit;
-                o.IsUpdatedAt = DateTime.UtcNow;
+                o.IsUpdatedAt = DateTime.Now;
 
 
                 // Convert đối tượng thành JSON

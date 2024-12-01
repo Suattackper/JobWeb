@@ -53,6 +53,7 @@ public partial class JobSeekerCandidateProfile
     public virtual JobSeekerUserLoginDatum? CandidateNavigation { get; set; }
 
     public virtual ICollection<JobSeekerApplicantProfileSaved> JobSeekerApplicantProfileSaveds { get; set; } = new List<JobSeekerApplicantProfileSaved>();
+    public virtual ICollection<JobSeekerEnterpriseFollowed> JobSeekerEnterpriseFolloweds { get; set; } = new List<JobSeekerEnterpriseFollowed>();
 
     public virtual ICollection<JobSeekerCertificate> JobSeekerCertificates { get; set; } = new List<JobSeekerCertificate>();
 

@@ -49,6 +49,16 @@
   },
   {
     "ContainingType": "BE_JobWeb.Controllers.AccountController",
+    "Method": "GetListUser",
+    "RelativePath": "api/Account/getlistuser",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.AccountController",
     "Method": "Login",
     "RelativePath": "api/Account/login",
     "HttpMethod": "POST",
@@ -58,6 +68,22 @@
       {
         "Name": "e",
         "Type": "Data_JobWeb.Entity.JobSeekerUserLoginDatum",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.AccountController",
+    "Method": "Logout",
+    "RelativePath": "api/Account/logout/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -241,6 +267,16 @@
   },
   {
     "ContainingType": "BE_JobWeb.Controllers.CompanyController",
+    "Method": "GetListEnterprise",
+    "RelativePath": "api/Company/getlistenterprise",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.CompanyController",
     "Method": "GetListJobApply",
     "RelativePath": "api/Company/getlistjobapply",
     "HttpMethod": "GET",
@@ -389,6 +425,70 @@
   },
   {
     "ContainingType": "BE_JobWeb.Controllers.JobController",
+    "Method": "AddJobcategory",
+    "RelativePath": "api/Job/addjobcategory",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "e",
+        "Type": "Data_JobWeb.Entity.JobSeekerJobCategory",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.JobController",
+    "Method": "AddJobfield",
+    "RelativePath": "api/Job/addjobfield",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "e",
+        "Type": "Data_JobWeb.Entity.JobSeekerJobField",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.JobController",
+    "Method": "DeleteJobcategory",
+    "RelativePath": "api/Job/deletejobcategory/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.JobController",
+    "Method": "DeleteJobfield",
+    "RelativePath": "api/Job/deletejobfield/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.JobController",
     "Method": "GetJobcategory",
     "RelativePath": "api/Job/getjobcategory",
     "HttpMethod": "GET",
@@ -418,24 +518,77 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "BE_JobWeb.Controllers.WeatherForecastController",
-    "Method": "Get",
-    "RelativePath": "api/WeatherForecast",
-    "HttpMethod": "GET",
+    "ContainingType": "BE_JobWeb.Controllers.JobController",
+    "Method": "UpdateJobcategory",
+    "RelativePath": "api/Job/updatejobcategory",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [],
-    "EndpointName": "GetWeatherForecast"
+    "Parameters": [
+      {
+        "Name": "e",
+        "Type": "Data_JobWeb.Entity.JobSeekerJobCategory",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "BE_JobWeb.Controllers.WeatherForecastController",
-    "Method": "getdemo",
-    "RelativePath": "api/WeatherForecast/demo",
+    "ContainingType": "BE_JobWeb.Controllers.JobController",
+    "Method": "UpdateJobfield",
+    "RelativePath": "api/Job/updatejobfield",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "e",
+        "Type": "Data_JobWeb.Entity.JobSeekerJobField",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.NotificationController",
+    "Method": "ListNotificationAdmin",
+    "RelativePath": "api/Notification/listnotificationadmin",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.NotificationController",
+    "Method": "NotificationCompany",
+    "RelativePath": "api/Notification/notificationcompany/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.NotificationController",
+    "Method": "NotificationPostJob",
+    "RelativePath": "api/Notification/notificationpostjob/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   }
 ]

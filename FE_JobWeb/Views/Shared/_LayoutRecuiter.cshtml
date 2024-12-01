@@ -49,6 +49,12 @@
 
 </head>
 
+<style>
+    .form-select.form-control {
+        width: 100%; /* Chiếm toàn bộ chiều rộng container */
+    }
+</style>
+
 <body>
 
     <!-- LOADING AREA START ===== -->
@@ -83,7 +89,7 @@
                         <div class="header-right">
                             <ul class="header-widget-wrap">
                                 <!--Message-->
-                                <li class="header-widget dashboard-message-dropdown">
+                                @* <li class="header-widget dashboard-message-dropdown">
 
                                     <div class="dropdown">
                                         <a href="javascript:;" class="dropdown-toggle jobzilla-admin-messange"
@@ -154,7 +160,7 @@
                                         </div>
                                     </div>
 
-                                </li>
+                                </li> *@
 
                                 <!--Notification-->
                                 <li class="header-widget dashboard-noti-dropdown">
@@ -368,7 +374,7 @@
                         <div class="header-right">
                             <ul class="header-widget-wrap">
                                 <!--Message-->
-                                <li class="header-widget dashboard-message-dropdown">
+                                @* <li class="header-widget dashboard-message-dropdown">
 
                                     <div class="dropdown">
                                         <a href="javascript:;" class="dropdown-toggle jobzilla-admin-messange"
@@ -439,7 +445,7 @@
                                         </div>
                                     </div>
 
-                                </li>
+                                </li> *@
 
                                 <!--Notification-->
                                 <li class="header-widget dashboard-noti-dropdown">
@@ -679,7 +685,7 @@
                         <div class="header-right">
                             <ul class="header-widget-wrap">
                                 <!--Message-->
-                                <li class="header-widget dashboard-message-dropdown">
+                                @* <li class="header-widget dashboard-message-dropdown">
 
                                     <div class="dropdown">
                                         <a href="javascript:;" class="dropdown-toggle jobzilla-admin-messange"
@@ -750,7 +756,7 @@
                                         </div>
                                     </div>
 
-                                </li>
+                                </li> *@
 
                                 <!--Notification-->
                                 <li class="header-widget dashboard-noti-dropdown">
@@ -888,24 +894,39 @@
                                 </span>
                             </a>
                         </li>
-                        <li>
-                            <a href="admin-company-managed.html">
+                        <li @((Context.Request.Path.Value.Contains("ManageCompanyAdmin")) ? "class=active" : "")>
+                            <a href="@Url.Action("ManageCompanyAdmin","Home")">
                                 <i class="feather-file-text"></i><span class="admin-nav-text">
                                     Quản lý doanh
                                     nghiệp
                                 </span>
                             </a>
                         </li>
-                        <li>
-                            <a href="admin-job-posting.html">
+                        <li @((Context.Request.Path.Value.Contains("ManageJobPostingAdmin")) ? "class=active" : "")>
+                            <a href="@Url.Action("ManageJobPostingAdmin","Home")">
                                 <i class="feather-briefcase"></i><span class="admin-nav-text">
                                     Quản lý các
                                     bài đăng
                                 </span>
                             </a>
                         </li>
-                        <li>
-                            <a href="#">
+                        <li @((Context.Request.Path.Value.Contains("ManageCategoryAdmin")) ? "class=active" : "")>
+                            <a href="@Url.Action("ManageCategoryAdmin","Home")">
+                                <i class="feather-briefcase"></i><span class="admin-nav-text">Quản lý ngành nghề</span>
+                            </a>
+                        </li>
+                        <li @((Context.Request.Path.Value.Contains("ManageJobFieldAdmin")) ? "class=active" : "")>
+                            <a href="@Url.Action("ManageJobFieldAdmin","Home")">
+                                <i class="feather-briefcase"></i><span class="admin-nav-text">Quản lý lĩnh vực hoạt động</span>
+                            </a>
+                        </li>
+                        @* <li>
+                            <a href="admin-blog.html">
+                                <i class="feather-book-open"></i><span class="admin-nav-text">Quản lý bài blog</span>
+                            </a>
+                        </li> *@
+                        <li @((Context.Request.Path.Value.Contains("ManageAccountAdmin")) ? "class=active" : "")>
+                            <a href="@Url.Action("ManageAccountAdmin","Home")">
                                 <i class="feather-users"></i><span class="admin-nav-text">Quản lý tài khoản</span>
                             </a>
                         </li>
@@ -997,6 +1018,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
     <script src="~/Content/js/script.js"></script>
     <script src="~/Content/js/notification.js"></script>
+    <script src="~/Content/js/nice-select.min.js"></script>
 
     
 

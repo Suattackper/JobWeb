@@ -49,6 +49,10 @@
       "PackagePath": "staticwebassets\\Content\\css\\magnific-popup.min.css"
     },
     {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\nice-select.min.css",
+      "PackagePath": "staticwebassets\\Content\\css\\nice-select.min.css"
+    },
+    {
       "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\owl.carousel.min.css",
       "PackagePath": "staticwebassets\\Content\\css\\owl.carousel.min.css"
     },
@@ -159,6 +163,10 @@
     {
       "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\markerclusterer.js",
       "PackagePath": "staticwebassets\\Content\\js\\markerclusterer.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\nice-select.min.js",
+      "PackagePath": "staticwebassets\\Content\\js\\nice-select.min.js"
     },
     {
       "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\notification.js",

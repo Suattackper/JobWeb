@@ -135,3 +135,4 @@ D:\c#\JobWeb\JobWeb\Data_JobWeb\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.
 D:\c#\JobWeb\JobWeb\Data_JobWeb\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 D:\c#\JobWeb\JobWeb\Data_JobWeb\obj\Debug\net8.0\Data_JobWeb.csproj.AssemblyReference.cache
 D:\c#\JobWeb\JobWeb\Data_JobWeb\obj\Debug\net8.0\Data_Job.89496A84.Up2Date
+D:\c#\JobWeb\JobWeb\Data_JobWeb\obj\Debug\net8.0\Data_JobWeb.sourcelink.json

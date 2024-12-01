@@ -22,6 +22,7 @@ public partial class JobSeekerContext : DbContext
     public virtual DbSet<AuthenticationRole> AuthenticationRoles { get; set; }
 
     public virtual DbSet<JobSeekerApplicantProfileSaved> JobSeekerApplicantProfileSaveds { get; set; }
+    public virtual DbSet<JobSeekerEnterpriseFollowed> JobSeekerEnterpriseFolloweds { get; set; }
 
     public virtual DbSet<JobSeekerCandidateProfile> JobSeekerCandidateProfiles { get; set; }
 
@@ -146,6 +147,37 @@ public partial class JobSeekerContext : DbContext
                 .HasForeignKey(d => d.EnterpriseId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("profile_saved_enterprise_id_fk");
+        });
+        modelBuilder.Entity<JobSeekerEnterpriseFollowed>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__job_seek__3213E83F1E4AB212");
+
+            entity.ToTable("job_seeker_enterprise_followed");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CandidateId).HasColumnName("candidate_id");
+            entity.Property(e => e.EnterpriseId).HasColumnName("enterprise_id");
+            entity.Property(e => e.IsCreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("is_created_at");
+            entity.Property(e => e.IsDeletedAt)
+                .HasColumnType("datetime")
+                .HasColumnName("is_deleted_at");
+            entity.Property(e => e.IsUpdatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("is_updated_at");
+
+            entity.HasOne(d => d.Candidate).WithMany(p => p.JobSeekerEnterpriseFolloweds)
+                .HasForeignKey(d => d.CandidateId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("enterprise_followed_candidate_id_fk");
+
+            entity.HasOne(d => d.Enterprise).WithMany(p => p.JobSeekerEnterpriseFolloweds)
+                .HasForeignKey(d => d.EnterpriseId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("enterprise_followed_enterprise_id_fk");
         });
 
         modelBuilder.Entity<JobSeekerCandidateProfile>(entity =>
@@ -396,6 +428,9 @@ public partial class JobSeekerContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
                 .HasColumnName("is_updated_at");
+            entity.Property(e => e.IsCensorship)
+                .HasDefaultValue(false)
+                .HasColumnName("is_censorship");
             entity.Property(e => e.JobFieldId).HasColumnName("job_field_id");
             entity.Property(e => e.LinkedinUrl)
                 .HasMaxLength(500)
@@ -426,7 +461,7 @@ public partial class JobSeekerContext : DbContext
 
             entity.HasOne(d => d.JobField).WithMany(p => p.JobSeekerEnterprises)
                 .HasForeignKey(d => d.JobFieldId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("job_field_id_fk");
         });
 
@@ -559,7 +594,7 @@ public partial class JobSeekerContext : DbContext
 
             entity.HasOne(d => d.JobCategory).WithMany(p => p.JobSeekerJobPostings)
                 .HasForeignKey(d => d.JobCategoryId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("job_posting_job_category_id_fk");
 
             entity.HasOne(d => d.JobLevelCodeNavigation).WithMany(p => p.JobSeekerJobPostings)
@@ -598,7 +633,7 @@ public partial class JobSeekerContext : DbContext
 
             entity.HasOne(d => d.JobPosting).WithMany(p => p.JobSeekerJobPostingApplies)
                 .HasForeignKey(d => d.JobPostingId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("job_posting_id_fk");
 
             entity.HasOne(d => d.StatusCodeNavigation).WithMany(p => p.JobSeekerJobPostingApplies)
@@ -621,32 +656,19 @@ public partial class JobSeekerContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
                 .HasColumnName("is_created_at");
-            entity.Property(e => e.IsDeleted)
-                .HasDefaultValue(false)
-                .HasColumnName("is_deleted");
             entity.Property(e => e.IsSeen).HasColumnName("is_seen");
             entity.Property(e => e.IsSent).HasColumnName("is_sent");
-            entity.Property(e => e.JobId).HasColumnName("job_id");
-            entity.Property(e => e.NotifyTypeId)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("notify_type_id");
-            entity.Property(e => e.UserLoginDataId).HasColumnName("user_login_data_id");
-
-            entity.HasOne(d => d.Job).WithMany(p => p.JobSeekerNotifications)
-                .HasForeignKey(d => d.JobId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("job_posting_notify_id_fk");
-
-            entity.HasOne(d => d.NotifyType).WithMany(p => p.JobSeekerNotifications)
-                .HasForeignKey(d => d.NotifyTypeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("notify_type_id_fk");
-
-            entity.HasOne(d => d.UserLoginData).WithMany(p => p.JobSeekerNotifications)
-                .HasForeignKey(d => d.UserLoginDataId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("user_login_data_id_fk");
+            entity.Property(e => e.IdConcern).HasColumnName("concern_id");
+            entity.Property(e => e.IdUserReceive).HasColumnName("user_id");
+            entity.Property(e => e.Description)
+                .HasMaxLength(500)
+                .HasColumnName("description");
+            entity.Property(e => e.Type)
+                .HasMaxLength(200)
+                .HasColumnName("type_name");
+            entity.Property(e => e.Title)
+                .HasMaxLength(100)
+                .HasColumnName("title");
         });
 
         modelBuilder.Entity<JobSeekerNotificationType>(entity =>
@@ -665,6 +687,12 @@ public partial class JobSeekerContext : DbContext
             entity.Property(e => e.TypeName)
                 .HasMaxLength(100)
                 .HasColumnName("type_name");
+            entity.Property(e => e.IdUser)
+                .HasMaxLength(100)
+                .HasColumnName("id_user");
+            entity.Property(e => e.IsCreateAt)
+                .HasColumnType("datetime")
+                .HasColumnName("is_create_at");
         });
 
         modelBuilder.Entity<JobSeekerProvince>(entity =>
@@ -763,7 +791,7 @@ public partial class JobSeekerContext : DbContext
 
             entity.HasOne(d => d.JobPosting).WithMany(p => p.JobSeekerSavedJobPostings)
                 .HasForeignKey(d => d.JobPostingId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("saved_job_posting_id_fk");
         });
 
@@ -839,6 +867,9 @@ public partial class JobSeekerContext : DbContext
             entity.Property(e => e.IsActive)
                 .HasDefaultValue(false)
                 .HasColumnName("is_active");
+            entity.Property(e => e.IsDisable)
+                .HasDefaultValue(false)
+                .HasColumnName("is_disable");
             entity.Property(e => e.IsCreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")

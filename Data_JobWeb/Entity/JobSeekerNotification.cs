@@ -7,23 +7,19 @@ public partial class JobSeekerNotification
 {
     public string Id { get; set; }
 
-    public string? NotifyTypeId { get; set; }
+    public string? Title { get; set; }
 
-    public Guid? UserLoginDataId { get; set; }
+    public string? Description { get; set; }
 
-    public Guid? JobId { get; set; }
+    public string? Type { get; set; }
+
+    public Guid? IdUserReceive { get; set; }
+
+    public Guid? IdConcern { get; set; }
 
     public DateTime? IsCreatedAt { get; set; }
 
     public bool? IsSent { get; set; }
 
     public bool? IsSeen { get; set; }
-
-    public bool? IsDeleted { get; set; }
-
-    public virtual JobSeekerJobPosting? Job { get; set; }
-
-    public virtual JobSeekerNotificationType? NotifyType { get; set; }
-
-    public virtual JobSeekerUserLoginDatum? UserLoginData { get; set; }
 }
