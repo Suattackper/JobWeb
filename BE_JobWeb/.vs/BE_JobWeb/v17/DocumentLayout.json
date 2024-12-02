@@ -3,23 +3,16 @@
   "WorkspaceRootPath": "D:\\c#\\JobWeb\\JobWeb\\BE_JobWeb\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8C0BF67E-3E7C-4B7F-AD1B-A41B67C18DAD}|..\\FE_JobWeb\\FE_JobWeb.csproj|d:\\c#\\jobweb\\jobweb\\fe_jobweb\\views\\shared\\_layoutrecuiter.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8C0BF67E-3E7C-4B7F-AD1B-A41B67C18DAD}|..\\FE_JobWeb\\FE_JobWeb.csproj|d:\\c#\\jobweb\\jobweb\\fe_jobweb\\views\\company\\listpostjob.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8C0BF67E-3E7C-4B7F-AD1B-A41B67C18DAD}|..\\FE_JobWeb\\FE_JobWeb.csproj|d:\\c#\\jobweb\\jobweb\\fe_jobweb\\views\\home\\managejobfieldadmin.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8C0BF67E-3E7C-4B7F-AD1B-A41B67C18DAD}|..\\FE_JobWeb\\FE_JobWeb.csproj|d:\\c#\\jobweb\\jobweb\\fe_jobweb\\views\\home\\managecategoryadmin.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CF24060B-7DAC-464F-97F0-48CD12EC250C}|BE_JobWeb.csproj|d:\\c#\\jobweb\\jobweb\\be_jobweb\\controllers\\jobcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CF24060B-7DAC-464F-97F0-48CD12EC250C}|BE_JobWeb.csproj|solutionrelative:controllers\\jobcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{8C0BF67E-3E7C-4B7F-AD1B-A41B67C18DAD}|..\\FE_JobWeb\\FE_JobWeb.csproj|d:\\c#\\jobweb\\jobweb\\fe_jobweb\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8C0BF67E-3E7C-4B7F-AD1B-A41B67C18DAD}|..\\FE_JobWeb\\FE_JobWeb.csproj|d:\\c#\\jobweb\\jobweb\\fe_jobweb\\views\\home\\jobhome.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8C0BF67E-3E7C-4B7F-AD1B-A41B67C18DAD}|..\\FE_JobWeb\\FE_JobWeb.csproj|d:\\c#\\jobweb\\jobweb\\fe_jobweb\\views\\home\\companyhome.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8C0BF67E-3E7C-4B7F-AD1B-A41B67C18DAD}|..\\FE_JobWeb\\FE_JobWeb.csproj|d:\\c#\\jobweb\\jobweb\\fe_jobweb\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -29,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -41,78 +34,52 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "_LayoutRecuiter.cshtml",
-              "DocumentMoniker": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\Views\\Shared\\_LayoutRecuiter.cshtml",
-              "RelativeDocumentMoniker": "..\\FE_JobWeb\\Views\\Shared\\_LayoutRecuiter.cshtml",
-              "ToolTip": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\Views\\Shared\\_LayoutRecuiter.cshtml",
-              "RelativeToolTip": "..\\FE_JobWeb\\Views\\Shared\\_LayoutRecuiter.cshtml",
-              "ViewState": "AgIAAGcBAAAAAAAAAAAawHoBAAA6AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-12-01T18:18:36.875Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "ListPostJob.cshtml",
-              "DocumentMoniker": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\Views\\Company\\ListPostJob.cshtml",
-              "RelativeDocumentMoniker": "..\\FE_JobWeb\\Views\\Company\\ListPostJob.cshtml",
-              "ToolTip": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\Views\\Company\\ListPostJob.cshtml",
-              "RelativeToolTip": "..\\FE_JobWeb\\Views\\Company\\ListPostJob.cshtml",
-              "ViewState": "AgIAAAMCAAAAAAAAAAAawLIBAAByAAAAAAAAAA==",
+              "Title": "JobHome.cshtml",
+              "DocumentMoniker": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\Views\\Home\\JobHome.cshtml",
+              "RelativeDocumentMoniker": "..\\FE_JobWeb\\Views\\Home\\JobHome.cshtml",
+              "ToolTip": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\Views\\Home\\JobHome.cshtml",
+              "RelativeToolTip": "..\\FE_JobWeb\\Views\\Home\\JobHome.cshtml",
+              "ViewState": "AgIAABkAAAAAAAAAAAAcwCYAAABEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-12-01T18:14:42.027Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "JobController.cs",
-              "DocumentMoniker": "D:\\c#\\JobWeb\\JobWeb\\BE_JobWeb\\Controllers\\JobController.cs",
-              "RelativeDocumentMoniker": "Controllers\\JobController.cs",
-              "ToolTip": "D:\\c#\\JobWeb\\JobWeb\\BE_JobWeb\\Controllers\\JobController.cs",
-              "RelativeToolTip": "Controllers\\JobController.cs",
-              "ViewState": "AgIAACAAAAAAAAAAAAASwDAAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-01T17:50:21.129Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ManageJobFieldAdmin.cshtml",
-              "DocumentMoniker": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\Views\\Home\\ManageJobFieldAdmin.cshtml",
-              "RelativeDocumentMoniker": "..\\FE_JobWeb\\Views\\Home\\ManageJobFieldAdmin.cshtml",
-              "ToolTip": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\Views\\Home\\ManageJobFieldAdmin.cshtml",
-              "RelativeToolTip": "..\\FE_JobWeb\\Views\\Home\\ManageJobFieldAdmin.cshtml",
-              "ViewState": "AgIAABIAAAAAAAAAAAAAACAAAABpAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-12-01T17:40:32.941Z",
+              "WhenOpened": "2024-12-02T16:25:08.126Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "ManageCategoryAdmin.cshtml",
-              "DocumentMoniker": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\Views\\Home\\ManageCategoryAdmin.cshtml",
-              "RelativeDocumentMoniker": "..\\FE_JobWeb\\Views\\Home\\ManageCategoryAdmin.cshtml",
-              "ToolTip": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\Views\\Home\\ManageCategoryAdmin.cshtml",
-              "RelativeToolTip": "..\\FE_JobWeb\\Views\\Home\\ManageCategoryAdmin.cshtml",
-              "ViewState": "AgIAABUAAAAAAAAAAAAAAJsAAAAWAAAAAAAAAA==",
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "..\\FE_JobWeb\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "..\\FE_JobWeb\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAE0AAAAAAAAAAAAAAGwAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-12-01T15:23:44.046Z",
+              "WhenOpened": "2024-12-02T15:44:21.762Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 2,
+              "Title": "CompanyHome.cshtml",
+              "DocumentMoniker": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\Views\\Home\\CompanyHome.cshtml",
+              "RelativeDocumentMoniker": "..\\FE_JobWeb\\Views\\Home\\CompanyHome.cshtml",
+              "ToolTip": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\Views\\Home\\CompanyHome.cshtml",
+              "RelativeToolTip": "..\\FE_JobWeb\\Views\\Home\\CompanyHome.cshtml",
+              "ViewState": "AgIAAFQAAAAAAAAAAAAAAJgAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-12-02T14:55:40.965Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
               "Title": "HomeController.cs",
               "DocumentMoniker": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\Controllers\\HomeController.cs",
               "RelativeDocumentMoniker": "..\\FE_JobWeb\\Controllers\\HomeController.cs",
               "ToolTip": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\Controllers\\HomeController.cs",
               "RelativeToolTip": "..\\FE_JobWeb\\Controllers\\HomeController.cs",
-              "ViewState": "AgIAABQBAAAAAAAAAADwv3ACAAA2AAAAAAAAAA==",
+              "ViewState": "AgIAABoAAAAAAAAAAAAgwDwBAAB/AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-28T16:35:20.012Z",
               "EditorCaption": ""

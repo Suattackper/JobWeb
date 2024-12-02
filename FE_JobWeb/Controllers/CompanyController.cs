@@ -408,6 +408,7 @@ namespace FE_JobWeb.Controllers
             o.EnterpriseId = enterprise.EnterpriseId;
             o.StatusCode = "SC7";
             o.IsCreatedAt = DateTime.Now;
+            o.IsUpdatedAt = DateTime.Now;
 
 
             // Convert đối tượng thành JSON

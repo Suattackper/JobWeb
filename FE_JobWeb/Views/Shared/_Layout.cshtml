@@ -39,7 +39,7 @@
     <link rel="stylesheet" type="text/css" href="~/Content/css/swiper-bundle.min.css"><!-- Swiper Slider -->
     <link rel="stylesheet" type="text/css" href="~/Content/css/style.css"><!-- MAIN STYLE SHEET -->
     <!-- THEME COLOR CHANGE STYLE SHEET -->
-    <link rel="stylesheet" class="skin" type="text/css" href="~/Content/css/skins-type/skin-6.css">
+    @* <link rel="stylesheet" class="skin" type="text/css" href="~/Content/css/skins-type/skin-6.css"> *@
     <!-- SIDE SWITCHER STYLE SHEET -->
     <link rel="stylesheet" type="text/css" href="~/Content/css/switcher.css">
 
@@ -93,31 +93,31 @@
                         <div class="nav-animation header-nav navbar-collapse collapse d-flex justify-content-center">
                             <ul class=" nav navbar-nav">
                                 <li class="has-mega-menu">
-                                    <a href="index.html">Trang chủ</a>
+                                    <a href="@Url.Action("Index","Home")">Trang chủ</a>
                                 </li>
                                 <li class="has-child">
-                                    <a href="job-list.html">Công việc</a>
+                                    <a href="@Url.Action("JobHome","Home")">Công việc</a>
                                 </li>
                                 <li class="has-child">
-                                    <a href="employer-detail.html">Doanh nghiệp</a>
+                                    <a href="@Url.Action("CompanyHome","Home")">Doanh nghiệp</a>
                                 </li>
                                 <li class="has-child">
                                     <a href="about-1.html">Về chúng tôi</a>
                                 </li>
-                                <li class="has-child">
+                                @* <li class="has-child">
                                     <a href="blog-list.html">Blog</a>
-                                </li>
+                                </li> *@
                             </ul>
 
                         </div>
 
                         <!-- Header Right Section-->
                         <div class="extra-nav header-2-nav">
-                            <div class="extra-cell">
+                            @* <div class="extra-cell">
                                 <div class="header-search">
                                     <a href="#search" class="header-search-icon"><i class="feather-search"></i></a>
                                 </div>
-                            </div>
+                            </div> *@
                             @if(user.User != null)
                             {
                                 <div class="extra-cell">
@@ -313,12 +313,12 @@
                                                                             <i class="feather-home"></i>Dashboard
                                                                         </a>
                                                                     </li>
-                                                                    <li>
+                                                                    @* <li>
                                                                         <a href="candidate-chat.html">
                                                                             <i class="feather-mail"></i>
                                                                             Tin nhắn
                                                                         </a>
-                                                                    </li>
+                                                                    </li> *@
                                                                     <li>
                                                                         <a href="@Url.Action("MyProfile","Account")">
                                                                             <i class="feather-user"></i>

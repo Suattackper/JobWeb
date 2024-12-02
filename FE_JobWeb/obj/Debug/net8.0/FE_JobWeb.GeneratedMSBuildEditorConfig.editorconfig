@@ -66,6 +66,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcGFueVxQb3N0Sm9iLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/c\#/JobWeb/JobWeb/FE_JobWeb/Views/Home/CompanyHome.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDb21wYW55SG9tZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/c\#/JobWeb/JobWeb/FE_JobWeb/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -80,6 +84,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/c\#/JobWeb/JobWeb/FE_JobWeb/Views/Home/IndexRecruiter.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleFJlY3J1aXRlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/c\#/JobWeb/JobWeb/FE_JobWeb/Views/Home/JobHome.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxKb2JIb21lLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/c\#/JobWeb/JobWeb/FE_JobWeb/Views/Home/ManageAccountAdmin.cshtml]

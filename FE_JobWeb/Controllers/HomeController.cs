@@ -10,6 +10,7 @@ using System.Net;
 using System.Text;
 using FE_JobWeb.Others;
 using Microsoft.AspNetCore.Http;
+using Data_JobWeb.Dtos;
 
 namespace FE_JobWeb.Controllers
 {
@@ -17,17 +18,148 @@ namespace FE_JobWeb.Controllers
     {
         private JobSeekerContext db = new JobSeekerContext();
         private readonly ILogger<HomeController> _logger;
-        int pageSize = 10;
+        int pageSize = 9;
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
-
+        //home
         public IActionResult Index()
         {
             return View();
         }
+        public async Task<IActionResult> CompanyHome(string? error, string? success, int page = 1)
+        {
+            if (error != null) ViewBag.ErrorMessage = error;
+            if (success != null) ViewBag.SuccessMessage = success;
+
+            ViewBag.Jobfield = await GetJobfield();
+            ViewBag.City = await GetCity();
+
+            if (TempData.ContainsKey("comanyhomes"))
+            {
+                string jobPostingsJson = TempData["comanyhomes"] as string;
+                List<JobSeekerEnterprise> data = JsonConvert.DeserializeObject<List<JobSeekerEnterprise>>(jobPostingsJson);
+
+                if (!data.Any())
+                {
+                    data = await GetListEnterprise();
+
+                    data = data.Where(p => p.IsCensorship == true).ToList();
+
+                    PaginatedList<JobSeekerEnterprise> paginatedJobs2 = PaginatedList<JobSeekerEnterprise>.Create(data, page, pageSize);
+
+                    return View(paginatedJobs2);
+                }
+
+                PaginatedList<JobSeekerEnterprise> paginatedJobs1 = PaginatedList<JobSeekerEnterprise>.Create(data, page, pageSize);
+
+                return View(paginatedJobs1);
+            }
+
+            List<JobSeekerEnterprise> enterprise = await GetListEnterprise();
+            enterprise = enterprise.Where(p => p.IsCensorship == true).ToList();
+
+            PaginatedList<JobSeekerEnterprise> paginatedJobs = PaginatedList<JobSeekerEnterprise>.Create(enterprise, page, pageSize);
+
+            return View(paginatedJobs);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CompanyHome(string search, string jobfield, string city)
+        {
+            #region validate
+            if (string.IsNullOrEmpty(jobfield) || string.IsNullOrEmpty(city)) return RedirectToAction("CompanyHome", "Home", new { error = "Vui lòng nhập đầy đủ!" });
+            #endregion
+
+            List<JobSeekerEnterprise> a = await GetListEnterprise();
+            a = a.Where(p => p.IsCensorship == true).ToList();
+            if (search != null) a = a.Where(p => p.FullCompanyName.Contains(search)).ToList();
+
+            if(jobfield != "all") a = a.Where(p => p.JobFieldId == int.Parse(jobfield)).ToList();
+
+            if (city != "all") a = a.Where(p => p.City == city).ToList();
+
+            if (a.Any())
+            {
+                TempData["comanyhomes"] = JsonConvert.SerializeObject(a);
+                return RedirectToAction("CompanyHome", "Home");
+            }
+            else return RedirectToAction("CompanyHome", "Home", new { error = "Không tìm thấy các công ty!" });
+        }
+        public async Task<IActionResult> JobHome(string? error, string? success, int page = 1)
+        {
+            if (error != null) ViewBag.ErrorMessage = error;
+            if (success != null) ViewBag.SuccessMessage = success;
+
+            // Chạy đồng thời các tác vụ
+            var jobPostingTask = GetListPostJob();
+            var jobCategoryTask = GetJobCategory();
+            var jobLevelTask = GetJobLevel();
+            var citytask = GetCity();
+
+            await Task.WhenAll(jobPostingTask, citytask, jobCategoryTask, jobLevelTask);
+
+            ViewBag.Jobcategory = await jobCategoryTask;
+            ViewBag.Joblevel = await jobLevelTask;
+            ViewBag.City = await citytask;
+
+            if (TempData.ContainsKey("jobhomes"))
+            {
+                string jobPostingsJson = TempData["jobhomes"] as string;
+                List<JobSeekerJobPosting> data = JsonConvert.DeserializeObject<List<JobSeekerJobPosting>>(jobPostingsJson);
+
+                if (!data.Any())
+                {
+                    data = await jobPostingTask;
+
+                    data = data.OrderByDescending(p => p.IsUpdatedAt).Where(p => p.StatusCode == "SC5").ToList();
+
+                    PaginatedList<JobSeekerJobPosting> paginatedJobs2 = PaginatedList<JobSeekerJobPosting>.Create(data, page, pageSize);
+
+                    return View(paginatedJobs2);
+                }
+
+                PaginatedList<JobSeekerJobPosting> paginatedJobs1 = PaginatedList<JobSeekerJobPosting>.Create(data, page, pageSize);
+
+                return View(paginatedJobs1);
+            }
+
+            List<JobSeekerJobPosting> job = await jobPostingTask;
+            job = job.OrderByDescending(p => p.IsUpdatedAt).Where(p => p.StatusCode == "SC5").ToList();
+
+            PaginatedList<JobSeekerJobPosting> paginatedJobs = PaginatedList<JobSeekerJobPosting>.Create(job, page, pageSize);
+
+            return View(paginatedJobs);
+        }
+        [HttpPost]
+        public async Task<IActionResult> JobHome(string search, string category, string joblevel, string exp, string city)
+        {
+            #region validate
+            if (string.IsNullOrEmpty(category) || string.IsNullOrEmpty(joblevel) || string.IsNullOrEmpty(exp) || string.IsNullOrEmpty(city)) return RedirectToAction("JobHome", "Home", new { error = "Vui lòng nhập đầy đủ!" });
+            #endregion
+
+            List<JobSeekerJobPosting> a = await GetListPostJob();
+            a = a.OrderByDescending(p => p.IsUpdatedAt).Where(p => p.StatusCode == "SC5").ToList();
+            if (search != null) a = a.Where(p => p.JobTitle.Contains(search)).ToList();
+
+            if (category != "all") a = a.Where(p => p.JobCategoryId == int.Parse(category)).ToList();
+
+            if (joblevel != "all") a = a.Where(p => p.JobLevelCode == int.Parse(joblevel)).ToList();
+
+            if (exp != "all") a = a.Where(p => p.ExpRequirement == exp).ToList();
+
+            if (city != "all") a = a.Where(p => p.Province == city).ToList();
+
+            if (a.Any())
+            {
+                TempData["jobhomes"] = JsonConvert.SerializeObject(a);
+                return RedirectToAction("JobHome", "Home");
+            }
+            else return RedirectToAction("JobHome", "Home", new { error = "Không tìm thấy các bài đăng!" });
+        }
+
+        //candidate
         public IActionResult IndexCandidate()
         {
             return View();
@@ -36,6 +168,7 @@ namespace FE_JobWeb.Controllers
         {
             return View();
         }
+        //admin
         public async Task<IActionResult> IndexAdmin(string? error, string? success)
         {
             if (error != null) ViewBag.ErrorMessage = error;
@@ -192,25 +325,14 @@ namespace FE_JobWeb.Controllers
                 List<JobSeekerEnterprise> a = await GetListEnterprise();
                 if (search != null) a = a.Where(p => p.FullCompanyName.Contains(search) || p.CompanyEmail.Contains(search) || p.CompanyPhoneContact.Contains(search)).ToList();
 
-                switch (censor)
+                if (censor != "all") a = a.Where(p => p.IsCensorship == bool.Parse(censor)).ToList();
+
+                if (a.Any())
                 {
-                    case "all":
-                        TempData["Enterprises"] = JsonConvert.SerializeObject(a);
-                        if (a.Any()) return RedirectToAction("ManageCompanyAdmin", "Home");
-                        else return RedirectToAction("ManageCompanyAdmin", "Home", new { error = "Không tìm thấy các công ty!" });
-                    case "false":
-                        a = a.Where(p => p.IsCensorship == false).ToList();
-                        TempData["Enterprises"] = JsonConvert.SerializeObject(a);
-                        if (a.Any()) return RedirectToAction("ManageCompanyAdmin", "Home");
-                        else return RedirectToAction("ManageCompanyAdmin", "Home", new { error = "Không tìm thấy các công ty!" });
-                    case "true":
-                        a = a.Where(p => p.IsCensorship == true).ToList();
-                        TempData["Enterprises"] = JsonConvert.SerializeObject(a);
-                        if (a.Any()) return RedirectToAction("ManageCompanyAdmin", "Home");
-                        else return RedirectToAction("ManageCompanyAdmin", "Home", new { error = "Không tìm thấy các công ty!" });
-                    default:
-                        return RedirectToAction("ManageCompanyAdmin", "Home", new { error = "Có vấn đề gì đó ở filter status!" });
+                    TempData["Enterprises"] = JsonConvert.SerializeObject(a);
+                    return RedirectToAction("ManageCompanyAdmin", "Home");
                 }
+                else return RedirectToAction("ManageCompanyAdmin", "Home", new { error = "Không tìm thấy các công ty!" });
             }
             else
             {
@@ -329,30 +451,14 @@ namespace FE_JobWeb.Controllers
                 List<JobSeekerJobPosting> a = await GetListPostJob();
                 if (search != null) a = a.Where(p => p.JobTitle.Contains(search)).ToList();
 
-                switch (status)
+                if (status != "all") a = a.Where(p => p.StatusCode == status).ToList();
+
+                if (a.Any())
                 {
-                    case "all":
-                        TempData["JobPostings"] = JsonConvert.SerializeObject(a);
-                        if (a.Any()) return RedirectToAction("ManageJobPostingAdmin", "Home");
-                        else return RedirectToAction("ManageJobPostingAdmin", "Home", new { error = "Không tìm thấy các bài đăng!" });
-                    case "SC5":
-                        a = a.Where(p => p.StatusCode == status).ToList();
-                        TempData["JobPostings"] = JsonConvert.SerializeObject(a);
-                        if (a.Any()) return RedirectToAction("ManageJobPostingAdmin", "Home");
-                        else return RedirectToAction("ManageJobPostingAdmin", "Home", new { error = "Không tìm thấy các bài đăng!" });
-                    case "SC6":
-                        a = a.Where(p => p.StatusCode == status).ToList();
-                        TempData["JobPostings"] = JsonConvert.SerializeObject(a);
-                        if (a.Any()) return RedirectToAction("ManageJobPostingAdmin", "Home");
-                        else return RedirectToAction("ManageJobPostingAdmin", "Home", new { error = "Không tìm thấy các bài đăng!" });
-                    case "SC7":
-                        a = a.Where(p => p.StatusCode == status).ToList();
-                        TempData["JobPostings"] = JsonConvert.SerializeObject(a);
-                        if (a.Any()) return RedirectToAction("ManageJobPostingAdmin", "Home");
-                        else return RedirectToAction("ManageJobPostingAdmin", "Home", new { error = "Không tìm thấy các bài đăng!" });
-                    default:
-                        return RedirectToAction("ManageJobPostingAdmin", "Home", new { error = "Có vấn đề gì đó ở filter status!" });
+                    TempData["JobPostings"] = JsonConvert.SerializeObject(a);
+                    return RedirectToAction("ManageJobPostingAdmin", "Home");
                 }
+                else return RedirectToAction("ManageJobPostingAdmin", "Home", new { error = "Không tìm thấy các bài đăng!" });
             }
             else
             {
@@ -900,40 +1006,16 @@ namespace FE_JobWeb.Controllers
             a = a.OrderByDescending(p => p.IsCreatedAt).Where(p => p.RoleId == 3 || p.RoleId == 2).ToList();
             if (search != null) a = a.Where(p => p.FullName.Contains(search) || p.Email.Contains(search)).ToList();
 
-            switch (status)
+            if (status != "all") a = a.Where(p => p.StatusCode == status).ToList();
+
+            if (type != "all") a = a.Where(p => p.RoleId == int.Parse(type)).ToList();
+
+            if (a.Any())
             {
-                case "all":
-                    break;
-                case "SC8":
-                    a = a.Where(p => p.StatusCode == status).ToList();
-                    if (!a.Any()) return RedirectToAction("ManageAccountAdmin", "Home", new { error = "Không tìm thấy các tài khoản!" });
-                    break;
-                case "SC9":
-                    a = a.Where(p => p.StatusCode == status).ToList();
-                    if (!a.Any()) return RedirectToAction("ManageAccountAdmin", "Home", new { error = "Không tìm thấy các tài khoản!" });
-                    break;
-                default:
-                    return RedirectToAction("ManageAccountAdmin", "Home", new { error = "Có vấn đề gì đó ở filter status!" });
+                TempData["Accounts"] = JsonConvert.SerializeObject(a);
+                return RedirectToAction("ManageAccountAdmin", "Home");
             }
-            switch (type)
-            {
-                case "all":
-                    TempData["Accounts"] = JsonConvert.SerializeObject(a);
-                    if (a.Any()) return RedirectToAction("ManageAccountAdmin", "Home");
-                    else return RedirectToAction("ManageAccountAdmin", "Home", new { error = "Không tìm thấy các tài khoản!" });
-                case "2":
-                    a = a.Where(p => p.RoleId == 2).ToList();
-                    TempData["Accounts"] = JsonConvert.SerializeObject(a);
-                    if (a.Any()) return RedirectToAction("ManageAccountAdmin", "Home");
-                    else return RedirectToAction("ManageAccountAdmin", "Home", new { error = "Không tìm thấy các tài khoản!" });
-                case "3":
-                    a = a.Where(p => p.RoleId == 3).ToList();
-                    TempData["Accounts"] = JsonConvert.SerializeObject(a);
-                    if (a.Any()) return RedirectToAction("ManageAccountAdmin", "Home");
-                    else return RedirectToAction("ManageAccountAdmin", "Home", new { error = "Không tìm thấy các tài khoản!" });
-                default:
-                    return RedirectToAction("ManageAccountAdmin", "Home", new { error = "Có vấn đề gì đó ở filter type!" });
-            }
+            else return RedirectToAction("ManageAccountAdmin", "Home", new { error = "Không tìm thấy các tài khoản!" });
         }
 
         public IActionResult Privacy()
@@ -1239,7 +1321,8 @@ namespace FE_JobWeb.Controllers
                 ViewBag.ErrorMessage = "Có 1 vấn đề nào đó xả ra, vui lòng kết nối tới chúng tôi để được giúp đỡ!";
                 return new List<JobSeekerJobCategory>();
             }
-        }//Lấy danh sách lĩnh vực
+        }
+        //Lấy danh sách lĩnh vực
         public async Task<List<JobSeekerJobField>> GetJobfield()
         {
             HttpClient client = new HttpClient();
@@ -1267,6 +1350,35 @@ namespace FE_JobWeb.Controllers
                 Console.WriteLine("Chi tiet loi API: " + errorDetails);
                 ViewBag.ErrorMessage = "Có 1 vấn đề nào đó xả ra, vui lòng kết nối tới chúng tôi để được giúp đỡ!";
                 return new List<JobSeekerJobField>();
+            }
+        }
+        //Lấy danh sách lĩnh vực
+        public async Task<List<City>> GetCity()
+        {
+            HttpClient client = new HttpClient();
+            //Call api
+            var apiUrl = "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json";
+            HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+            List<City> j = new List<City>();
+
+            if (response.IsSuccessStatusCode)
+            {
+                string responseData = await response.Content.ReadAsStringAsync();
+                //Deserialization từ JSON sang danh sách đối tượng jobfield
+                j = JsonConvert.DeserializeObject<List<City>>(responseData);
+
+                Console.WriteLine("get city thanh cong");
+                return j;
+            }
+            else
+            {
+                // Ghi log lỗi chi tiết từ API
+                string errorDetails = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(" lay city that bai: " + response.StatusCode);
+                Console.WriteLine("Chi tiet loi API: " + errorDetails);
+                ViewBag.ErrorMessage = "Có 1 vấn đề nào đó xả ra, vui lòng kết nối tới chúng tôi để được giúp đỡ!";
+                return new List<City>();
             }
         }
     }
