@@ -625,6 +625,10 @@ public partial class JobSeekerContext : DbContext
                 .HasMaxLength(15)
                 .IsUnicode(false)
                 .HasColumnName("status_code");
+            entity.Property(e => e.CoverLetter)
+                .HasMaxLength(500)
+                .IsUnicode(false)
+                .HasColumnName("covverletter");
 
             entity.HasOne(d => d.Candidate).WithMany(p => p.JobSeekerJobPostingApplies)
                 .HasForeignKey(d => d.CandidateId)

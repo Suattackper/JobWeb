@@ -1,0 +1,283 @@
+﻿@using Data_JobWeb.Entity
+@using FE_JobWeb.Others
+@inject ApplicationUser user
+@model JobSeekerEnterprise
+@{
+    JobSeekerContext db = new JobSeekerContext();
+}
+@{
+    ViewData["Title"] = "CompanyDetailHome";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-content">
+    <div class="wt-bnr-inr overlay-wraper bg-center" style="background-image:url(/Content/images/banner/1.jpg);">
+        <div class="overlay-main site-bg-white opacity-01"></div>
+        <div class="container">
+            <div class="wt-bnr-inr-entry">
+                <div class="banner-title-outer">
+                    <div class="banner-title-name">
+                        <h2 class="wt-title">Thông tin công ty</h2>
+                    </div>
+                </div>
+
+                <div>
+                    <ul class="wt-breadcrumb breadcrumb-style-2">
+                        <li><a href="@Url.Action("Index","Home")">Trang chủ</a></li>
+                        <li>Thông tin công ty</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-full  p-t120 p-b90 bg-white">
+        <div class="container">
+            <div class="section-content">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-8 col-md-12">
+                        <div class="candidate-de-info">
+                            <div class="twm-employer-self-wrap">
+                                <div class="twm-employer-self-info">
+                                    <div class="twm-employer-self-top">
+                                        <div class="twm-media-bg">
+                                            <img src="@Model.CoverImgUrl" alt="#">
+                                        </div>
+                                        <div class="twm-mid-content">
+                                            <div class="twm-media">
+                                                <img src="@Model.LogoUrl" alt="#">
+                                            </div>
+                                            <div class="twm-ep-detail-tags mb-3">
+                                                <button class="de-info-two twm-bg-green-two">
+                                                    <i class="fa fa-check"></i> Verified
+                                                </button>
+                                                <button class="follow-us">
+                                                    @if(user.User != null)
+                                                    {
+                                                        JobSeekerEnterpriseFollowed check = db.JobSeekerEnterpriseFolloweds.FirstOrDefault(p => p.EnterpriseId == Model.EnterpriseId && p.CandidateId == user.User.Id);
+                                                        if (check != null)
+                                                        {
+                                                            <a href="@Url.Action("CompanyHomeFollow", "Home", new {type = 2, id = Model.EnterpriseId})">
+                                                                <i class="fa fa-minus"></i> Đã theo
+                                                                dõi
+                                                            </a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href="@Url.Action("CompanyHomeFollow", "Home", new {type = 1, id = Model.EnterpriseId})">
+                                                                <i class="fa fa-plus"></i> Theo
+                                                                dõi
+                                                            </a>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="@Url.Action("CompanyHomeFollow", "Home", new {type = 1, id = Model.EnterpriseId})">
+                                                            <i class="fa fa-plus"></i> Theo
+                                                            dõi
+                                                        </a>
+                                                    }
+                                                </button>
+                                            </div>
+                                            <h4 class="twm-job-title">@Model.FullCompanyName</h4>
+                                            <div class="twm-ep-detail-tags mb-3 d-flex">
+                                                @if (ViewBag.Jobfield != null && ViewBag.Jobfield.Count > 0)
+                                                {
+                                                    foreach (JobSeekerJobField i in ViewBag.Jobfield)
+                                                    {
+                                                        if (i.JobFieldId == Model.JobFieldId)
+                                                        {
+                                                            <p class="twm-company-category m-r20">
+                                                                <i class="feather-briefcase m-r5"></i>@i.JobFieldName
+                                                            </p>
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                                @if (Model.EnterpriseSize == "small")
+                                                {
+                                                    <p class="twm-company-staff-number m-r20">
+                                                        <i class="feather-users m-r5"></i>Dưới 50 nhân viên
+                                                    </p>
+                                                }
+                                                else if (Model.EnterpriseSize == "medium")
+                                                {
+                                                    <p class="twm-company-staff-number m-r20">
+                                                        <i class="feather-users m-r5"></i>50-200 nhân viên
+                                                    </p>
+                                                }
+                                                else if (Model.EnterpriseSize == "large")
+                                                {
+                                                    <p class="twm-company-staff-number m-r20">
+                                                        <i class="feather-users m-r5"></i>Trên 200 nhân viên
+                                                    </p>
+                                                }
+                                                else
+                                                {
+                                                    <p class="twm-company-staff-number m-r20">
+                                                        <i class="feather-users m-r5"></i>Error
+                                                    </p>
+                                                }
+                                                <a href="@Model.WebsiteUrl" target="_blank"
+                                                   class="twm-company-link site-text-primary">
+                                                    <i class="feather-globe m-r5"></i>@Model.WebsiteUrl
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h4 class="twm-s-title">Giới thiệu công ty</h4>
+
+                            <p class="twm-company-introduction">
+                                @Model.Descriptions
+                            </p>
+
+                            @* <h4 class="twm-s-title">Chia sẻ qua mạng xã hội</h4>
+                            <div class="twm-social-tags">
+                                <a href="javascript:void(0)" class="fb-clr">Facebook</a>
+                                <a href="javascript:void(0)" class="link-clr">Linkedin</a>
+                            </div> *@
+
+                            
+
+                            <h4 class="twm-s-title">Tuyển dụng</h4>
+                            <div class="twm-jobs-list-wrap">
+                                <ul>
+                                    @if (ViewBag.Listjob != null && ViewBag.Listjob.Count > 0)
+                                    {
+                                        foreach (JobSeekerJobPosting i in ViewBag.Listjob)
+                                        {
+                                            JobSeekerEnterprise o = db.JobSeekerEnterprises.FirstOrDefault(p => p.EnterpriseId == i.EnterpriseId);
+                                            if (o == null) o = new JobSeekerEnterprise();
+                                            <li>
+                                                <div class="col-lg-12">
+                                                    <div class="job-item">
+                                                        @if (user.User != null)
+                                                        {
+                                                            JobSeekerSavedJobPosting check = db.JobSeekerSavedJobPostings.FirstOrDefault(p => p.JobPostingId == i.Id && p.CandidateId == user.User.Id);
+                                                            if (check != null)
+                                                            {
+                                                                <a href="@Url.Action("JobHomeSaveJob", "Home", new {type = 2, id = i.Id})" class="job-bookmark" style="background-color: blue"><i class="feather-bookmark" style="color: white"></i></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a href="@Url.Action("JobHomeSaveJob", "Home", new {type = 1, id = i.Id})" class="job-bookmark"><i class="feather-bookmark"></i></a>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href="@Url.Action("JobHomeSaveJob", "Home", new {type = 1, id = i.Id})" class="job-bookmark"><i class="feather-bookmark"></i></a>
+                                                        }
+                                                        <div class="job-top">
+                                                            @* <div class="job-img">
+                                                    <img src="images/jobs-company/axon-active-logo.jpg" alt="">
+                                                    </div> *@
+                                                            <div class="job-title">
+                                                                <h5><a href="@Url.Action("JobDetailHome", "Home", new {id = i.Id})">@i.JobTitle</a></h5>
+                                                                <a href="@Url.Action("CompanyDetailHome", "Home", new {id = i.EnterpriseId})" class="job-employer">
+                                                                    <i class="far fa-building"></i>
+                                                                    @o.FullCompanyName
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="job-content">
+                                                            <ul class="job-info-list">
+                                                                <li><i class="feather-clock"></i> Hạn chót <span class="deadine">@(i.ExpiredTime.HasValue ? i.ExpiredTime.Value.ToString("dd/MM/yyyy") : "Error")</span></li>
+                                                                <li><i class="feather-check-circle"></i> Full Time</li>
+                                                                <li><i class="feather-map-pin"></i> @i.Province</li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="job-tag">
+                                                            <p><i class="feather-clock"></i> Ngày đăng <span class="deadine">@(i.IsCreatedAt.HasValue ? i.IsCreatedAt.Value.ToString("dd/MM/yyyy") : "Error")</span></p>
+                                                            @* <p href="#" class="job-tag-new">Mới</p> *@
+                                                            @* <a href="#" class="job-tag-urgent">Tuyển gấp</a> *@
+                                                        </div>
+                                                        <div class="job-bottom">
+                                                            <div class="job-salary">
+                                                                <span class="job-salary-amount">@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0} đ", i.SalaryMin) - @string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0} đ", i.SalaryMax)</span>
+                                                            </div>
+                                                            <a href="@Url.Action("JobDetailHome", "Home", new {id = i.Id})" class="theme-btn">Ứng tuyển ngay</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-12 rightSidebar">
+                        <div class="side-bar-2">
+
+                            <div class="twm-s-info-wrap mb-5">
+                                <h4 class="section-head-small mb-4">Thông tin chung</h4>
+                                <div class="twm-s-info">
+                                    <ul>
+                                        <li>
+                                            <div class="twm-s-info-inner">
+                                                <i class="fas fa-mobile-alt"></i>
+                                                <span class="twm-title">Số điện thoại </span>
+                                                <div class="twm-s-info-discription">@Model.CompanyPhoneContact</div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="twm-s-info-inner">
+                                                <i class="fas fa-at"></i>
+                                                <span class="twm-title">Email</span>
+                                                <div class="twm-s-info-discription">
+                                                    @Model.CompanyEmail
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="twm-s-info-inner">
+                                                <i class="fas fa-calendar-day"></i>
+                                                <span class="twm-title">Ngày thành lập</span>
+                                                <div class="twm-s-info-discription">
+                                                    @(Model.FoundedDate.HasValue ? Model.FoundedDate.Value.ToString("dd/MM/yyyy") : "Error")
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="twm-s-info-inner">
+                                                <i class="fas fa-city"></i>
+                                                <span class="twm-title">Thành phố</span>
+                                                <div class="twm-s-info-discription">
+                                                    @Model.City
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="twm-s-info-inner">
+
+                                                <i class="fas fa-map-marker-alt"></i>
+                                                <span class="twm-title">Địa chỉ</span>
+                                                <div class="twm-s-info-discription">
+                                                    @Model.City, @Model.District, @Model.Ward, @Model.Address
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="twm-s-map mb-5">
+                                <h4 class="section-head-small mb-4">Bản đồ</h4>
+                                <div class="twm-s-map-iframe">
+                                    <iframe height="270"
+                                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3304.8534521658976!2d-118.2533646842856!3d34.073270780600225!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2c6fd9829c6f3%3A0x6ecd11bcf4b0c23a!2s1363%20Sunset%20Blvd%2C%20Los%20Angeles%2C%20CA%2090026%2C%20USA!5e0!3m2!1sen!2sin!4v1620815366832!5m2!1sen!2sin"></iframe>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

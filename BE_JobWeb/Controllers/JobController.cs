@@ -1,4 +1,5 @@
-﻿using Data_JobWeb.Entity;
+﻿using BE_JobWeb.Others;
+using Data_JobWeb.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

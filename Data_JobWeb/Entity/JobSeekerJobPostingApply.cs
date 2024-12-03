@@ -14,6 +14,7 @@ public partial class JobSeekerJobPostingApply
     public DateTime? ApplyTime { get; set; }
 
     public string? StatusCode { get; set; }
+    public string? CoverLetter { get; set; }
 
     public virtual JobSeekerCandidateProfile? Candidate { get; set; }
 

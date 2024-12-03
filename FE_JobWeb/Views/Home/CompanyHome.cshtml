@@ -93,10 +93,12 @@
                                     <div class="col-lg-4 col-md-6">
                                         <div class="twm-employer-grid-style1 mb-5">
                                             <div class="twm-media">
-                                                <img src="@i.LogoUrl" alt="#">
+                                                <a href="@Url.Action("CompanyDetailHome", "Home", new {id = i.EnterpriseId})">
+                                                    <img src="@i.LogoUrl" alt="#">
+                                                </a>
                                             </div>
                                             <div class="twm-mid-content mb-2">
-                                                <a href="company-detail.html" class="twm-job-title">
+                                                <a href="@Url.Action("CompanyDetailHome", "Home", new {id = i.EnterpriseId})" class="twm-job-title">
                                                     <h4>@i.FullCompanyName</h4>
                                                 </a>
                                                 <p class="twm-job-address mb-1">

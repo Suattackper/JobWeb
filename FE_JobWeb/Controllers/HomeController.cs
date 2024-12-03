@@ -11,6 +11,8 @@ using System.Text;
 using FE_JobWeb.Others;
 using Microsoft.AspNetCore.Http;
 using Data_JobWeb.Dtos;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 
 namespace FE_JobWeb.Controllers
 {
@@ -19,10 +21,16 @@ namespace FE_JobWeb.Controllers
         private JobSeekerContext db = new JobSeekerContext();
         private readonly ILogger<HomeController> _logger;
         int pageSize = 9;
+        private ApplicationUser user;
+        //public AccountController(ApplicationUser user)
+        //{
+        //    this.user = user;
+        //}
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ApplicationUser user)
         {
             _logger = logger;
+            this.user = user;
         }
         //home
         public IActionResult Index()
@@ -87,6 +95,167 @@ namespace FE_JobWeb.Controllers
             }
             else return RedirectToAction("CompanyHome", "Home", new { error = "Không tìm thấy các công ty!" });
         }
+        public async Task<IActionResult> CompanyDetailHome(Guid id, string? error, string? success)
+        {
+            if (id == Guid.Empty) return View("Error");
+
+            if (error != null) ViewBag.ErrorMessage = error;
+            if (success != null) ViewBag.SuccessMessage = success;
+
+            HttpClient client = new HttpClient();
+            //Call api
+            var apiUrl = $"http://localhost:5281/api/company/getcompanybyid/{id}";
+
+            HttpResponseMessage response = await client.GetAsync(apiUrl);
+            if (response.IsSuccessStatusCode)
+            {
+                JobSeekerEnterprise j = new JobSeekerEnterprise();
+
+                string responseData = await response.Content.ReadAsStringAsync();
+                // Deserialization từ JSON sang danh sách đối tượng 
+                j = JsonConvert.DeserializeObject<JobSeekerEnterprise>(responseData);
+
+                Console.WriteLine("get company thanh cong");
+
+                // Chạy các tác vụ đồng thời
+                var jobFieldTask = GetJobfield();
+                var listCompanyTask = GetListEnterprise();
+                var listJobTask = GetListPostJob();
+
+                // Chờ tất cả các tác vụ hoàn thành
+                await Task.WhenAll(listCompanyTask, jobFieldTask, listJobTask);
+
+                List<JobSeekerJobPosting> list = await listJobTask;
+                list = list.OrderByDescending(p => p.IsUpdatedAt).Where(p => p.EnterpriseId == j.EnterpriseId && p.StatusCode == "SC5").Take(3).ToList();
+
+                // Gán kết quả sau khi tất cả hoàn thành
+                ViewBag.Jobfield = await jobFieldTask;
+                ViewBag.Company = await listCompanyTask;
+                ViewBag.Listjob = list;
+
+                return View(j);
+            }
+            else
+            {
+                // Ghi log lỗi chi tiết từ API
+                string errorDetails = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("CompanyDetailHomeAsync: not found company that bai: " + response.StatusCode);
+                Console.WriteLine("Chi tiet loi API: " + errorDetails);
+                Console.WriteLine("Có 1 vấn đề nào đó xả ra, vui lòng kết nối tới chúng tôi để được giúp đỡ!");
+                return View("Error");
+            }
+        }
+        public async Task<IActionResult> CompanyHomeFollow(int type, Guid id)
+        {
+            if (type == 1)
+            {
+                #region validate
+                if (id == Guid.Empty) return RedirectToAction("CompanyDetailHome", "Home", new { id = id, error = "Không tìm thấy id company!" });
+                #endregion
+
+                if (user.User == null) return RedirectToAction("CompanyDetailHome", "Home", new { id = id, error = "Vui lòng đăng nhập để thực hiện chức năng này!" });
+
+                HttpClient client = new HttpClient();
+                //Call api
+                var apiUrl = "http://localhost:5281/api/company/addcompanfollow";
+
+                JobSeekerEnterpriseFollowed o = new JobSeekerEnterpriseFollowed();
+                o.CandidateId = user.User.Id;
+                o.EnterpriseId = id;
+                o.IsCreatedAt = DateTime.Now;
+                o.IsUpdatedAt = DateTime.Now;
+
+                Console.WriteLine("json\n" + JsonConvert.SerializeObject(o, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                }));
+
+                // Convert đối tượng thành JSON
+                var content = new StringContent(JsonConvert.SerializeObject(o, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                }), Encoding.UTF8, "application/json");
+
+                Console.WriteLine("json\n" + JsonConvert.SerializeObject(o, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                }));
+                //get with token
+                string token = Request.Cookies["jwtToken"];
+                Console.WriteLine("jwt: " + token);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                // Gửi yêu cầu POST tới API
+                HttpResponseMessage response = await client.PostAsync(apiUrl, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("add companyfollow thanh cong");
+                    return RedirectToAction("CompanyDetailHome", "Home", new { id = id, success = "Theo dõi công ty thành công!" });
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
+                {
+                    Console.WriteLine("Không được phép: Người dùng chưa xác thực.");
+                    return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+                }
+                else if (response.StatusCode == HttpStatusCode.Forbidden) // 403
+                {
+                    Console.WriteLine("Không được phép: Người dùng không có quyền truy cập.");
+                    return RedirectToAction("CompanyDetailHome", "Home", new { id = id, error = "Bạn không có quyền thực hiện thao tác này!" });
+                }
+                else
+                {
+                    // Ghi log lỗi chi tiết từ API
+                    string errorDetails = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine("CompanyDetailHome: add that bai: " + response.StatusCode);
+                    Console.WriteLine("Chi tiet loi API: " + errorDetails);
+                    return RedirectToAction("CompanyDetailHome", "Home", new { id = id, error = "Có 1 vấn đề nào đó xả ra, vui lòng kết nối tới chúng tôi để được giúp đỡ!" });
+                }
+            }
+            else
+            {
+                #region validate
+                if (id == Guid.Empty) return RedirectToAction("CompanyDetailHome", "Home", new { id = id, error = "Không tìm thấy id company!" });
+                #endregion
+                if (user.User == null) return RedirectToAction("CompanyDetailHome", "Home", new { id = id, error = "Vui lòng đăng nhập để thực hiện chức năng này!" });
+
+                JobSeekerEnterpriseFollowed check = db.JobSeekerEnterpriseFolloweds.FirstOrDefault(p => p.EnterpriseId == id && p.CandidateId == user.User.Id);
+                if (check == null) return RedirectToAction("CompanyDetailHome", "Home", new { id = id, error = "Không tìm thấy công ty đã theo dõi!" });
+
+                HttpClient client = new HttpClient();
+                //Call api
+                var apiUrl = $"http://localhost:5281/api/company/deletecompanyfollow/{check.Id}";
+
+                //get with token
+                string token = Request.Cookies["jwtToken"];
+                Console.WriteLine("jwt: " + token);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                // Gửi yêu cầu DELETE tới API
+                HttpResponseMessage response = await client.DeleteAsync(apiUrl);
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("delete companyfollow thanh cong");
+                    return RedirectToAction("CompanyDetailHome", "Home", new { id = id, success = "Bỏ theo dõi công ty thành công!" });
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
+                {
+                    Console.WriteLine("Không được phép: Người dùng chưa xác thực.");
+                    return RedirectToAction("Login", "Account", new { id = id, error = "Đăng nhập hết hạn!" });
+                }
+                else if (response.StatusCode == HttpStatusCode.Forbidden) // 403
+                {
+                    Console.WriteLine("Không được phép: Người dùng không có quyền truy cập.");
+                    return RedirectToAction("CompanyDetailHome", "Home", new { id = id, error = "Bạn không có quyền thực hiện thao tác này!" });
+                }
+                else
+                {
+                    // Ghi log lỗi chi tiết từ API
+                    string errorDetails = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine("Delete companyfollow: delete that bai: " + response.StatusCode);
+                    Console.WriteLine("Chi tiet loi API: " + errorDetails);
+                    return RedirectToAction("CompanyDetailHome", "Home", new { id = id, error = "Có 1 vấn đề nào đó xả ra, vui lòng kết nối tới chúng tôi để được giúp đỡ!" });
+                }
+            }
+        }
         public async Task<IActionResult> JobHome(string? error, string? success, int page = 1)
         {
             if (error != null) ViewBag.ErrorMessage = error;
@@ -132,8 +301,8 @@ namespace FE_JobWeb.Controllers
 
             return View(paginatedJobs);
         }
-        [HttpPost]
-        public async Task<IActionResult> JobHome(string search, string category, string joblevel, string exp, string city)
+        [HttpGet]
+        public async Task<IActionResult> JobHomeSearch(int type, string search, string category, string joblevel, string exp, string city, Guid id)
         {
             #region validate
             if (string.IsNullOrEmpty(category) || string.IsNullOrEmpty(joblevel) || string.IsNullOrEmpty(exp) || string.IsNullOrEmpty(city)) return RedirectToAction("JobHome", "Home", new { error = "Vui lòng nhập đầy đủ!" });
@@ -157,6 +326,240 @@ namespace FE_JobWeb.Controllers
                 return RedirectToAction("JobHome", "Home");
             }
             else return RedirectToAction("JobHome", "Home", new { error = "Không tìm thấy các bài đăng!" });
+        }
+        //home - theo doi jobposting
+        [HttpGet]
+        public async Task<IActionResult> JobHomeSaveJob(int type, Guid id)
+        {
+            if(type == 1)
+            {
+                #region validate
+                if (id == Guid.Empty) return RedirectToAction("JobHome", "Home", new { error = "Không tìm thấy id post!" });
+                #endregion
+
+                if (user.User == null) return RedirectToAction("JobHome", "Home", new { error = "Vui lòng đăng nhập để thực hiện chức năng này!" });
+
+                HttpClient client = new HttpClient();
+                //Call api
+                var apiUrl = "http://localhost:5281/api/company/addsavejobpost";
+
+                JobSeekerSavedJobPosting o = new JobSeekerSavedJobPosting();
+                o.CandidateId = user.User.Id;
+                o.JobPostingId = id;
+                o.SavedAt = DateTime.Now;
+
+                Console.WriteLine("json\n" + JsonConvert.SerializeObject(o, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                }));
+
+                // Convert đối tượng thành JSON
+                var content = new StringContent(JsonConvert.SerializeObject(o, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                }), Encoding.UTF8, "application/json");
+
+                Console.WriteLine("json\n" + JsonConvert.SerializeObject(o, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                }));
+                //get with token
+                string token = Request.Cookies["jwtToken"];
+                Console.WriteLine("jwt: " + token);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                // Gửi yêu cầu POST tới API
+                HttpResponseMessage response = await client.PostAsync(apiUrl, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("add savejob thanh cong");
+                    return RedirectToAction("JobHome", "Home", new { success = "Theo dõi bài đăng thành công!" });
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
+                {
+                    Console.WriteLine("Không được phép: Người dùng chưa xác thực.");
+                    return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+                }
+                else if (response.StatusCode == HttpStatusCode.Forbidden) // 403
+                {
+                    Console.WriteLine("Không được phép: Người dùng không có quyền truy cập.");
+                    return RedirectToAction("JobHome", "Home", new { error = "Bạn không có quyền thực hiện thao tác này!" });
+                }
+                else
+                {
+                    // Ghi log lỗi chi tiết từ API
+                    string errorDetails = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine("JobHome: add that bai: " + response.StatusCode);
+                    Console.WriteLine("Chi tiet loi API: " + errorDetails);
+                    return RedirectToAction("JobHome", "Home", new { error = "Có 1 vấn đề nào đó xả ra, vui lòng kết nối tới chúng tôi để được giúp đỡ!" });
+                }
+            }
+            else
+            {
+                #region validate
+                if (id == Guid.Empty) return RedirectToAction("JobHome", "Home", new { error = "Không tìm thấy id post!" });
+                #endregion
+                if (user.User == null) return RedirectToAction("JobHome", "Home", new { error = "Vui lòng đăng nhập để thực hiện chức năng này!" });
+
+                JobSeekerSavedJobPosting check = db.JobSeekerSavedJobPostings.FirstOrDefault(p => p.JobPostingId == id && p.CandidateId == user.User.Id);
+                if (check == null) return RedirectToAction("JobHome", "Home", new { error = "Không tìm thấy bài đăng đã lưu!" });
+
+                HttpClient client = new HttpClient();
+                //Call api
+                var apiUrl = $"http://localhost:5281/api/company/deletesavejobpost/{check.Id}";
+
+                //get with token
+                string token = Request.Cookies["jwtToken"];
+                Console.WriteLine("jwt: " + token);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                // Gửi yêu cầu DELETE tới API
+                HttpResponseMessage response = await client.DeleteAsync(apiUrl);
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("delete savejob thanh cong");
+                    return RedirectToAction("JobHome", "Home", new { success = "Bỏ lưu bài đăng thành công!" });
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
+                {
+                    Console.WriteLine("Không được phép: Người dùng chưa xác thực.");
+                    return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+                }
+                else if (response.StatusCode == HttpStatusCode.Forbidden) // 403
+                {
+                    Console.WriteLine("Không được phép: Người dùng không có quyền truy cập.");
+                    return RedirectToAction("JobHome", "Home", new { error = "Bạn không có quyền thực hiện thao tác này!" });
+                }
+                else
+                {
+                    // Ghi log lỗi chi tiết từ API
+                    string errorDetails = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine("Delete savejob: delete that bai: " + response.StatusCode);
+                    Console.WriteLine("Chi tiet loi API: " + errorDetails);
+                    return RedirectToAction("JobHome", "Home", new { error = "Có 1 vấn đề nào đó xả ra, vui lòng kết nối tới chúng tôi để được giúp đỡ!" });
+                }
+            }
+        }
+        public async Task<IActionResult> JobDetailHome(Guid id, string? error, string? success)
+        {
+            if (id == Guid.Empty) return View("Error");
+
+            if (error != null) ViewBag.ErrorMessage = error;
+            if (success != null) ViewBag.SuccessMessage = success;
+
+            HttpClient client = new HttpClient();
+            //Call api
+            var apiUrl = $"http://localhost:5281/api/company/getpostjobbyid/{id}";
+
+            HttpResponseMessage response = await client.GetAsync(apiUrl);
+            if (response.IsSuccessStatusCode)
+            {
+                JobSeekerJobPosting j = new JobSeekerJobPosting();
+
+                string responseData = await response.Content.ReadAsStringAsync();
+                // Deserialization từ JSON sang danh sách đối tượng 
+                j = JsonConvert.DeserializeObject<JobSeekerJobPosting>(responseData);
+
+                Console.WriteLine("get jobpost thanh cong");
+
+                // Chạy các tác vụ đồng thời
+                var jobCategoryTask = GetJobCategory();
+                var jobLevelTask = GetJobLevel();
+                var listJobTask = GetListPostJob();
+
+                // Chờ tất cả các tác vụ hoàn thành
+                await Task.WhenAll(jobCategoryTask, jobLevelTask, listJobTask);
+
+                List<JobSeekerJobPosting> list = await listJobTask;
+                list = list.Where(p => p.JobLevelCode == j.JobLevelCode && p.StatusCode == "SC5").Take(5).ToList();
+
+                // Gán kết quả sau khi tất cả hoàn thành
+                ViewBag.Jobcategory = await jobCategoryTask;
+                ViewBag.Joblevel = await jobLevelTask;
+                ViewBag.Listjob = list;
+
+                return View(j);
+            }
+            else
+            {
+                // Ghi log lỗi chi tiết từ API
+                string errorDetails = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("JobDetailHome: sen mail that bai: " + response.StatusCode);
+                Console.WriteLine("Chi tiet loi API: " + errorDetails);
+                Console.WriteLine("Có 1 vấn đề nào đó xả ra, vui lòng kết nối tới chúng tôi để được giúp đỡ!");
+                return View("Error");
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> JobDetailHome(Guid id, string name, string cvurl, string coverletter)
+        {
+            #region validate
+            if (user.User == null) return RedirectToAction("JobDetailHome", "Home", new { id = id, error = "Vui lòng đăng nhập để thực hiện chức năng này!" });
+            if (string.IsNullOrEmpty(cvurl)) return RedirectToAction("JobDetailHome", "Home", new { id = id, error = "Vui lòng thêm cv của bạn từ profile để thực hiện chức năng này!" });
+
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(cvurl) || id == Guid.Empty) return RedirectToAction("JobDetailHome", "Home", new { id = id, error = "Vui lòng nhập đầy đủ!" });
+            #endregion
+
+            JobSeekerJobPostingApply check = db.JobSeekerJobPostingApplies.FirstOrDefault(p => p.CandidateId == user.User.Id && p.JobPostingId == id);
+            if (check != null) return RedirectToAction("JobDetailHome", "Home", new { id = id, error = "Bạn đã ứng tuyển bài đăng này rồi!" });
+
+            HttpClient client = new HttpClient();
+            //Call api
+            var apiUrl = "http://localhost:5281/api/company/addjobapply";
+
+            JobSeekerJobPostingApply o = new JobSeekerJobPostingApply();
+            o.CandidateId = user.User.Id;
+            o.JobPostingId = id;
+            o.ApplyTime = DateTime.Now;
+            o.StatusCode = "SC7";
+
+            if(coverletter != null) o.CoverLetter = coverletter;
+
+            Console.WriteLine("json\n" + JsonConvert.SerializeObject(o, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            }));
+
+            // Convert đối tượng thành JSON
+            var content = new StringContent(JsonConvert.SerializeObject(o, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            }), Encoding.UTF8, "application/json");
+
+            Console.WriteLine("json\n" + JsonConvert.SerializeObject(o, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            }));
+            //get with token
+            string token = Request.Cookies["jwtToken"];
+            Console.WriteLine("jwt: " + token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            // Gửi yêu cầu POST tới API
+            HttpResponseMessage response = await client.PostAsync(apiUrl, content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("add applyjob thanh cong");
+                return RedirectToAction("JobDetailHome", "Home", new { id = id, success = "Úng tuyển thành công!" });
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
+            {
+                Console.WriteLine("Không được phép: Người dùng chưa xác thực.");
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            else if (response.StatusCode == HttpStatusCode.Forbidden) // 403
+            {
+                Console.WriteLine("Không được phép: Người dùng không có quyền truy cập.");
+                return RedirectToAction("JobDetailHome", "Home", new { id = id, error = "Bạn không có quyền thực hiện thao tác này!" });
+            }
+            else
+            {
+                // Ghi log lỗi chi tiết từ API
+                string errorDetails = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("JobDetailHome: add that bai: " + response.StatusCode);
+                Console.WriteLine("Chi tiet loi API: " + errorDetails);
+                return RedirectToAction("JobDetailHome", "Home", new { id = id, error = "Có 1 vấn đề nào đó xả ra, vui lòng kết nối tới chúng tôi để được giúp đỡ!" });
+            }
+
         }
 
         //candidate

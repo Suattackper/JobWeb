@@ -1,5 +1,6 @@
 ﻿@using Data_JobWeb.Entity;
 @using FE_JobWeb.Others
+@inject ApplicationUser user
 @model PaginatedList<JobSeekerJobPosting>
 @{
     ViewData["Title"] = "JobHome";
@@ -31,7 +32,7 @@
         <div class="container">
             <div class="row">
                 <div class="twm-bnr-search-bar">
-                    <form action="@Url.Action("JobHome", "Home")" method="post">
+                    <form action="@Url.Action("JobHomeSearch", "Home")" method="get">
                         <div class="row d-flex justify-content-between">
                             <div class="form-group col-xl-2 col-lg-4 col-md-6">
                                 <label>Nhập tên công việc</label>
@@ -130,14 +131,29 @@
                                     <li>
                                         <div class="col-lg-12">
                                             <div class="job-item">
-                                                <a href="#" class="job-bookmark"><i class="feather-bookmark"></i></a>
+                                                @if(user.User != null)
+                                                {
+                                                    JobSeekerSavedJobPosting check = db.JobSeekerSavedJobPostings.FirstOrDefault(p => p.JobPostingId == i.Id && p.CandidateId == user.User.Id);
+                                                    if (check != null)
+                                                    {
+                                                        <a href="@Url.Action("JobHomeSaveJob", "Home", new {type = 2, id = i.Id})" class="job-bookmark" style="background-color: blue"><i class="feather-bookmark" style="color: white"></i></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="@Url.Action("JobHomeSaveJob", "Home", new {type = 1, id = i.Id})" class="job-bookmark"><i class="feather-bookmark"></i></a>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("JobHomeSaveJob", "Home", new {type = 1, id = i.Id})" class="job-bookmark"><i class="feather-bookmark"></i></a>
+                                                }
                                                 <div class="job-top">
                                                     @* <div class="job-img">
                                                         <img src="images/jobs-company/axon-active-logo.jpg" alt="">
                                                     </div> *@
                                                     <div class="job-title">
-                                                        <h5><a href="job-detail.html">@i.JobTitle</a></h5>
-                                                        <a href="company-detail.html" class="job-employer">
+                                                        <h5><a href="@Url.Action("JobDetailHome", "Home", new {id = i.Id})">@i.JobTitle</a></h5>
+                                                        <a href="@Url.Action("CompanyDetailHome", "Home", new {id = i.EnterpriseId})" class="job-employer">
                                                             <i class="far fa-building"></i>
                                                             @o.FullCompanyName
                                                         </a>
@@ -159,7 +175,7 @@
                                                     <div class="job-salary">
                                                         <span class="job-salary-amount">@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0} đ", i.SalaryMin) - @string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0} đ", i.SalaryMax)</span>
                                                     </div>
-                                                    <a href="job-detail.html" class="theme-btn">Ứng tuyển ngay</a>
+                                                    <a href="@Url.Action("JobDetailHome", "Home", new {id = i.Id})" class="theme-btn">Ứng tuyển ngay</a>
                                                 </div>
                                             </div>
                                         </div>
