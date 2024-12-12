@@ -81,6 +81,18 @@
       "PackagePath": "staticwebassets\\Content\\css\\switcher.css"
     },
     {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\images\\featured-cities\\dananghome.jpg",
+      "PackagePath": "staticwebassets\\Content\\images\\featured-cities\\dananghome.jpg"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\images\\featured-cities\\hanoihome.jpg",
+      "PackagePath": "staticwebassets\\Content\\images\\featured-cities\\hanoihome.jpg"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\images\\featured-cities\\hochiminhhome.jpg",
+      "PackagePath": "staticwebassets\\Content\\images\\featured-cities\\hochiminhhome.jpg"
+    },
+    {
       "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\anm.js",
       "PackagePath": "staticwebassets\\Content\\js\\anm.js"
     },

@@ -525,6 +525,12 @@ namespace Data_JobWeb.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("tax_code");
 
+                    b.Property<int?>("ViewCount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0)
+                        .HasColumnName("viewcount");
+
                     b.Property<string>("Ward")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
@@ -787,6 +793,12 @@ namespace Data_JobWeb.Migrations
                         .HasColumnType("datetime")
                         .HasColumnName("time_post")
                         .HasDefaultValueSql("(getdate())");
+
+                    b.Property<int?>("ViewCount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0)
+                        .HasColumnName("viewcount");
 
                     b.Property<string>("Ward")
                         .HasMaxLength(100)

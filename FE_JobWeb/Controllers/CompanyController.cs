@@ -409,6 +409,7 @@ namespace FE_JobWeb.Controllers
             o.StatusCode = "SC7";
             o.IsCreatedAt = DateTime.Now;
             o.IsUpdatedAt = DateTime.Now;
+            o.ViewCount = 0;
 
 
             // Convert đối tượng thành JSON

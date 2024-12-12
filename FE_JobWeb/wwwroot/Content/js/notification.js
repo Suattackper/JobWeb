@@ -57,11 +57,11 @@ function toastNoti({ title = "", message = "", type = "", duration = 3000 }) {
   });
 }
 
-document.querySelectorAll(".delete-icon-btn").forEach((btn) => {
-  btn.addEventListener("click", () => {
-      showInfoToast();
-  });
-});
+//document.querySelectorAll(".delete-icon-btn").forEach((btn) => {
+//  btn.addEventListener("click", () => {
+//      showInfoToast();
+//  });
+//});
 
 function showSuccessToast() {
   toastNoti({

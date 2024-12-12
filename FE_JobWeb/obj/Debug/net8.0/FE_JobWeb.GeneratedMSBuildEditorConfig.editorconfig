@@ -66,6 +66,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcGFueVxQb3N0Sm9iLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/c\#/JobWeb/JobWeb/FE_JobWeb/Views/Home/CandidateApplyRecruiter.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDYW5kaWRhdGVBcHBseVJlY3J1aXRlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/c\#/JobWeb/JobWeb/FE_JobWeb/Views/Home/CandidateDetailRecruiter.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDYW5kaWRhdGVEZXRhaWxSZWNydWl0ZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/c\#/JobWeb/JobWeb/FE_JobWeb/Views/Home/CompanyDetailHome.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDb21wYW55RGV0YWlsSG9tZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -90,12 +98,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleFJlY3J1aXRlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/c\#/JobWeb/JobWeb/FE_JobWeb/Views/Home/JobApplyCandidate.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxKb2JBcHBseUNhbmRpZGF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/c\#/JobWeb/JobWeb/FE_JobWeb/Views/Home/JobDetailHome.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxKb2JEZXRhaWxIb21lLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/c\#/JobWeb/JobWeb/FE_JobWeb/Views/Home/JobHome.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxKb2JIb21lLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/c\#/JobWeb/JobWeb/FE_JobWeb/Views/Home/JobSaveCandidate.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxKb2JTYXZlQ2FuZGlkYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/c\#/JobWeb/JobWeb/FE_JobWeb/Views/Home/ManageAccountAdmin.cshtml]
@@ -116,6 +132,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/c\#/JobWeb/JobWeb/FE_JobWeb/Views/Home/ManageJobPostingAdmin.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxNYW5hZ2VKb2JQb3N0aW5nQWRtaW4uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/c\#/JobWeb/JobWeb/FE_JobWeb/Views/Home/Notification.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxOb3RpZmljYXRpb24uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/c\#/JobWeb/JobWeb/FE_JobWeb/Views/Home/Privacy.cshtml]

@@ -431,6 +431,9 @@ public partial class JobSeekerContext : DbContext
             entity.Property(e => e.IsCensorship)
                 .HasDefaultValue(false)
                 .HasColumnName("is_censorship");
+            entity.Property(e => e.ViewCount)
+                .HasDefaultValue(0)
+                .HasColumnName("viewcount");
             entity.Property(e => e.JobFieldId).HasColumnName("job_field_id");
             entity.Property(e => e.LinkedinUrl)
                 .HasMaxLength(500)
@@ -528,6 +531,9 @@ public partial class JobSeekerContext : DbContext
             entity.Property(e => e.Address)
                 .HasMaxLength(100)
                 .HasColumnName("address");
+            entity.Property(e => e.ViewCount)
+                .HasDefaultValue(0)
+                .HasColumnName("viewcount");
             entity.Property(e => e.BenefitEnjoyed).HasColumnName("benefit_enjoyed");
             entity.Property(e => e.District)
                 .HasMaxLength(100)

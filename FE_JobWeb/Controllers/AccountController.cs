@@ -332,6 +332,7 @@ namespace FE_JobWeb.Controllers
             e.City = city;
             e.District = district;
             e.Ward = ward;
+            e.ViewCount = 0;
             e.JobFieldId = int.Parse(jobfield);
             e.Address = addressdetail;
             e.FoundedDate = DateOnly.FromDateTime(foundeddate);

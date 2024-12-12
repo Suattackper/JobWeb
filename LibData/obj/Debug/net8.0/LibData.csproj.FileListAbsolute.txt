@@ -1,0 +1,15 @@
+D:\c#\JobWeb\JobWeb\LibData\obj\Debug\net8.0\LibData.csproj.AssemblyReference.cache
+D:\c#\JobWeb\JobWeb\LibData\obj\Debug\net8.0\LibData.GeneratedMSBuildEditorConfig.editorconfig
+D:\c#\JobWeb\JobWeb\LibData\obj\Debug\net8.0\LibData.AssemblyInfoInputs.cache
+D:\c#\JobWeb\JobWeb\LibData\obj\Debug\net8.0\LibData.AssemblyInfo.cs
+D:\c#\JobWeb\JobWeb\LibData\obj\Debug\net8.0\LibData.csproj.CoreCompileInputs.cache
+D:\c#\JobWeb\JobWeb\LibData\obj\Debug\net8.0\LibData.sourcelink.json
+D:\c#\JobWeb\JobWeb\LibData\bin\Debug\net8.0\LibData.deps.json
+D:\c#\JobWeb\JobWeb\LibData\bin\Debug\net8.0\LibData.runtimeconfig.json
+D:\c#\JobWeb\JobWeb\LibData\bin\Debug\net8.0\LibData.dll
+D:\c#\JobWeb\JobWeb\LibData\bin\Debug\net8.0\LibData.pdb
+D:\c#\JobWeb\JobWeb\LibData\obj\Debug\net8.0\LibData.dll
+D:\c#\JobWeb\JobWeb\LibData\obj\Debug\net8.0\refint\LibData.dll
+D:\c#\JobWeb\JobWeb\LibData\obj\Debug\net8.0\LibData.pdb
+D:\c#\JobWeb\JobWeb\LibData\obj\Debug\net8.0\LibData.genruntimeconfig.cache
+D:\c#\JobWeb\JobWeb\LibData\obj\Debug\net8.0\ref\LibData.dll

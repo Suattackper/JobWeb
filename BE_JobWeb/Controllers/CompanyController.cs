@@ -27,6 +27,9 @@ namespace BE_JobWeb.Controllers
             JobSeekerEnterprise o = db.JobSeekerEnterprises.FirstOrDefault(p => p.EnterpriseId == id);
             if (o == null) return BadRequest("Not found company");
 
+            o.ViewCount = o.ViewCount + 1;
+            db.SaveChanges();
+
             return Ok(o);
         }
         [HttpPost("updatecompany")]
@@ -74,6 +77,9 @@ namespace BE_JobWeb.Controllers
             JobSeekerJobPosting job = db.JobSeekerJobPostings.FirstOrDefault(p => p.Id == id);
             if (job == null) return BadRequest("Not Found JobPost");
 
+            job.ViewCount = job.ViewCount + 1;
+            db.SaveChanges();
+
             return Ok(job);
         }
         [HttpGet("getlistenterprise")]
@@ -98,12 +104,13 @@ namespace BE_JobWeb.Controllers
             notification.IsSeen = false;
             notification.IsCreatedAt = DateTime.Now;
             notification.IdConcern = p.Id;
+            notification.Title = $"http://localhost:5080/Home/ManageJobPostingAdmin";
             db.JobSeekerNotifications.Add(notification);
             db.SaveChanges();
 
             EmailService e = new EmailService();
             string title = $"Bạn có 1 bài đăng mới đang chờ duyệt! - JobWeb";
-            string url = $"http://localhost:5281/api/Account/notification/{admin.Id}";
+            string url = $"http://localhost:5080/Home/Notification/{admin.Id}";
             string message = $"<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <title>{title}</title>\r\n</head>\r\n<body>\r\n    <h2>Chào {admin.FullName},</h2>\r\n    <p>Kiểm tra các thông báo của bạn tại đây:</p>\r\n    <a href=\"{url}\" style=\"background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; display: inline-block;\">Thông báo</a>\r\n    <p>Cảm ơn bạn,</p>\r\n    <p>Đội ngũ JobWeb</p>\r\n</body>\r\n</html>";
 
             e.SendEmail(admin.Email, title, message);
@@ -162,7 +169,7 @@ namespace BE_JobWeb.Controllers
         }
         [HttpPost("addjobapply")]
         [Authorize(Roles = "1,3")]
-        public IActionResult AddSaveJobPost(JobSeekerJobPostingApply t)
+        public IActionResult AddApplyJobPost(JobSeekerJobPostingApply t)
         {
             db.JobSeekerJobPostingApplies.Add(t);
             db.SaveChanges();
@@ -187,11 +194,12 @@ namespace BE_JobWeb.Controllers
             notification.IsCreatedAt = DateTime.Now;
             notification.IsSent = true;
             notification.IsSeen = false;
+            notification.Title = $"http://localhost:5080/Home/CandidateDetailRecruiter/{t.CandidateId}?idjob={t.Id}";
             db.JobSeekerNotifications.Add(notification);
             db.SaveChanges();
 
             string title = $"1 ứng viên mới vừa apply từ bài đăng {jobPosting.JobTitle} của bạn!";
-            string url = $"http://localhost:5281/api/Account/notification/{recruiter.RecruiterId}";
+            string url = $"http://localhost:5080/Home/Notification/{recruiter.RecruiterId}";
             string message = $"<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <title>{title}</title>\r\n</head>\r\n<body>\r\n    <h2>Chào {recruiter.Fullname},</h2>\r\n    <p>Có vẻ như có 1 ứng viên vừa apply từ bài đăng của bạn, nếu có vấn đề gì vui lòng liên hệ đến chúng tôi để được giải đáp.</p>\r\n    <p>Kiểm tra các thông báo của bạn tại đây:</p>\r\n    <a href=\"{url}\" style=\"background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; display: inline-block;\">Thông báo</a>\r\n    <p>Cảm ơn bạn,</p>\r\n    <p>Đội ngũ JobWeb</p>\r\n</body>\r\n</html>";
             e.SendEmail(recruiter.Email, title, message);
 
@@ -205,16 +213,78 @@ namespace BE_JobWeb.Controllers
             notification1.IsCreatedAt = DateTime.Now;
             notification1.IsSent = true;
             notification1.IsSeen = false;
+            notification1.Title = $"http://localhost:5080/Home/JobDetailHome/{jobPosting.Id}";
             db.JobSeekerNotifications.Add(notification1);
             db.SaveChanges();
 
             string title1 = $"Bạn đã ứng tuyển bài đăng {jobPosting.JobTitle} thành công!";
-            string url1 = $"http://localhost:5281/api/Account/notification/{candidate.CandidateId}";
+            string url1 = $"http://localhost:5080/Home/Notification/{candidate.CandidateId}";
             string message1 = $"<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <title>{title1}</title>\r\n</head>\r\n<body>\r\n    <h2>Chào {candidate.Fullname},</h2>\r\n    <p>Bạn vừa ứng tuyển thành công, nhà tuyển dụng sẽ sớm thông báo kết quả ứng tuyển đến bạn, nếu có vấn đề gì vui lòng liên hệ đến chúng tôi để được giải đáp.</p>\r\n    <p>Kiểm tra các thông báo của bạn tại đây:</p>\r\n    <a href=\"{url1}\" style=\"background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; display: inline-block;\">Thông báo</a>\r\n    <p>Cảm ơn bạn,</p>\r\n    <p>Đội ngũ JobWeb</p>\r\n</body>\r\n</html>";
 
             e.SendEmail(candidate.Email, title1, message1);
 
             return Ok("Add applyjobpost success!");
+        }
+        [HttpPost("updatejobapply")]
+        [Authorize(Roles = "1,2")]
+        public IActionResult UpdateApplyJobPost(JobSeekerJobPostingApply t)
+        {
+            JobSeekerJobPostingApply apply = db.JobSeekerJobPostingApplies.FirstOrDefault(p => p.Id == t.Id);
+            if (apply == null) return NotFound("Not Found Apply JobPost!");
+
+            JobSeekerJobPosting jobPosting = db.JobSeekerJobPostings.FirstOrDefault(p => p.Id == t.JobPostingId);
+            if (jobPosting == null) return BadRequest("Khong tim thay bai dang");
+
+            JobSeekerCandidateProfile candidate = db.JobSeekerCandidateProfiles.FirstOrDefault(p => p.CandidateId == apply.CandidateId);
+            if (candidate == null) return BadRequest("Khong tim thay ung vien");
+
+            if (apply.StatusCode != t.StatusCode && t.StatusCode == "SC5")
+            {
+                EmailService e = new EmailService();
+
+                //thong bao den candidate
+                JobSeekerNotification notification1 = new JobSeekerNotification();
+                notification1.Id = Guid.NewGuid().ToString();
+                notification1.Type = "candidate_jobapplyapproved";
+                notification1.Description = $"Bạn đã được đánh giá phù hợp từ bài đăng {jobPosting.JobTitle}!";
+                notification1.IdConcern = jobPosting.Id;
+                notification1.IdUserReceive = candidate.CandidateId;
+                notification1.IsCreatedAt = DateTime.Now;
+                notification1.IsSent = true;
+                notification1.IsSeen = false;
+                notification1.Title = $"http://localhost:5080/Home/JobDetailHome/{jobPosting.Id}";
+                db.JobSeekerNotifications.Add(notification1);
+                db.SaveChanges();
+
+                string title1 = $"Bạn đã được đánh giá phù hợp từ bài đăng {jobPosting.JobTitle}!";
+                string url1 = $"http://localhost:5080/Home/Notification/{candidate.CandidateId}";
+                string message1 = $"<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <title>{title1}</title>\r\n</head>\r\n<body>\r\n    <h2>Chào {candidate.Fullname},</h2>\r\n    <p>Một bài đăng mà bạn đã ứng tuyển đã được đánh giá là phù hợp, nhà tuyển dụng sẽ sớm liên hệ đến bạn để trao đổi thêm về công việc, nếu có vấn đề gì vui lòng liên hệ đến chúng tôi để được giải đáp.</p>\r\n    <p>Kiểm tra các thông báo của bạn tại đây:</p>\r\n    <a href=\"{url1}\" style=\"background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; display: inline-block;\">Thông báo</a>\r\n    <p>Cảm ơn bạn,</p>\r\n    <p>Đội ngũ JobWeb</p>\r\n</body>\r\n</html>";
+
+                e.SendEmail(candidate.Email, title1, message1);
+            }
+
+            apply.CoverLetter = t.CoverLetter;
+            apply.ApplyTime = t.ApplyTime;
+            apply.JobPostingId = t.JobPostingId;
+            apply.CandidateId = t.CandidateId;
+            apply.StatusCode = t.StatusCode;
+
+            db.SaveChanges();
+
+            return Ok("update applyjobpost success!");
+        }
+        [HttpDelete("deletejobapply/{id}")]
+        [Authorize(Roles = "1,2")]
+        public IActionResult DeleteApplyJobPost(int id)
+        {
+            JobSeekerJobPostingApply apply = db.JobSeekerJobPostingApplies.FirstOrDefault(p => p.Id == id);
+            if (apply == null) return NotFound("Not Found Apply JobPost!");
+
+            db.JobSeekerJobPostingApplies.Remove(apply);
+
+            db.SaveChanges();
+
+            return Ok("delete applyjobpost success!");
         }
         [HttpPost("addsavejobpost")]
         [Authorize(Roles = "1,3")]
@@ -234,18 +304,19 @@ namespace BE_JobWeb.Controllers
             EmailService e = new EmailService();
             JobSeekerNotification notification = new JobSeekerNotification();
             notification.Id = Guid.NewGuid().ToString();
-            notification.Type = "jobpostnewsave";
+            notification.Type = "recruiter_jobpostnewsave";
             notification.Description = $"1 ứng viên mới vừa lưu bài đăng {jobPosting.JobTitle} của bạn!";
             notification.IdConcern = t.CandidateId;
             notification.IdUserReceive = recruiter.RecruiterId;
             notification.IsCreatedAt = DateTime.Now;
             notification.IsSent = true;
             notification.IsSeen = false;
+            notification.Title = $"http://localhost:5080/Home/CandidateDetailRecruiter/{t.CandidateId}?idjob={jobPosting.Id}";
             db.JobSeekerNotifications.Add(notification);
             db.SaveChanges();
 
             string title = $"1 ứng viên mới vừa lưu bài đăng {jobPosting.JobTitle} của bạn!";
-            string url = $"http://localhost:5281/api/Account/notification/{recruiter.RecruiterId}";
+            string url = $"http://localhost:5080/Home/Notification/{recruiter.RecruiterId}";
             string message = $"<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <title>{title}</title>\r\n</head>\r\n<body>\r\n    <h2>Chào {recruiter.Fullname},</h2>\r\n    <p>Có vẻ như có 1 ứng viên vừa lưu bài đăng của bạn, nếu có vấn đề gì vui lòng liên hệ đến chúng tôi để được giải đáp.</p>\r\n    <p>Kiểm tra các thông báo của bạn tại đây:</p>\r\n    <a href=\"{url}\" style=\"background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; display: inline-block;\">Thông báo</a>\r\n    <p>Cảm ơn bạn,</p>\r\n    <p>Đội ngũ JobWeb</p>\r\n</body>\r\n</html>";
 
             e.SendEmail(recruiter.Email, title, message);
@@ -277,20 +348,21 @@ namespace BE_JobWeb.Controllers
             if (recruiter == null) return BadRequest("Khong tim thay nha tuyen dung");
 
             EmailService e = new EmailService();
-            //JobSeekerNotification notification = new JobSeekerNotification();
-            //notification.Id = Guid.NewGuid().ToString();
-            //notification.Type = "companynewfollow";
-            //notification.Description = $"1 ứng viên mới vừa theo dõi công ty {enterprise.FullCompanyName} mà bạn đã đăng ký!";
-            //notification.IdConcern = t.CandidateId;
-            //notification.IdUserReceive = recruiter.RecruiterId;
-            //notification.IsCreatedAt = DateTime.Now;
-            //notification.IsSent = true;
-            //notification.IsSeen = false;
-            //db.JobSeekerNotifications.Add(notification);
-            //db.SaveChanges();
+            JobSeekerNotification notification = new JobSeekerNotification();
+            notification.Id = Guid.NewGuid().ToString();
+            notification.Type = "recruiter_companynewfollow";
+            notification.Description = $"1 ứng viên mới vừa theo dõi công ty {enterprise.FullCompanyName} mà bạn đã đăng ký!";
+            notification.IdConcern = t.CandidateId;
+            notification.IdUserReceive = recruiter.RecruiterId;
+            notification.IsCreatedAt = DateTime.Now;
+            notification.IsSent = true;
+            notification.IsSeen = false;
+            notification.Title = $"http://localhost:5080/Home/CandidateDetailRecruiter/{t.CandidateId}";
+            db.JobSeekerNotifications.Add(notification);
+            db.SaveChanges();
 
             string title = $"1 ứng viên mới vừa theo dõi công ty {enterprise.FullCompanyName} mà bạn đã đăng ký!";
-            string url = $"http://localhost:5281/api/Account/notification/{recruiter.RecruiterId}";
+            string url = $"http://localhost:5080/Home/Notification/{recruiter.RecruiterId}";
             string message = $"<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <title>{title}</title>\r\n</head>\r\n<body>\r\n    <h2>Chào {recruiter.Fullname},</h2>\r\n    <p>Có vẻ như có 1 ứng viên vừa theo dõi công ty bạn đã đăng ký, nếu có vấn đề gì vui lòng liên hệ đến chúng tôi để được giải đáp.</p>\r\n    <p>Kiểm tra các thông báo của bạn tại đây:</p>\r\n    <a href=\"{url}\" style=\"background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; display: inline-block;\">Thông báo</a>\r\n    <p>Cảm ơn bạn,</p>\r\n    <p>Đội ngũ JobWeb</p>\r\n</body>\r\n</html>";
 
             e.SendEmail(recruiter.Email, title, message);

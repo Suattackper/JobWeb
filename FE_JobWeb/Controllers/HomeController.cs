@@ -22,19 +22,74 @@ namespace FE_JobWeb.Controllers
         private readonly ILogger<HomeController> _logger;
         int pageSize = 9;
         private ApplicationUser user;
-        //public AccountController(ApplicationUser user)
-        //{
-        //    this.user = user;
-        //}
 
         public HomeController(ILogger<HomeController> logger, ApplicationUser user)
         {
             _logger = logger;
             this.user = user;
         }
-        //home
-        public IActionResult Index()
+        //Notification candidate, recruiter, admin
+        public IActionResult Notification(Guid id, string? error, string? success)
         {
+            if (error != null) ViewBag.ErrorMessage = error;
+            if (success != null) ViewBag.SuccessMessage = success;
+
+            JobSeekerUserLoginDatum u = db.JobSeekerUserLoginData.FirstOrDefault(x => x.Id == id);
+            if (u == null) View("Error");
+
+            List<JobSeekerNotification> lnoti = new List<JobSeekerNotification>();
+
+            if (u.RoleId == 1)
+            {
+                lnoti = db.JobSeekerNotifications.OrderByDescending(p => p.IsCreatedAt).Where(p => p.Type.Contains("admin")).ToList();
+                return View(lnoti);
+            }
+
+            lnoti = db.JobSeekerNotifications.OrderByDescending(p => p.IsCreatedAt).Where(p => p.IdUserReceive == id).ToList();
+
+            return View(lnoti);
+        }
+        public IActionResult NotificationForward(string id, string url)
+        {
+            #region validate
+            if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(id)) return RedirectToAction("Notification", "Home", new { id = user.User.Id, error = "Có vấn đề khi chuyển tiếp thông báo!" });
+            #endregion
+
+            JobSeekerNotification noti = db.JobSeekerNotifications.FirstOrDefault(p => p.Id == id);
+            if(noti == null) return RedirectToAction("Notification", "Home", new { id = user.User.Id, error = "Không tìm thấy thông báo!" });
+
+            noti.IsSeen = true;
+            db.SaveChanges();
+
+            return Redirect(url);
+        }
+        //home
+        public async Task<IActionResult> Index()
+        {
+            // Gọi đồng thời tất cả các API cần thiết
+            var jobCategoriesTask = GetJobCategory();
+            var enterprisesTask = GetListEnterprise();
+            var jobPostingsTask = GetListPostJob();
+            var citiesTask = GetCity();
+
+            // Chờ tất cả các tác vụ hoàn thành
+            await Task.WhenAll(jobCategoriesTask, enterprisesTask, jobPostingsTask, citiesTask);
+
+            // Lấy kết quả từ các tác vụ
+            var jobCategories = jobCategoriesTask.Result;
+            var enterprises = enterprisesTask.Result;
+            var jobPostings = jobPostingsTask.Result;
+            var cities = citiesTask.Result;
+
+            // Xử lý dữ liệu và lưu vào ViewBag
+            ViewBag.Jobcategory = jobCategories;
+            ViewBag.Category = jobCategories.Take(10).ToList();
+            ViewBag.Company = enterprises.OrderByDescending(e => e.ViewCount).Take(10).ToList();
+            ViewBag.Hochiminh = jobPostings.Count(p => p.Province == "Thành phố Hồ Chí Minh");
+            ViewBag.Hanoi = jobPostings.Count(p => p.Province == "Thành phố Hà Nội");
+            ViewBag.Danang = jobPostings.Count(p => p.Province == "Thành phố Đà Nẵng");
+            ViewBag.City = cities;
+
             return View();
         }
         public async Task<IActionResult> CompanyHome(string? error, string? success, int page = 1)
@@ -302,7 +357,7 @@ namespace FE_JobWeb.Controllers
             return View(paginatedJobs);
         }
         [HttpGet]
-        public async Task<IActionResult> JobHomeSearch(int type, string search, string category, string joblevel, string exp, string city, Guid id)
+        public async Task<IActionResult> JobHomeSearch(string search, string category, string joblevel, string exp, string city, Guid id)
         {
             #region validate
             if (string.IsNullOrEmpty(category) || string.IsNullOrEmpty(joblevel) || string.IsNullOrEmpty(exp) || string.IsNullOrEmpty(city)) return RedirectToAction("JobHome", "Home", new { error = "Vui lòng nhập đầy đủ!" });
@@ -567,9 +622,334 @@ namespace FE_JobWeb.Controllers
         {
             return View();
         }
+        public IActionResult JobApplyCandidate(string? error, string? success, int page = 1)
+        {
+            if (error != null) ViewBag.ErrorMessage = error;
+            if (success != null) ViewBag.SuccessMessage = success;
+
+            if (TempData.ContainsKey("jobapplys"))
+            {
+                string jobPostingsJson = TempData["jobapplys"] as string;
+                List<JobSeekerJobPostingApply> data = JsonConvert.DeserializeObject<List<JobSeekerJobPostingApply>>(jobPostingsJson);
+
+                if (!data.Any())
+                {
+                    data = db.JobSeekerJobPostingApplies.Where(p => p.CandidateId == user.User.Id).ToList();
+
+                    PaginatedList<JobSeekerJobPostingApply> paginatedJobs2 = PaginatedList<JobSeekerJobPostingApply>.Create(data, page, pageSize);
+
+                    return View(paginatedJobs2);
+                }
+
+                PaginatedList<JobSeekerJobPostingApply> paginatedJobs1 = PaginatedList<JobSeekerJobPostingApply>.Create(data, page, pageSize);
+
+                return View(paginatedJobs1);
+            }
+
+            List<JobSeekerJobPostingApply> jobapply = db.JobSeekerJobPostingApplies.Where(p => p.CandidateId == user.User.Id).ToList();
+
+            PaginatedList<JobSeekerJobPostingApply> paginatedJobs = PaginatedList<JobSeekerJobPostingApply>.Create(jobapply, page, pageSize);
+
+            return View(paginatedJobs);
+        }
+        [HttpPost]
+        public IActionResult JobApplyCandidate(string status)
+        {
+            #region validate
+            if (string.IsNullOrEmpty(status)) return RedirectToAction("JobApplyCandidate", "Home", new { error = "Vui lòng nhập đầy đủ!" });
+            #endregion
+
+            List<JobSeekerJobPostingApply> a = db.JobSeekerJobPostingApplies.Where(p => p.CandidateId == user.User.Id).ToList();
+
+            if (status != "") a = a.Where(p => p.StatusCode == status).ToList();
+
+            if (a.Any())
+            {
+                TempData["jobapplys"] = JsonConvert.SerializeObject(a);
+                return RedirectToAction("JobApplyCandidate", "Home");
+            }
+            else return RedirectToAction("JobApplyCandidate", "Home", new { error = "Không tìm thấy các bài đăng đã ứng tuyển!" });
+        }
+        public IActionResult JobSaveCandidate(string? error, string? success, int page = 1)
+        {
+            if (error != null) ViewBag.ErrorMessage = error;
+            if (success != null) ViewBag.SuccessMessage = success;
+
+            List<JobSeekerSavedJobPosting> jobapply = db.JobSeekerSavedJobPostings.Where(p => p.CandidateId == user.User.Id).ToList();
+
+            PaginatedList<JobSeekerSavedJobPosting> paginatedJobs = PaginatedList<JobSeekerSavedJobPosting>.Create(jobapply, page, pageSize);
+
+            return View(paginatedJobs);
+        }
+        [HttpGet]
+        public IActionResult JobSaveCandidateDelete(int id)
+        {
+            #region validate
+            if (id == null) return RedirectToAction("JobSaveCandidate", "Home", new { error = "Vui lòng nhập đầy đủ!" });
+            #endregion
+
+            JobSeekerSavedJobPosting a = db.JobSeekerSavedJobPostings.FirstOrDefault(p => p.Id == id);
+            if (a == null) return RedirectToAction("JobSaveCandidate", "Home", new { error = "Không tìm thấy bài post đã lưu!" });
+
+            db.JobSeekerSavedJobPostings.Remove(a);
+            db.SaveChanges();
+
+            return RedirectToAction("JobSaveCandidate", "Home", new { success = "Hủy lưu thành công!" });
+        }
+
+        //recruiter
         public IActionResult IndexRecruiter()
         {
             return View();
+        }
+        public IActionResult CandidateApplyRecruiter(string? error, string? success, int page = 1)
+        {
+            if (error != null) ViewBag.ErrorMessage = error;
+            if (success != null) ViewBag.SuccessMessage = success;
+
+            if (TempData.ContainsKey("candidateapplys"))
+            {
+                string jobPostingsJson = TempData["candidateapplys"] as string;
+                List<JobSeekerJobPostingApply> data = JsonConvert.DeserializeObject<List<JobSeekerJobPostingApply>>(jobPostingsJson);
+
+                if (!data.Any())
+                {
+                    JobSeekerRecruiterProfile rec1 = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == user.User.Id);
+                    if (rec1 == null) rec1 = new JobSeekerRecruiterProfile();
+
+                    JobSeekerEnterprise enter1 = db.JobSeekerEnterprises.FirstOrDefault(p => p.EnterpriseId == rec1.EnterpriseId);
+                    if (enter1 == null) enter1 = new JobSeekerEnterprise();
+
+                    List<JobSeekerJobPosting> jobpost1 = db.JobSeekerJobPostings.Where(p => p.EnterpriseId == enter1.EnterpriseId).ToList();
+
+                    ViewBag.Jobpost = jobpost1;
+
+                    if (jobpost1.Count > 0)
+                    {
+                        foreach (JobSeekerJobPosting i in jobpost1)
+                        {
+                            List<JobSeekerJobPostingApply> j = db.JobSeekerJobPostingApplies.Where(p => p.JobPostingId == i.Id).ToList();
+                            if (!j.Any()) continue;
+                            foreach (JobSeekerJobPostingApply ii in j)
+                            {
+                                data.Add(ii);
+                            }
+                        }
+                    }
+
+                    PaginatedList<JobSeekerJobPostingApply> paginatedJobs2 = PaginatedList<JobSeekerJobPostingApply>.Create(data, page, pageSize);
+
+                    return View(paginatedJobs2);
+                }
+
+                JobSeekerRecruiterProfile rec11 = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == user.User.Id);
+                if (rec11 == null) rec11 = new JobSeekerRecruiterProfile();
+
+                JobSeekerEnterprise enter11 = db.JobSeekerEnterprises.FirstOrDefault(p => p.EnterpriseId == rec11.EnterpriseId);
+                if (enter11 == null) enter11 = new JobSeekerEnterprise();
+
+                List<JobSeekerJobPosting> jobpost11 = db.JobSeekerJobPostings.Where(p => p.EnterpriseId == enter11.EnterpriseId).ToList();
+
+                ViewBag.Jobpost = jobpost11;
+
+                PaginatedList<JobSeekerJobPostingApply> paginatedJobs1 = PaginatedList<JobSeekerJobPostingApply>.Create(data, page, pageSize);
+
+                return View(paginatedJobs1);
+            }
+
+            List<JobSeekerJobPostingApply> jobapply = new List<JobSeekerJobPostingApply>();
+
+            JobSeekerRecruiterProfile rec = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == user.User.Id);
+            if (rec == null) rec = new JobSeekerRecruiterProfile();
+
+            JobSeekerEnterprise enter = db.JobSeekerEnterprises.FirstOrDefault(p => p.EnterpriseId == rec.EnterpriseId);
+            if (enter == null) enter = new JobSeekerEnterprise();
+
+            List<JobSeekerJobPosting> jobpost = db.JobSeekerJobPostings.Where(p => p.EnterpriseId == enter.EnterpriseId).ToList();
+            ViewBag.Jobpost = jobpost;
+
+            if (jobpost.Count > 0)
+            {
+                foreach (JobSeekerJobPosting i in jobpost)
+                {
+                    List<JobSeekerJobPostingApply> j = db.JobSeekerJobPostingApplies.Where(p => p.JobPostingId == i.Id).ToList();
+                    if (!j.Any()) continue;
+                    foreach (JobSeekerJobPostingApply ii in j)
+                    {
+                        jobapply.Add(ii);
+                    }
+                }
+            }
+
+            PaginatedList<JobSeekerJobPostingApply> paginatedJobs = PaginatedList<JobSeekerJobPostingApply>.Create(jobapply, page, pageSize);
+
+            return View(paginatedJobs);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CandidateApplyRecruiter(int type, string search, string job, string status, int idedit, string statusedit, int iddelete)
+        {
+            if (type == 1)
+            {
+                #region validate
+                if (string.IsNullOrEmpty(status) || string.IsNullOrEmpty(job)) return RedirectToAction("CandidateApplyRecruiter", "Home", new { error = "Vui lòng nhập đầy đủ!" });
+                #endregion
+
+                JobSeekerRecruiterProfile rec = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == user.User.Id);
+                if (rec == null) rec = new JobSeekerRecruiterProfile();
+
+                JobSeekerEnterprise enter = db.JobSeekerEnterprises.FirstOrDefault(p => p.EnterpriseId == rec.EnterpriseId);
+                if (enter == null) enter = new JobSeekerEnterprise();
+
+                List<JobSeekerJobPosting> a = db.JobSeekerJobPostings.Where(p => p.EnterpriseId == enter.EnterpriseId).ToList();
+
+                if (search != null) a = a.Where(p => p.JobTitle.Contains(search)).ToList();
+
+                if (job != "all") a = a.Where(p => p.Id.ToString() == job).ToList();
+
+
+                List<JobSeekerJobPostingApply> jobapply = new List<JobSeekerJobPostingApply>();
+
+                if (a.Count > 0)
+                {
+                    foreach (JobSeekerJobPosting i in a)
+                    {
+                        List<JobSeekerJobPostingApply> j = db.JobSeekerJobPostingApplies.Where(p => p.JobPostingId == i.Id).ToList();
+                        if (!j.Any()) continue;
+                        foreach (JobSeekerJobPostingApply ii in j)
+                        {
+                            jobapply.Add(ii);
+                        }
+                    }
+                }
+
+                if (status != "all") jobapply = jobapply.Where(p => p.StatusCode == status).ToList();
+
+                if (jobapply.Any())
+                {
+                    TempData["candidateapplys"] = JsonConvert.SerializeObject(jobapply, new JsonSerializerSettings
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    });
+
+                    return RedirectToAction("CandidateApplyRecruiter", "Home");
+                }
+                else return RedirectToAction("CandidateApplyRecruiter", "Home", new { error = "Không tìm thấy!" });
+            }
+            else if(type == 2)
+            {
+                #region validate
+                if (string.IsNullOrEmpty(statusedit) || idedit == 0) return RedirectToAction("CandidateApplyRecruiter", "Home", new { error = "Vui lòng nhập đầy đủ!" });
+                #endregion
+
+                HttpClient client = new HttpClient();
+                //Call api
+                var apiUrl = "http://localhost:5281/api/company/updatejobapply";
+
+                JobSeekerJobPostingApply o = db.JobSeekerJobPostingApplies.FirstOrDefault(p => p.Id == idedit);
+                if (o == null) return RedirectToAction("CandidateApplyRecruiter", "Home", new { error = "Có vấn đề khi đổi trạng thái!" });
+                
+                if(o.StatusCode == statusedit) return RedirectToAction("CandidateApplyRecruiter", "Home", new { error = "không có gì thay đổi!" });
+
+                o.StatusCode = statusedit;
+
+                // Convert đối tượng thành JSON
+                var content = new StringContent(JsonConvert.SerializeObject(o, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                }), Encoding.UTF8, "application/json");
+
+                Console.WriteLine("json\n" + JsonConvert.SerializeObject(o, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                }));
+                //get with token
+                string token = Request.Cookies["jwtToken"];
+                Console.WriteLine("jwt: " + token);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                // Gửi yêu cầu POST tới API
+                HttpResponseMessage response = await client.PostAsync(apiUrl, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("cat nhat trang thai ung vien ung tuyen thanh cong");
+                    return RedirectToAction("CandidateApplyRecruiter", "Home", new { success = "Cật nhật trạng thái ứng viên thành công!" });
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
+                {
+                    Console.WriteLine("Không được phép: Người dùng chưa xác thực.");
+                    return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+                }
+                else if (response.StatusCode == HttpStatusCode.Forbidden) // 403
+                {
+                    Console.WriteLine("Không được phép: Người dùng không có quyền truy cập.");
+                    return RedirectToAction("CandidateApplyRecruiter", "Home", new { error = "Bạn không có quyền thực hiện thao tác này!" });
+                }
+                else
+                {
+                    // Ghi log lỗi chi tiết từ API
+                    string errorDetails = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine("CandidateApplyRecruiter: cat nhat that bai: " + response.StatusCode);
+                    Console.WriteLine("Chi tiet loi API: " + errorDetails);
+                    return RedirectToAction("CandidateApplyRecruiter", "Home", new { error = "Có 1 vấn đề nào đó xả ra, vui lòng kết nối tới chúng tôi để được giúp đỡ!" });
+                }
+            }
+            else
+            {
+                #region validate
+                if (iddelete == 0) return RedirectToAction("CandidateApplyRecruiter", "Home", new { error = "Vui lòng nhập đầy đủ!" });
+                #endregion
+
+                HttpClient client = new HttpClient();
+                //Call api
+                var apiUrl = $"http://localhost:5281/api/company/deletejobapply/{iddelete}";
+
+                //get with token
+                string token = Request.Cookies["jwtToken"];
+                Console.WriteLine("jwt: " + token);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                // Gửi yêu cầu DELETE tới API
+                HttpResponseMessage response = await client.DeleteAsync(apiUrl);
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("delete ung vien thanh cong");
+                    return RedirectToAction("CandidateApplyRecruiter", "Home", new { success = "Xóa ứng viên thành công!" });
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
+                {
+                    Console.WriteLine("Không được phép: Người dùng chưa xác thực.");
+                    return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+                }
+                else if (response.StatusCode == HttpStatusCode.Forbidden) // 403
+                {
+                    Console.WriteLine("Không được phép: Người dùng không có quyền truy cập.");
+                    return RedirectToAction("CandidateApplyRecruiter", "Home", new { error = "Bạn không có quyền thực hiện thao tác này!" });
+                }
+                else
+                {
+                    // Ghi log lỗi chi tiết từ API
+                    string errorDetails = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine("Delete applyjob: delete that bai: " + response.StatusCode);
+                    Console.WriteLine("Chi tiet loi API: " + errorDetails);
+                    return RedirectToAction("CandidateApplyRecruiter", "Home", new { error = "Có 1 vấn đề nào đó xả ra, vui lòng kết nối tới chúng tôi để được giúp đỡ!" });
+                }
+            }
+        }
+        public IActionResult CandidateDetailRecruiter(Guid id, int idjob)
+        {
+            JobSeekerCandidateProfile can = db.JobSeekerCandidateProfiles.FirstOrDefault(p => p.CandidateId == id);
+            if(can == null) return RedirectToAction("CandidateApplyRecruiter", "Home", new { error = "Không tìm thấy thông tin ứng viên!" });
+
+            List<JobSeekerEducationDetail> ledu = db.JobSeekerEducationDetails.Where(p => p.CandidateId == id).ToList();
+            List<JobSeekerWorkingExperience> lexp = db.JobSeekerWorkingExperiences.Where(p => p.CandidateId == id).ToList();
+            List<JobSeekerCertificate> lcer = db.JobSeekerCertificates.Where(p => p.CandidateId == id).ToList();
+
+            NotificationCandidate(idjob);
+
+            ViewBag.Education = ledu;
+            ViewBag.Experience = lexp;
+            ViewBag.Certificate = lcer;
+
+            return View(can);
         }
         //admin
         public async Task<IActionResult> IndexAdmin(string? error, string? success)
@@ -1430,6 +1810,45 @@ namespace FE_JobWeb.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        //Gửi thông báo đến candidate
+        public async Task NotificationCandidate(int id)
+        {
+            HttpClient client = new HttpClient();
+            //Call api
+            var apiUrl = $"http://localhost:5281/api/notification/notificationcandidate/{id}";
+
+            //get with token
+            string token = Request.Cookies["jwtToken"];
+            Console.WriteLine("jwt: " + token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            HttpResponseMessage response = await client.GetAsync(apiUrl);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("NotificationCandidate thanh cong");
+                Console.WriteLine("Phản hồi từ API: " + await response.Content.ReadAsStringAsync());
+                return;
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
+            {
+                Console.WriteLine("Không được phép: Người dùng chưa xác thực.");
+                return;
+            }
+            else if (response.StatusCode == HttpStatusCode.Forbidden) // 403
+            {
+                Console.WriteLine("Không được phép: Người dùng không có quyền truy cập.");
+                return;
+            }
+            else
+            {
+                // Ghi log lỗi chi tiết từ API
+                string errorDetails = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("NotificationCandidate: sen mail that bai: " + response.StatusCode);
+                Console.WriteLine("Chi tiet loi API: " + errorDetails);
+                Console.WriteLine("Có 1 vấn đề nào đó xả ra, vui lòng kết nối tới chúng tôi để được giúp đỡ!");
+                return;
+            }
         }
         //Gửi thông báo đến recruiter về company
         public async Task NotificationCompany(Guid idcompany)

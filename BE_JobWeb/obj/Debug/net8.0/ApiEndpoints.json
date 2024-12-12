@@ -251,7 +251,7 @@
   },
   {
     "ContainingType": "BE_JobWeb.Controllers.CompanyController",
-    "Method": "AddSaveJobPost",
+    "Method": "AddApplyJobPost",
     "RelativePath": "api/Company/addjobapply",
     "HttpMethod": "POST",
     "IsController": true,
@@ -301,6 +301,22 @@
     "ContainingType": "BE_JobWeb.Controllers.CompanyController",
     "Method": "DeleteCompanyFollow",
     "RelativePath": "api/Company/deletecompanyfollow/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.CompanyController",
+    "Method": "DeleteApplyJobPost",
+    "RelativePath": "api/Company/deletejobapply/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -418,6 +434,22 @@
       {
         "Name": "e",
         "Type": "Data_JobWeb.Entity.JobSeekerEnterprise",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.CompanyController",
+    "Method": "UpdateApplyJobPost",
+    "RelativePath": "api/Company/updatejobapply",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "t",
+        "Type": "Data_JobWeb.Entity.JobSeekerJobPostingApply",
         "IsRequired": true
       }
     ],
@@ -669,6 +701,22 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BE_JobWeb.Controllers.NotificationController",
+    "Method": "NotificationCandidate",
+    "RelativePath": "api/Notification/notificationcandidate/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {

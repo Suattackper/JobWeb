@@ -1,5 +1,28 @@
 ﻿@using FE_JobWeb.Others
+@using Data_JobWeb.Entity;
 @inject ApplicationUser user
+@{
+    string notification = "";
+    List<JobSeekerNotification> lnoti = new List<JobSeekerNotification>();
+    if (user.User != null)
+    {
+        JobSeekerContext db = new JobSeekerContext();
+
+
+        JobSeekerUserLoginDatum u = db.JobSeekerUserLoginData.FirstOrDefault(x => x.Id == user.User.Id);
+        if (u == null) notification = "Error";
+        else if (u.RoleId == 1)
+        {
+            notification += db.JobSeekerNotifications.Where(p => p.Type.Contains("admin") && p.IsSeen == false).ToList().Count();
+            lnoti = db.JobSeekerNotifications.OrderByDescending(p => p.IsCreatedAt).Where(p => p.Type.Contains("admin") && p.IsSeen == false).Take(5).ToList();
+        }
+        else
+        {
+            notification += db.JobSeekerNotifications.Where(p => p.IdUserReceive == user.User.Id && p.IsSeen == false).ToList().Count();
+            lnoti = db.JobSeekerNotifications.OrderByDescending(p => p.IsCreatedAt).Where(p => p.IdUserReceive == user.User.Id && p.IsSeen == false).Take(5).ToList();
+        }
+    }
+}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -168,59 +191,30 @@
                                         <a href="javascript:;" class="dropdown-toggle jobzilla-admin-notification"
                                            id="ID-NOTI_dropdown" data-bs-toggle="dropdown">
                                             <i class="far fa-bell"></i>
-                                            <span class="notification-animate">8</span>
+                                            <span class="notification-animate">@notification</span>
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="ID-NOTI_dropdown">
-                                            <div class="dashboard-widgets-header">You have 7 notifications</div>
+                                            <div class="dashboard-widgets-header">You have @notification notifications</div>
                                             <div class="noti-list dashboard-widget-scroll">
                                                 <ul>
-
-                                                    <li>
-                                                        <a href="#">
-                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
-                                                            <span class="noti-texting">
-                                                                Devid applied for <b>Webdesigner.</b>
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
-                                                            <span class="noti-texting">Nikol sent you a message. </span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
-                                                            <span class="noti-texting">
-                                                                lucy bookmarked your <b>
-                                                                    SEO
-                                                                    Expert
-                                                                </b> Job!
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
-                                                            <span class="noti-texting">
-                                                                Your job for <b>teacher</b> has been
-                                                                approved!
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
-                                                            <span class="noti-texting">
-                                                                Thor applied for <b>Team Leader</b>.
-                                                            </span>
-                                                        </a>
-                                                    </li>
+                                                    @if(lnoti.Count > 0)
+                                                    {
+                                                        foreach(JobSeekerNotification i in lnoti)
+                                                        {
+                                                            <li>
+                                                                <a href="@Url.Action("NotificationForward","Home",new {id = i.Id, url = i.Title})">
+                                                                    <span class="noti-icon"><i class="far fa-bell"></i></span>
+                                                                    <span class="noti-texting">
+                                                                        <b>@i.Description</b>
+                                                                    </span>
+                                                                </a>
+                                                            </li>
+                                                        }
+                                                    }
                                                 </ul>
 
                                                 <div class="noti-view-all">
-                                                    <a href="admin-message.html">View All</a>
+                                                    <a href="@Url.Action("Notification","Home", new{ id = user.User.Id})">View All</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -247,7 +241,7 @@
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a href="admin-notification.html">
+                                                            <a href="@Url.Action("Notification","Home", new {id = user.User.Id})">
                                                                 <i class="feather-mail"></i>
                                                                 Thông báo
                                                             </a>
@@ -296,7 +290,7 @@
                                 </span>
                             </a>
                         </li>
-                        <li>
+                        <li @((Context.Request.Path.Value.Contains("JobApplyCandidate") || Context.Request.Path.Value.Contains("JobSaveCandidate")) ? "class=active" : "")>
                             <a href="javascript:;">
                                 <i class="feather-briefcase"></i><span class="admin-nav-text">
                                     Việc làm
@@ -305,7 +299,7 @@
                             </a>
                             <ul class="sub-menu">
                                 <li>
-                                    <a href="candidate-jobs-applied.html">
+                                    <a href="@Url.Action("JobApplyCandidate","Home")">
                                         <span class="admin-nav-text">
                                             Danh sách ứng
                                             tuyển
@@ -313,7 +307,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="candidate-saved-jobs.html">
+                                    <a href="@Url.Action("JobSaveCandidate","Home")">
                                         <span class="admin-nav-text">
                                             Việc làm đã
                                             lưu
@@ -329,12 +323,13 @@
                                     <sup class="twm-msg-noti">5</sup>
                                 </span>
                             </a>
-                        </li> *@
-                        <li>
-                            <a href="candidate-alert.html">
+                    </li> *@
+                        <li @((Context.Request.Path.Value.Contains("Notification")) ? "class=active" : "")>
+                            <a href="@Url.Action("Notification","Home", new{ id = user.User.Id})">
                                 <i class="feather-bell"></i><span class="admin-nav-text">
                                     Thông
                                     báo
+                                    <sup class="twm-msg-noti">@notification</sup>
                                 </span>
                             </a>
                         </li>
@@ -453,59 +448,30 @@
                                         <a href="javascript:;" class="dropdown-toggle jobzilla-admin-notification"
                                            id="ID-NOTI_dropdown" data-bs-toggle="dropdown">
                                             <i class="far fa-bell"></i>
-                                            <span class="notification-animate">8</span>
+                                            <span class="notification-animate">@notification</span>
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="ID-NOTI_dropdown">
-                                            <div class="dashboard-widgets-header">You have 7 notifications</div>
+                                            <div class="dashboard-widgets-header">You have @notification notifications</div>
                                             <div class="noti-list dashboard-widget-scroll">
                                                 <ul>
-
-                                                    <li>
-                                                        <a href="#">
-                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
-                                                            <span class="noti-texting">
-                                                                Devid applied for <b>Webdesigner.</b>
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
-                                                            <span class="noti-texting">Nikol sent you a message. </span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
-                                                            <span class="noti-texting">
-                                                                lucy bookmarked your <b>
-                                                                    SEO
-                                                                    Expert
-                                                                </b> Job!
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
-                                                            <span class="noti-texting">
-                                                                Your job for <b>teacher</b> has been
-                                                                approved!
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
-                                                            <span class="noti-texting">
-                                                                Thor applied for <b>Team Leader</b>.
-                                                            </span>
-                                                        </a>
-                                                    </li>
+                                                    @if (lnoti.Count > 0)
+                                                    {
+                                                        foreach (JobSeekerNotification i in lnoti)
+                                                        {
+                                                            <li>
+                                                                <a href="@Url.Action("NotificationForward","Home",new {id = i.Id, url = i.Title})">
+                                                                    <span class="noti-icon"><i class="far fa-bell"></i></span>
+                                                                    <span class="noti-texting">
+                                                                        <b>@i.Description</b>
+                                                                    </span>
+                                                                </a>
+                                                            </li>
+                                                        }
+                                                    }
                                                 </ul>
 
                                                 <div class="noti-view-all">
-                                                    <a href="admin-message.html">View All</a>
+                                                    <a href="@Url.Action("Notification","Home", new{ id = user.User.Id})">View All</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -532,7 +498,7 @@
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a href="admin-notification.html">
+                                                            <a href="@Url.Action("Notification","Home", new {id = user.User.Id})">
                                                                 <i class="feather-mail"></i>
                                                                 Thông báo
                                                             </a>
@@ -604,14 +570,13 @@
                                 </li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="javascript:;">
+                        <li @((Context.Request.Path.Value.Contains("CandidateApplyRecruiter")) ? "class=active" : "")>
+                            <a href="@Url.Action("CandidateApplyRecruiter","Home")">
                                 <i class="feather-users"></i><span class="admin-nav-text">
-                                    Hồ
-                                    sơ
+                                    Danh sách ứng tuyển
                                 </span>
                             </a>
-                            <ul class="sub-menu">
+                            @* <ul class="sub-menu">
                                 <li>
                                     <a href="dash-candidates.html">
                                         <span class="admin-nav-text">Danh sách ứng tuyển</span>
@@ -622,16 +587,16 @@
                                         <span class="admin-nav-text">Hồ sơ đã lưu</span>
                                     </a>
                                 </li>
-                            </ul>
+                            </ul> *@
                         </li>
-                        <li>
+                        @* <li>
                             <a href="dash-package.html">
                                 <i class="feather-dollar-sign"></i><span class="admin-nav-text">
                                     Gói
                                     đăng tin
                                 </span>
                             </a>
-                        </li>
+                        </li> *@
                  @*        <li>
                             <a href="dash-messages.html">
                                 <i class="feather-mail"></i><span class="admin-nav-text">
@@ -640,11 +605,12 @@
                                 </span>
                             </a>
                         </li> *@
-                        <li>
-                            <a href="dash-resume-alert.html">
+                        <li @((Context.Request.Path.Value.Contains("Notification")) ? "class=active" : "")>
+                            <a href="@Url.Action("Notification","Home", new{ id = user.User.Id})">
                                 <i class="feather-bell"></i><span class="admin-nav-text">
                                     Thông
                                     báo
+                                    <sup class="twm-msg-noti">@notification</sup>
                                 </span>
                             </a>
                         </li>
@@ -764,59 +730,30 @@
                                         <a href="javascript:;" class="dropdown-toggle jobzilla-admin-notification"
                                            id="ID-NOTI_dropdown" data-bs-toggle="dropdown">
                                             <i class="far fa-bell"></i>
-                                            <span class="notification-animate">8</span>
+                                            <span class="notification-animate">@notification</span>
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="ID-NOTI_dropdown">
-                                            <div class="dashboard-widgets-header">You have 7 notifications</div>
+                                            <div class="dashboard-widgets-header">You have @notification notifications</div>
                                             <div class="noti-list dashboard-widget-scroll">
                                                 <ul>
-
-                                                    <li>
-                                                        <a href="#">
-                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
-                                                            <span class="noti-texting">
-                                                                Devid applied for <b>Webdesigner.</b>
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
-                                                            <span class="noti-texting">Nikol sent you a message. </span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
-                                                            <span class="noti-texting">
-                                                                lucy bookmarked your <b>
-                                                                    SEO
-                                                                    Expert
-                                                                </b> Job!
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
-                                                            <span class="noti-texting">
-                                                                Your job for <b>teacher</b> has been
-                                                                approved!
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <span class="noti-icon"><i class="far fa-bell"></i></span>
-                                                            <span class="noti-texting">
-                                                                Thor applied for <b>Team Leader</b>.
-                                                            </span>
-                                                        </a>
-                                                    </li>
+                                                    @if (lnoti.Count > 0)
+                                                    {
+                                                        foreach (JobSeekerNotification i in lnoti)
+                                                        {
+                                                            <li>
+                                                                <a href="@Url.Action("NotificationForward","Home",new {id = i.Id, url = i.Title})">
+                                                                    <span class="noti-icon"><i class="far fa-bell"></i></span>
+                                                                    <span class="noti-texting">
+                                                                        <b>@i.Description</b>
+                                                                    </span>
+                                                                </a>
+                                                            </li>
+                                                        }
+                                                    }
                                                 </ul>
 
                                                 <div class="noti-view-all">
-                                                    <a href="admin-message.html">View All</a>
+                                                    <a href="@Url.Action("Notification","Home", new{ id = user.User.Id})">View All</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -843,7 +780,7 @@
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a href="admin-notification.html">
+                                                            <a href="@Url.Action("Notification","Home", new {id = user.User.Id})">
                                                                 <i class="feather-mail"></i>
                                                                 Thông báo
                                                             </a>
@@ -885,12 +822,12 @@
                                 <i class="feather-home"></i><span class="admin-nav-text">Dashboard</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="admin-notification.html">
+                        <li @((Context.Request.Path.Value.Contains("Notification")) ? "class=active" : "")>
+                            <a href="@Url.Action("Notification","Home", new{ id = user.User.Id})">
                                 <i class="feather-bell"></i><span class="admin-nav-text">
                                     Thông
                                     báo
-                                    <sup class="twm-msg-noti">5</sup>
+                                    <sup class="twm-msg-noti">@notification</sup>
                                 </span>
                             </a>
                         </li>

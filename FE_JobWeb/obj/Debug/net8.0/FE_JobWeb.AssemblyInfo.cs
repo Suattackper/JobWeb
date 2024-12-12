@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FE_JobWeb")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5a4a7fe448ca52718e78e392190958ad90f47a52")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+66559f4434ebc10ee05c0a2c6a1c6c3ef070a76f")]
 [assembly: System.Reflection.AssemblyProductAttribute("FE_JobWeb")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FE_JobWeb")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

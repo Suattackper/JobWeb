@@ -24,6 +24,7 @@ public partial class JobSeekerJobPosting
     public string? ExpRequirement { get; set; }
 
     public int? JobLevelCode { get; set; }
+    public int? ViewCount { get; set; }
 
     public string? WorkingType { get; set; }
 

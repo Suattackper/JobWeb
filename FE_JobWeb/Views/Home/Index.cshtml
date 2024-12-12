@@ -1,4 +1,8 @@
-﻿@{
+﻿@using Data_JobWeb.Entity
+@{
+    JobSeekerContext db = new JobSeekerContext();
+}
+@{
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -17,31 +21,32 @@
                 </div>
 
                 <div class="twm-bnr-search-bar">
-                    <form>
+                    <form action="@Url.Action("JobHomeSearch", "Home")" method="get">
                         <div class="row">
                             <!--Title-->
                             <div class="form-group col-xl-3 col-lg-6 col-md-6">
                                 <label>What</label>
-                                <select class="wt-search-bar-select selectpicker" data-live-search="true"
-                                        title="" id="j-Job_Title" data-bv-field="size">
-                                    <option disabled selected value="">Select Category</option>
-                                    <option selected>Job Title</option>
-                                    <option>Web Designer</option>
-                                    <option>Developer</option>
-                                    <option>Acountant</option>
-                                </select>
+                                <div class="twm-inputicon-box">
+                                    <input name="search" type="text" class="form-control"
+                                           placeholder="Job Title">
+                                </div>
                             </div>
-
+                            <input name="exp" type="hidden" value="all">
+                            <input name="joblevel" type="hidden" value="all">
                             <!--All Category-->
                             <div class="form-group col-xl-4 col-lg-6 col-md-6">
                                 <label>Type</label>
-                                <select class="wt-search-bar-select selectpicker" data-live-search="true"
+                                <select class="wt-search-bar-select selectpicker" data-live-search="true" name="category" required
                                         title="" id="j-All_Category" data-bv-field="size">
-                                    <option disabled selected value="">Select Category</option>
-                                    <option selected>All Category</option>
-                                    <option>Web Designer</option>
-                                    <option>Developer</option>
-                                    <option>Acountant</option>
+                                    <option disabled value="">Select Category</option>
+                                    <option selected value="all">All Category</option>
+                                    @if (ViewBag.Jobcategory != null)
+                                    {
+                                        foreach (var i in ViewBag.Jobcategory)
+                                        {
+                                            <option value="@i.Id">@i.JobCategoryName</option>
+                                        }
+                                    }
                                 </select>
                             </div>
 
@@ -49,28 +54,40 @@
                             <div class="form-group col-xl-3 col-lg-6 col-md-6">
                                 <label>Location</label>
                                 <div class="twm-inputicon-box">
-                                    <input name="username" type="text" required class="form-control"
-                                           placeholder="Location">
-                                    <i class="twm-input-icon fas fa-map-marker-alt"></i>
+                                    <select class="wt-search-bar-select selectpicker" data-live-search="true" name="city" required
+                                            title="" id="j-All_Category" data-bv-field="size">
+                                        <option disabled value="">Select Location</option>
+                                        <option selected value="all">All Location</option>
+                                        @if (ViewBag.City != null)
+                                        {
+                                            foreach (var i in ViewBag.City)
+                                            {
+                                                <option value="@i.Name">@i.Name</option>
+                                            }
+                                        }
+                                    </select>
+                    @* <input name="username" type="text" required class="form-control"
+                                    placeholder="Location"> *@
+                                    @* <i class="twm-input-icon fas fa-map-marker-alt"></i> *@
                                 </div>
                             </div>
 
                             <!--Find job btn-->
                             <div class="form-group col-xl-2 col-lg-6 col-md-6">
-                                <button type="button" class="site-button">Find Job</button>
+                                <button type="submit" class="site-button">Find Job</button>
                             </div>
 
                         </div>
                     </form>
                 </div>
 
-                <div class="twm-bnr-popular-search">
+                @* <div class="twm-bnr-popular-search">
                     <span class="twm-title">Popular Searches:</span>
                     <a href="job-list.html">Developer</a> ,
                     <a href="job-list.html">Designer</a> ,
                     <a href="job-list.html">Architect</a> ,
                     <a href="job-list.html">Engineer</a> ...
-                </div>
+                </div> *@
             </div>
             <div class="twm-bnr-bottom-section">
                 <div class="twm-browse-jobs">7,000+ Browse Jobs</div>
@@ -131,189 +148,33 @@
                 <div class="job-cat-block-hpage-6-section m-b30">
                     <div class="row">
                         <!-- COLUMNS 1 -->
-                        <div class="col">
-                            <div class="job-cat-block-hpage-6 m-b30">
-                                <div class="twm-media">
-                                    <div class="flaticon-dashboard"></div>
-                                </div>
-                                <div class="twm-content">
-                                    <a href="job-detail.html">Programming & Tech</a>
-                                    <div class="twm-jobs-available"><span>100+</span> Posted new jobs</div>
-                                    <div class="circle-line-wrap">
-                                        <a class="circle-line-btn" href="job-detail-v2.html">
-                                            <i class="fa fa-arrow-right"></i>
-                                        </a>
+                        @if(ViewBag.Category != null && ViewBag.Category.Count > 0)
+                        {
+                            foreach(JobSeekerJobCategory i in ViewBag.Category)
+                            {
+                                List<JobSeekerJobPosting> ljob = db.JobSeekerJobPostings.Where(p => p.JobCategoryId == i.Id && p.StatusCode == "SC5").ToList();
+                                <div class="col">
+                                    <div class="job-cat-block-hpage-6 m-b30">
+                                        <div class="twm-media">
+                                            <div class="flaticon-dashboard"></div>
+                                        </div>
+                                        <div class="twm-content">
+                                            <a href="@Url.Action("JobHomeSearch", "Home", new{ category = i.Id, city = "all", joblevel = "all", exp = "all"})">@i.JobCategoryName</a>
+                                            <div class="twm-jobs-available"><span>@ljob.Count</span> Posted new jobs</div>
+                                            <div class="circle-line-wrap">
+                                                <a class="circle-line-btn" href="@Url.Action("JobHomeSearch", "Home", new{ category = i.Id, city = "all", joblevel = "all", exp = "all"})">
+                                                    <i class="fa fa-arrow-right"></i>
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                            }
+                        }
 
-                        <!-- COLUMNS 2 -->
-                        <div class="col">
-                            <div class="job-cat-block-hpage-6 m-b30">
-                                <div class="twm-media">
-                                    <div class="flaticon-project-management"></div>
-                                </div>
-                                <div class="twm-content">
-                                    <a href="job-detail.html">Content Writer</a>
-                                    <div class="twm-jobs-available"><span>100+</span> Posted new jobs</div>
-                                    <div class="circle-line-wrap">
-                                        <a class="circle-line-btn" href="job-detail-v2.html">
-                                            <i class="fa fa-arrow-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- COLUMNS 3 -->
-                        <div class="col">
-                            <div class="job-cat-block-hpage-6 m-b30">
-                                <div class="twm-media">
-                                    <div class="flaticon-note"></div>
-                                </div>
-                                <div class="twm-content">
-                                    <a href="job-detail.html">Graphic Designer</a>
-                                    <div class="twm-jobs-available"><span>100+</span> Posted new jobs</div>
-                                    <div class="circle-line-wrap">
-                                        <a class="circle-line-btn" href="job-detail-v2.html">
-                                            <i class="fa fa-arrow-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- COLUMNS 4 -->
-                        <div class="col">
-                            <div class="job-cat-block-hpage-6 m-b30">
-                                <div class="twm-media">
-                                    <div class="flaticon-customer-support"></div>
-                                </div>
-                                <div class="twm-content">
-                                    <a href="job-detail.html">Health & Fitness</a>
-                                    <div class="twm-jobs-available"><span>100+</span> Posted new jobs</div>
-                                    <div class="circle-line-wrap">
-                                        <a class="circle-line-btn" href="job-detail-v2.html">
-                                            <i class="fa fa-arrow-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- COLUMNS 5 -->
-                        <div class="col">
-                            <div class="job-cat-block-hpage-6 m-b30">
-                                <div class="twm-media">
-                                    <div class="flaticon-bars"></div>
-                                </div>
-                                <div class="twm-content">
-                                    <a href="job-detail.html">Digital Marketing</a>
-                                    <div class="twm-jobs-available"><span>100+</span> Posted new jobs</div>
-                                    <div class="circle-line-wrap">
-                                        <a class="circle-line-btn" href="job-detail-v2.html">
-                                            <i class="fa fa-arrow-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- COLUMNS 6 -->
-                        <div class="col">
-                            <div class="job-cat-block-hpage-6 m-b30">
-                                <div class="twm-media">
-                                    <div class="flaticon-user"></div>
-                                </div>
-                                <div class="twm-content">
-                                    <a href="job-detail.html">Sports & Media</a>
-                                    <div class="twm-jobs-available"><span>100+</span> Posted new jobs</div>
-                                    <div class="circle-line-wrap">
-                                        <a class="circle-line-btn" href="job-detail-v2.html">
-                                            <i class="fa fa-arrow-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- COLUMNS 7 -->
-                        <div class="col">
-                            <div class="job-cat-block-hpage-6 m-b30">
-                                <div class="twm-media">
-                                    <div class="flaticon-computer"></div>
-                                </div>
-                                <div class="twm-content">
-                                    <a href="job-detail.html">Video Editing</a>
-                                    <div class="twm-jobs-available"><span>100+</span> Posted new jobs</div>
-                                    <div class="circle-line-wrap">
-                                        <a class="circle-line-btn" href="job-detail-v2.html">
-                                            <i class="fa fa-arrow-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- COLUMNS 8 -->
-                        <div class="col">
-                            <div class="job-cat-block-hpage-6 m-b30">
-                                <div class="twm-media">
-                                    <div class="flaticon-coding"></div>
-                                </div>
-                                <div class="twm-content">
-                                    <a href="job-detail.html">Education</a>
-                                    <div class="twm-jobs-available"><span>100+</span> Posted new jobs</div>
-                                    <div class="circle-line-wrap">
-                                        <a class="circle-line-btn" href="job-detail-v2.html">
-                                            <i class="fa fa-arrow-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- COLUMNS 9 -->
-                        <div class="col">
-                            <div class="job-cat-block-hpage-6 m-b30">
-                                <div class="twm-media">
-                                    <div class="flaticon-computer"></div>
-                                </div>
-                                <div class="twm-content">
-                                    <a href="job-detail.html">Finance & Account</a>
-                                    <div class="twm-jobs-available"><span>100+</span> Posted new jobs</div>
-                                    <div class="circle-line-wrap">
-                                        <a class="circle-line-btn" href="job-detail-v2.html">
-                                            <i class="fa fa-arrow-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- COLUMNS 10 -->
-                        <div class="col">
-                            <div class="job-cat-block-hpage-6 m-b30">
-                                <div class="twm-media">
-                                    <div class="flaticon-coding"></div>
-                                </div>
-                                <div class="twm-content">
-                                    <a href="job-detail.html">Art & Design</a>
-                                    <div class="twm-jobs-available"><span>100+</span> Posted new jobs</div>
-                                    <div class="circle-line-wrap">
-                                        <a class="circle-line-btn" href="job-detail-v2.html">
-                                            <i class="fa fa-arrow-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="text-center job-categories-btn">
-                    <a href="job-list.html" class=" site-button">All Categories</a>
+                            <a href="@Url.Action("JobHome", "Home")" class=" site-button">All Categories</a>
                 </div>
 
             </div>
@@ -335,86 +196,19 @@
         <div class="container">
             <div class="section-content">
                 <div class="owl-carousel home-client-carousel3 owl-btn-vertical-center">
-
-                    <div class="item">
-                        <div class="ow-client-logo">
-                            <div class="client-logo client-logo-media">
-                                <a href="employer-list.html"><img src="~/Content/images/client-logo2/w1.png" alt=""></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="item">
-                        <div class="ow-client-logo">
-                            <div class="client-logo client-logo-media">
-                                <a href="employer-list.html"><img src="~/Content/images/client-logo2/w2.png" alt=""></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="item">
-                        <div class="ow-client-logo">
-                            <div class="client-logo client-logo-media">
-                                <a href="employer-list.html"><img src="~/Content/images/client-logo2/w3.png" alt=""></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="item">
-                        <div class="ow-client-logo">
-                            <div class="client-logo client-logo-media">
-                                <a href="employer-list.html"><img src="~/Content/images/client-logo2/w4.png" alt=""></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="item">
-                        <div class="ow-client-logo">
-                            <div class="client-logo client-logo-media">
-                                <a href="employer-list.html"><img src="~/Content/images/client-logo2/w5.png" alt=""></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="item">
-                        <div class="ow-client-logo">
-                            <div class="client-logo client-logo-media">
-                                <a href="employer-list.html"><img src="~/Content/images/client-logo2/w6.png" alt=""></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="item">
-                        <div class="ow-client-logo">
-                            <div class="client-logo client-logo-media">
-                                <a href="employer-list.html"><img src="~/Content/images/client-logo2/w1.png" alt=""></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="item">
-                        <div class="ow-client-logo">
-                            <div class="client-logo client-logo-media">
-                                <a href="employer-list.html"><img src="~/Content/images/client-logo2/w2.png" alt=""></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="item">
-                        <div class="ow-client-logo">
-                            <div class="client-logo client-logo-media">
-                                <a href="employer-list.html"><img src="~/Content/images/client-logo2/w3.png" alt=""></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="item">
-                        <div class="ow-client-logo">
-                            <div class="client-logo client-logo-media">
-                                <a href="employer-list.html"><img src="~/Content/images/client-logo2/w5.png" alt=""></a>
-                            </div>
-                        </div>
-                    </div>
+                            @if (ViewBag.Company != null && ViewBag.Company.Count > 0)
+                            {
+                                foreach (JobSeekerEnterprise i in ViewBag.Company)
+                                {
+                                    <div class="item">
+                                        <div class="ow-client-logo">
+                                            <div class="client-logo client-logo-media">
+                                                <a href="@Url.Action("CompanyDetailHome","Home",new{ id = i.EnterpriseId})"><img src="@i.LogoUrl" alt=""></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
 
                 </div>
             </div>
@@ -541,10 +335,10 @@
                     <div class="col-xl-8 col-lg-8 col-md-12">
                         <div class="twm-featured-city twm-large-block">
                             <div class="twm-media">
-                                <img src="~/Content/images/featured-cities/city1.jpg" alt="">
+                                <img src="~/Content/images/featured-cities/hochiminhhome.jpg" alt="">
                                 <div class="twm-city-info">
-                                    <div class="twm-city-jobs">125 Jobs</div>
-                                    <h4 class="twm-title"><a href="job-list.html">New York City</a></h4>
+                                            <div class="twm-city-jobs">@(ViewBag.Hochiminh != null ? (ViewBag.Hochiminh + " Jobs") : "0 jobs")</div>
+                                    <h4 class="twm-title"><a href="@Url.Action("JobHomeSearch", "Home", new{ category = "all", city = "Thành phố Hồ Chí Minh", joblevel = "all", exp = "all"})">Hồ Chí Minh</a></h4>
                                 </div>
                             </div>
                         </div>
@@ -555,10 +349,10 @@
                             <div class="col-lg-12 col-md-12">
                                 <div class="twm-featured-city">
                                     <div class="twm-media">
-                                        <img src="~/Content/images/featured-cities/city2.jpg" alt="">
+                                        <img src="~/Content/images/featured-cities/hanoihome.jpg" alt="">
                                         <div class="twm-city-info">
-                                            <div class="twm-city-jobs">190 Jobs</div>
-                                            <h4 class="twm-title"><a href="job-list.html">Dubai</a></h4>
+                                                    <div class="twm-city-jobs">@(ViewBag.Hanoi != null ? (ViewBag.Hanoi + " Jobs") : "0 jobs")</div>
+                                                    <h4 class="twm-title"><a href="@Url.Action("JobHomeSearch", "Home", new{ category = "all", city = "Thành phố Hà nội", joblevel = "all", exp = "all"})">Hà Nội</a></h4>
                                         </div>
                                     </div>
                                 </div>
@@ -566,10 +360,10 @@
                             <div class="col-lg-12 col-md-12">
                                 <div class="twm-featured-city">
                                     <div class="twm-media">
-                                        <img src="~/Content/images/featured-cities/city3.jpg" alt="">
+                                        <img src="~/Content/images/featured-cities/dananghome.jpg" alt="">
                                         <div class="twm-city-info">
-                                            <div class="twm-city-jobs">220 Jobs</div>
-                                            <h4 class="twm-title"><a href="job-list.html">Shanghai</a></h4>
+                                            <div class="twm-city-jobs">@(ViewBag.Danang != null ? (ViewBag.Danang + " Jobs") : "0 jobs")</div>
+                                                    <h4 class="twm-title"><a href="@Url.Action("JobHomeSearch", "Home", new{ category = "all", city = "Thành phố Đà Nẵng", joblevel = "all", exp = "all"})">Đà Nẵng</a></h4>
                                         </div>
                                     </div>
                                 </div>
@@ -601,416 +395,45 @@
                 <div class="twm-recruiters5-wrap">
                     <div class="twm-column-5 m-b30">
                         <ul>
+                            @if (ViewBag.Company != null && ViewBag.Company.Count > 0)
+                            {
+                                foreach (JobSeekerEnterprise i in ViewBag.Company)
+                                {
+                                    <li>
+                                        <div class="twm-recruiters5-box">
+                                            <div class="twm-rec-top">
+                                                <div class="twm-rec-media">
+                                                    <img src="@i.LogoUrl" alt="#">
+                                                </div>
+                                                <div class="twm-rec-jobs">@(db.JobSeekerJobPostings.Where(p => p.EnterpriseId == i.EnterpriseId).Count()) Jobs</div>
+                                            </div>
+                                            <div class="twm-rec-content">
+                                                        <h4 class="twm-title"><a href="@Url.Action("CompanyDetailHome","Home",new{ id = i.EnterpriseId})">@i.FullCompanyName</a></h4>
+                                                <div class="twm-rec-rating-wrap">
+                                                    <div class="twm-rec-rating">
+                                                        <span><i class="fa fa-star"></i></span>
+                                                        <span><i class="fa fa-star"></i></span>
+                                                        <span><i class="fa fa-star"></i></span>
+                                                        <span><i class="fa fa-star"></i></span>
+                                                        <span><i class="fa fa-star"></i></span>
+                                                    </div>
+                                                    <div class="twm-rec-rating-count">(68)</div>
+                                                </div>
+                                                <div class="twm-job-address">
+                                                    <i class="feather-map-pin"></i>@i.City
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                }
+                            }
                             <!--1-->
-                            <li>
-                                <div class="twm-recruiters5-box">
-                                    <div class="twm-rec-top">
-                                        <div class="twm-rec-media">
-                                            <img src="~/Content/images/home-5/recruiters/1.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-rec-jobs">25 Jobs</div>
-                                    </div>
-                                    <div class="twm-rec-content">
-                                        <h4 class="twm-title"><a href="job-list.html">LinkedIn</a></h4>
-                                        <div class="twm-rec-rating-wrap">
-                                            <div class="twm-rec-rating">
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                            </div>
-                                            <div class="twm-rec-rating-count">(68)</div>
-                                        </div>
-                                        <div class="twm-job-address">
-                                            <i class="feather-map-pin"></i>New York, US
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <!--2-->
-                            <li>
-                                <div class="twm-recruiters5-box">
-                                    <div class="twm-rec-top">
-                                        <div class="twm-rec-media">
-                                            <img src="~/Content/images/home-5/recruiters/2.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-rec-jobs">25 Jobs</div>
-                                    </div>
-                                    <div class="twm-rec-content">
-                                        <h4 class="twm-title"><a href="job-list.html">Apple Inc.</a></h4>
-                                        <div class="twm-rec-rating-wrap">
-                                            <div class="twm-rec-rating">
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                            </div>
-                                            <div class="twm-rec-rating-count">(68)</div>
-                                        </div>
-                                        <div class="twm-job-address">
-                                            <i class="feather-map-pin"></i>New York, US
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <!--3-->
-                            <li>
-                                <div class="twm-recruiters5-box">
-                                    <div class="twm-rec-top">
-                                        <div class="twm-rec-media">
-                                            <img src="~/Content/images/home-5/recruiters/3.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-rec-jobs">25 Jobs</div>
-                                    </div>
-                                    <div class="twm-rec-content">
-                                        <h4 class="twm-title"><a href="job-list.html">Saudi Aramco</a></h4>
-                                        <div class="twm-rec-rating-wrap">
-                                            <div class="twm-rec-rating">
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                            </div>
-                                            <div class="twm-rec-rating-count">(68)</div>
-                                        </div>
-                                        <div class="twm-job-address">
-                                            <i class="feather-map-pin"></i>New York, US
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <!--4-->
-                            <li>
-                                <div class="twm-recruiters5-box">
-                                    <div class="twm-rec-top">
-                                        <div class="twm-rec-media">
-                                            <img src="~/Content/images/home-5/recruiters/4.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-rec-jobs">25 Jobs</div>
-                                    </div>
-                                    <div class="twm-rec-content">
-                                        <h4 class="twm-title"><a href="job-list.html">Alphabet Inc.</a></h4>
-                                        <div class="twm-rec-rating-wrap">
-                                            <div class="twm-rec-rating">
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                            </div>
-                                            <div class="twm-rec-rating-count">(68)</div>
-                                        </div>
-                                        <div class="twm-job-address">
-                                            <i class="feather-map-pin"></i>New York, US
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <!--5-->
-                            <li>
-                                <div class="twm-recruiters5-box">
-                                    <div class="twm-rec-top">
-                                        <div class="twm-rec-media">
-                                            <img src="~/Content/images/home-5/recruiters/5.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-rec-jobs">25 Jobs</div>
-                                    </div>
-                                    <div class="twm-rec-content">
-                                        <h4 class="twm-title"><a href="job-list.html">Amazon.com Inc.</a></h4>
-                                        <div class="twm-rec-rating-wrap">
-                                            <div class="twm-rec-rating">
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                            </div>
-                                            <div class="twm-rec-rating-count">(68)</div>
-                                        </div>
-                                        <div class="twm-job-address">
-                                            <i class="feather-map-pin"></i>New York, US
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <!--6-->
-                            <li>
-                                <div class="twm-recruiters5-box">
-                                    <div class="twm-rec-top">
-                                        <div class="twm-rec-media">
-                                            <img src="~/Content/images/home-5/recruiters/6.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-rec-jobs">25 Jobs</div>
-                                    </div>
-                                    <div class="twm-rec-content">
-                                        <h4 class="twm-title"><a href="job-list.html">Tesla Inc.</a></h4>
-                                        <div class="twm-rec-rating-wrap">
-                                            <div class="twm-rec-rating">
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                            </div>
-                                            <div class="twm-rec-rating-count">(68)</div>
-                                        </div>
-                                        <div class="twm-job-address">
-                                            <i class="feather-map-pin"></i>New York, US
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <!--7-->
-                            <li>
-                                <div class="twm-recruiters5-box">
-                                    <div class="twm-rec-top">
-                                        <div class="twm-rec-media">
-                                            <img src="~/Content/images/home-5/recruiters/7.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-rec-jobs">25 Jobs</div>
-                                    </div>
-                                    <div class="twm-rec-content">
-                                        <h4 class="twm-title"><a href="job-list.html">NVIDIA Corp.</a></h4>
-                                        <div class="twm-rec-rating-wrap">
-                                            <div class="twm-rec-rating">
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                            </div>
-                                            <div class="twm-rec-rating-count">(68)</div>
-                                        </div>
-                                        <div class="twm-job-address">
-                                            <i class="feather-map-pin"></i>New York, US
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <!--8-->
-                            <li>
-                                <div class="twm-recruiters5-box">
-                                    <div class="twm-rec-top">
-                                        <div class="twm-rec-media">
-                                            <img src="~/Content/images/home-5/recruiters/8.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-rec-jobs">25 Jobs</div>
-                                    </div>
-                                    <div class="twm-rec-content">
-                                        <h4 class="twm-title"><a href="job-list.html">Hathaway Inc.</a></h4>
-                                        <div class="twm-rec-rating-wrap">
-                                            <div class="twm-rec-rating">
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                            </div>
-                                            <div class="twm-rec-rating-count">(68)</div>
-                                        </div>
-                                        <div class="twm-job-address">
-                                            <i class="feather-map-pin"></i>New York, US
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <!--9-->
-                            <li>
-                                <div class="twm-recruiters5-box">
-                                    <div class="twm-rec-top">
-                                        <div class="twm-rec-media">
-                                            <img src="~/Content/images/home-5/recruiters/9.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-rec-jobs">25 Jobs</div>
-                                    </div>
-                                    <div class="twm-rec-content">
-                                        <h4 class="twm-title"><a href="job-list.html">NVIDIA Corp</a></h4>
-                                        <div class="twm-rec-rating-wrap">
-                                            <div class="twm-rec-rating">
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                            </div>
-                                            <div class="twm-rec-rating-count">(68)</div>
-                                        </div>
-                                        <div class="twm-job-address">
-                                            <i class="feather-map-pin"></i>New York, US
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <!--10-->
-                            <li>
-                                <div class="twm-recruiters5-box">
-                                    <div class="twm-rec-top">
-                                        <div class="twm-rec-media">
-                                            <img src="~/Content/images/home-5/recruiters/10.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-rec-jobs">25 Jobs</div>
-                                    </div>
-                                    <div class="twm-rec-content">
-                                        <h4 class="twm-title"><a href="job-list.html">Meta Platforms</a></h4>
-                                        <div class="twm-rec-rating-wrap">
-                                            <div class="twm-rec-rating">
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                            </div>
-                                            <div class="twm-rec-rating-count">(68)</div>
-                                        </div>
-                                        <div class="twm-job-address">
-                                            <i class="feather-map-pin"></i>New York, US
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <!--11-->
-                            <li>
-                                <div class="twm-recruiters5-box">
-                                    <div class="twm-rec-top">
-                                        <div class="twm-rec-media">
-                                            <img src="~/Content/images/home-5/recruiters/11.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-rec-jobs">25 Jobs</div>
-                                    </div>
-                                    <div class="twm-rec-content">
-                                        <h4 class="twm-title"><a href="job-list.html">Youtube</a></h4>
-                                        <div class="twm-rec-rating-wrap">
-                                            <div class="twm-rec-rating">
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                            </div>
-                                            <div class="twm-rec-rating-count">(68)</div>
-                                        </div>
-                                        <div class="twm-job-address">
-                                            <i class="feather-map-pin"></i>New York, US
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <!--12-->
-                            <li>
-                                <div class="twm-recruiters5-box">
-                                    <div class="twm-rec-top">
-                                        <div class="twm-rec-media">
-                                            <img src="~/Content/images/home-5/recruiters/12.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-rec-jobs">25 Jobs</div>
-                                    </div>
-                                    <div class="twm-rec-content">
-                                        <h4 class="twm-title"><a href="job-list.html">Instagram</a></h4>
-                                        <div class="twm-rec-rating-wrap">
-                                            <div class="twm-rec-rating">
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                            </div>
-                                            <div class="twm-rec-rating-count">(68)</div>
-                                        </div>
-                                        <div class="twm-job-address">
-                                            <i class="feather-map-pin"></i>New York, US
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <!--13-->
-                            <li>
-                                <div class="twm-recruiters5-box">
-                                    <div class="twm-rec-top">
-                                        <div class="twm-rec-media">
-                                            <img src="~/Content/images/home-5/recruiters/13.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-rec-jobs">25 Jobs</div>
-                                    </div>
-                                    <div class="twm-rec-content">
-                                        <h4 class="twm-title"><a href="job-list.html">McKesson</a></h4>
-                                        <div class="twm-rec-rating-wrap">
-                                            <div class="twm-rec-rating">
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                            </div>
-                                            <div class="twm-rec-rating-count">(68)</div>
-                                        </div>
-                                        <div class="twm-job-address">
-                                            <i class="feather-map-pin"></i>New York, US
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <!--14-->
-                            <li>
-                                <div class="twm-recruiters5-box">
-                                    <div class="twm-rec-top">
-                                        <div class="twm-rec-media">
-                                            <img src="~/Content/images/home-5/recruiters/14.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-rec-jobs">25 Jobs</div>
-                                    </div>
-                                    <div class="twm-rec-content">
-                                        <h4 class="twm-title"><a href="job-list.html">Foxconn</a></h4>
-                                        <div class="twm-rec-rating-wrap">
-                                            <div class="twm-rec-rating">
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                            </div>
-                                            <div class="twm-rec-rating-count">(68)</div>
-                                        </div>
-                                        <div class="twm-job-address">
-                                            <i class="feather-map-pin"></i>New York, US
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <!--15-->
-                            <li>
-                                <div class="twm-recruiters5-box">
-                                    <div class="twm-rec-top">
-                                        <div class="twm-rec-media">
-                                            <img src="~/Content/images/home-5/recruiters/15.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-rec-jobs">25 Jobs</div>
-                                    </div>
-                                    <div class="twm-rec-content">
-                                        <h4 class="twm-title"><a href="job-list.html">Microsoft</a></h4>
-                                        <div class="twm-rec-rating-wrap">
-                                            <div class="twm-rec-rating">
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                                <span><i class="fa fa-star"></i></span>
-                                            </div>
-                                            <div class="twm-rec-rating-count">(68)</div>
-                                        </div>
-                                        <div class="twm-job-address">
-                                            <i class="feather-map-pin"></i>New York, US
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-
+                            
+                            
                         </ul>
                     </div>
                     <div class="text-center m-b30">
-                        <a href="job-list.html" class="site-button">View All</a>
+                                <a href="@Url.Action("CompanyHome","Home")" class="site-button">View All</a>
                     </div>
                 </div>
             </div>
@@ -1018,635 +441,9 @@
         </div>
     </div>
 
-    <!-- JOB POST START -->
-    <div class="section-full p-t120 p-b90 site-bg-light-purple twm-bg-ring-wrap">
-        <div class="twm-bg-ring-right"></div>
-        <div class="twm-bg-ring-left"></div>
-        <div class="container">
-            <!-- TITLE START-->
-            <div class="section-head center wt-small-separator-outer">
-                <div class="wt-small-separator site-text-primary">
-                    <div>Công việc nổi bật</div>
-                </div>
-                <h2 class="wt-title fw-bold">TOP CÔNG VIỆC</h2>
-            </div>
-            <!-- TITLE END-->
 
 
-            <div class="section-content">
-                <div class="twm-jobs-list-wrap">
-                    <ul>
-                        <li>
-                            <div class="twm-jobs-list-style1 mb-5">
-                                <div class="twm-media">
-                                    <img src="~/Content/images/jobs-company/pic1.jpg" alt="#">
-                                </div>
-                                <div class="twm-mid-content">
-                                    <a href="job-detail.html" class="twm-job-title">
-                                        <h4>
-                                            Senior Web Designer , Developer <span class="twm-job-post-duration">/ 1 days ago</span>
-                                        </h4>
-                                    </a>
-                                    <p class="twm-job-address">
-                                        1363-1385 Sunset Blvd Los Angeles, CA 90026, USA
-                                    </p>
-                                    <a href="https://themeforest.net/user/thewebmax/portfolio"
-                                       class="twm-job-websites site-text-primary">https://thewebmax.com</a>
-                                </div>
-                                <div class="twm-right-content">
-                                    <div class="twm-jobs-category green">
-                                        <span class="twm-bg-green">New</span>
-                                    </div>
-                                    <div class="twm-jobs-amount">$2500 <span>/ Month</span></div>
-                                    <a href="job-detail.html" class="twm-jobs-browse site-text-primary">
-                                        Browse
-                                        Job
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
 
-                        <li>
-                            <div class="twm-jobs-list-style1 mb-5">
-                                <div class="twm-media">
-                                    <img src="~/Content/images/jobs-company/pic2.jpg" alt="#">
-                                </div>
-                                <div class="twm-mid-content">
-                                    <a href="job-detail.html" class="twm-job-title">
-                                        <h4>
-                                            Need Senior Rolling Stock Technician<span class="twm-job-post-duration">/ 15 days ago</span>
-                                        </h4>
-                                    </a>
-                                    <p class="twm-job-address">
-                                        1363-1385 Sunset Blvd Los Angeles, CA 90026, USA
-                                    </p>
-                                    <a href="https://themeforest.net/user/thewebmax/portfolio"
-                                       class="twm-job-websites site-text-primary">https://thewebmax.com</a>
-                                </div>
-                                <div class="twm-right-content">
-                                    <div class="twm-jobs-category green">
-                                        <span class="twm-bg-brown">Intership</span>
-                                    </div>
-                                    <div class="twm-jobs-amount">$2000<span>/ Month</span></div>
-                                    <a href="job-detail.html" class="twm-jobs-browse site-text-primary">
-                                        Browse
-                                        Job
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
-
-                        <li>
-                            <div class="twm-jobs-list-style1 mb-5">
-                                <div class="twm-media">
-                                    <img src="~/Content/images/jobs-company/pic3.jpg" alt="#">
-                                </div>
-                                <div class="twm-mid-content">
-                                    <a href="job-detail.html" class="twm-job-title">
-                                        <h4 class="twm-job-title">
-                                            IT Department Manager & Blogger-Entrepenour
-                                            <span class="twm-job-post-duration">/ 6 Month ago</span>
-                                        </h4>
-                                    </a>
-                                    <p class="twm-job-address">
-                                        1363-1385 Sunset Blvd Los Angeles, CA 90026, USA
-                                    </p>
-                                    <a href="https://themeforest.net/user/thewebmax/portfolio"
-                                       class="twm-job-websites site-text-primary">https://thewebmax.com</a>
-                                </div>
-                                <div class="twm-right-content">
-                                    <div class="twm-jobs-category green">
-                                        <span class="twm-bg-purple">Fulltime</span>
-                                    </div>
-                                    <div class="twm-jobs-amount">$1500 <span>/ Month</span></div>
-                                    <a href="job-detail.html" class="twm-jobs-browse site-text-primary">
-                                        Browse
-                                        Job
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
-
-                        <li>
-                            <div class="twm-jobs-list-style1 mb-5">
-                                <div class="twm-media">
-                                    <img src="~/Content/images/jobs-company/pic4.jpg" alt="#">
-                                </div>
-                                <div class="twm-mid-content">
-                                    <a href="job-detail.html" class="twm-job-title">
-                                        <h4 class="twm-job-title">
-                                            Art Production Specialist <span class="twm-job-post-duration">/ 2 days ago</span>
-                                        </h4>
-                                    </a>
-                                    <p class="twm-job-address">
-                                        1363-1385 Sunset Blvd Los Angeles, CA 90026, USA
-                                    </p>
-                                    <a href="https://themeforest.net/user/thewebmax/portfolio"
-                                       class="twm-job-websites site-text-primary">https://thewebmax.com</a>
-                                </div>
-                                <div class="twm-right-content">
-                                    <div class="twm-jobs-category green">
-                                        <span class="twm-bg-sky">Freelancer</span>
-                                    </div>
-                                    <div class="twm-jobs-amount">$1200<span>/ Month</span></div>
-                                    <a href="job-detail.html" class="twm-jobs-browse site-text-primary">
-                                        Browse
-                                        Job
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
-
-                        <li>
-                            <div class="twm-jobs-list-style1 mb-5">
-                                <div class="twm-media">
-                                    <img src="~/Content/images/jobs-company/pic5.jpg" alt="#">
-                                </div>
-                                <div class="twm-mid-content">
-                                    <a href="job-detail.html" class="twm-job-title">
-                                        <h4 class="twm-job-title">
-                                            Recreation & Fitness Worker <span class="twm-job-post-duration">/ 1 days ago</span>
-                                        </h4>
-                                    </a>
-                                    <p class="twm-job-address">
-                                        1363-1385 Sunset Blvd Los Angeles, CA 90026, USA
-                                    </p>
-                                    <a href="https://themeforest.net/user/thewebmax/portfolio"
-                                       class="twm-job-websites site-text-primary">https://thewebmax.com</a>
-                                </div>
-                                <div class="twm-right-content">
-                                    <div class="twm-jobs-category green">
-                                        <span class="twm-bg-golden">Temporary</span>
-                                    </div>
-                                    <div class="twm-jobs-amount">$1700 <span>/ Month</span></div>
-                                    <a href="job-detail.html" class="twm-jobs-browse site-text-primary">
-                                        Browse
-                                        Job
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="twm-jobs-list-style1 mb-5">
-                                <div class="twm-media">
-                                    <img src="~/Content/images/jobs-company/pic5.jpg" alt="#">
-                                </div>
-                                <div class="twm-mid-content">
-                                    <a href="job-detail.html" class="twm-job-title">
-                                        <h4 class="twm-job-title">
-                                            Recreation & Fitness Worker <span class="twm-job-post-duration">/ 1 days ago</span>
-                                        </h4>
-                                    </a>
-                                    <p class="twm-job-address">
-                                        1363-1385 Sunset Blvd Los Angeles, CA 90026, USA
-                                    </p>
-                                    <a href="https://themeforest.net/user/thewebmax/portfolio"
-                                       class="twm-job-websites site-text-primary">https://thewebmax.com</a>
-                                </div>
-                                <div class="twm-right-content">
-                                    <div class="twm-jobs-category green">
-                                        <span class="twm-bg-golden">Temporary</span>
-                                    </div>
-                                    <div class="twm-jobs-amount">$1700 <span>/ Month</span></div>
-                                    <a href="job-detail.html" class="twm-jobs-browse site-text-primary">
-                                        Browse
-                                        Job
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="twm-jobs-list-style1 mb-5">
-                                <div class="twm-media">
-                                    <img src="~/Content/images/jobs-company/pic5.jpg" alt="#">
-                                </div>
-                                <div class="twm-mid-content">
-                                    <a href="job-detail.html" class="twm-job-title">
-                                        <h4 class="twm-job-title">
-                                            Recreation & Fitness Worker <span class="twm-job-post-duration">/ 1 days ago</span>
-                                        </h4>
-                                    </a>
-                                    <p class="twm-job-address">
-                                        1363-1385 Sunset Blvd Los Angeles, CA 90026, USA
-                                    </p>
-                                    <a href="https://themeforest.net/user/thewebmax/portfolio"
-                                       class="twm-job-websites site-text-primary">https://thewebmax.com</a>
-                                </div>
-                                <div class="twm-right-content">
-                                    <div class="twm-jobs-category green">
-                                        <span class="twm-bg-golden">Temporary</span>
-                                    </div>
-                                    <div class="twm-jobs-amount">$1700 <span>/ Month</span></div>
-                                    <a href="job-detail.html" class="twm-jobs-browse site-text-primary">
-                                        Browse
-                                        Job
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
-
-                        <li>
-                            <div class="twm-jobs-list-style1 mb-5">
-                                <div class="twm-media">
-                                    <img src="~/Content/images/jobs-company/pic5.jpg" alt="#">
-                                </div>
-                                <div class="twm-mid-content">
-                                    <a href="job-detail.html" class="twm-job-title">
-                                        <h4 class="twm-job-title">
-                                            Recreation & Fitness Worker <span class="twm-job-post-duration">/ 1 days ago</span>
-                                        </h4>
-                                    </a>
-                                    <p class="twm-job-address">
-                                        1363-1385 Sunset Blvd Los Angeles, CA 90026, USA
-                                    </p>
-                                    <a href="https://themeforest.net/user/thewebmax/portfolio"
-                                       class="twm-job-websites site-text-primary">https://thewebmax.com</a>
-                                </div>
-                                <div class="twm-right-content">
-                                    <div class="twm-jobs-category green">
-                                        <span class="twm-bg-golden">Temporary</span>
-                                    </div>
-                                    <div class="twm-jobs-amount">$1700 <span>/ Month</span></div>
-                                    <a href="job-detail.html" class="twm-jobs-browse site-text-primary">
-                                        Browse
-                                        Job
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="text-center m-b30">
-                        <a href="job-list.html" class=" site-button">Browse All Jobs</a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- PRICING TABLE SECTION START -->
-    <div class="section-full p-t120 p-b90 site-bg-white tw-pricing-area">
-        <div class="container">
-            <!-- TILE START-->
-            <div class="section-head left wt-small-separator-outer">
-                <div class="wt-small-separator site-text-primary">
-                    <div>Các gói</div>
-                </div>
-                <h2 class="wt-title fw-bold">TIẾT KIỆM TỚI 10%</h2>
-            </div>
-            <!-- TITLE END-->
-            <div class="section-content">
-
-                <div class="twm-tabs-style-1">
-                    <ul class="nav nav-tabs" id="myTab3" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="Monthly" data-bs-toggle="tab"
-                                    data-bs-target="#home" type="button" role="tab">
-                                Gói tháng
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="annual" data-bs-toggle="tab" data-bs-target="#profile"
-                                    type="button" role="tab" aria-controls="profile">
-                                Gói năm
-                            </button>
-                        </li>
-                    </ul>
-                    <div class="tab-content" id="myTab3Content">
-                        <div class="tab-pane fade show active" id="home" role="tabpanel"
-                             aria-labelledby="Monthly">
-                            <div class="pricing-block-outer">
-                                <div class="row justify-content-center">
-                                    <div class="col-lg-4 col-md-6 m-b30">
-                                        <div class="pricing-table-1">
-                                            <div class="p-table-title">
-                                                <h4 class="wt-title">
-                                                    Cơ bản
-                                                </h4>
-                                            </div>
-                                            <div class="p-table-inner">
-                                                <div class="p-table-price">
-                                                    <span>$90/</span>
-                                                    <p>Monthly</p>
-                                                </div>
-                                                <div class="p-table-list">
-                                                    <ul>
-                                                        <li><i class="feather-check"></i>1 job posting</li>
-                                                        <li class="disable">
-                                                            <i class="feather-x"></i>0 featured
-                                                            job
-                                                        </li>
-                                                        <li class="disable">
-                                                            <i class="feather-x"></i>job
-                                                            displayed fo 20 days
-                                                        </li>
-                                                        <li class="disable">
-                                                            <i class="feather-x"></i>Premium
-                                                            support 24/7
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div class="p-table-btn">
-                                                    <a href="about-1.html" class="site-button">Đăng ký</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-4 col-md-6 p-table-highlight m-b30">
-                                        <div class="pricing-table-1 circle-yellow">
-                                            <div class="p-table-recommended">Recommended</div>
-                                            <div class="p-table-title">
-                                                <h4 class="wt-title">
-                                                    Tiêu chuẩn
-                                                </h4>
-                                            </div>
-                                            <div class="p-table-inner">
-
-                                                <div class="p-table-price">
-                                                    <span>$248/</span>
-                                                    <p>Monthly</p>
-                                                </div>
-                                                <div class="p-table-list">
-                                                    <ul>
-                                                        <li><i class="feather-check"></i>1 job posting</li>
-                                                        <li><i class="feather-check"></i>0 featured job</li>
-                                                        <li>
-                                                            <i class="feather-check"></i>job displayed fo 20
-                                                            days
-                                                        </li>
-                                                        <li class="disable">
-                                                            <i class="feather-x"></i>Premium
-                                                            support 24/7
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div class="p-table-btn">
-                                                    <a href="about-1.html" class="site-button">Đăng ký</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-4 col-md-6 m-b30">
-                                        <div class="pricing-table-1 circle-pink">
-                                            <div class="p-table-title">
-                                                <h4 class="wt-title">
-                                                    Nâng cao
-                                                </h4>
-                                            </div>
-                                            <div class="p-table-inner">
-                                                <div class="p-table-price">
-                                                    <span>$499/</span>
-                                                    <p>Monthly</p>
-                                                </div>
-                                                <div class="p-table-list">
-                                                    <ul>
-                                                        <li><i class="feather-check"></i>1 job posting</li>
-                                                        <li><i class="feather-check"></i>0 featured job</li>
-                                                        <li>
-                                                            <i class="feather-check"></i>job displayed fo 20
-                                                            days
-                                                        </li>
-                                                        <li>
-                                                            <i class="feather-check"></i>Premium support 24/7
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div class="p-table-btn">
-                                                    <a href="about-1.html" class="site-button">Đăng ký</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="annual">
-                            <div class="pricing-block-outer">
-                                <div class="row justify-content-center">
-                                    <div class="col-lg-4 col-md-6 m-b30">
-                                        <div class="pricing-table-1">
-                                            <div class="p-table-title">
-                                                <h4 class="wt-title">
-                                                    Cơ bản
-                                                </h4>
-                                            </div>
-                                            <div class="p-table-inner">
-                                                <div class="p-table-price">
-                                                    <span>$149/</span>
-                                                    <p>Monthly</p>
-                                                </div>
-                                                <div class="p-table-list">
-                                                    <ul>
-                                                        <li><i class="feather-check"></i>1 job posting</li>
-                                                        <li class="disable">
-                                                            <i class="feather-x"></i>0 featured
-                                                            job
-                                                        </li>
-                                                        <li class="disable">
-                                                            <i class="feather-x"></i>job
-                                                            displayed fo 20 days
-                                                        </li>
-                                                        <li class="disable">
-                                                            <i class="feather-x"></i>Premium
-                                                            support 24/7
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div class="p-table-btn">
-                                                    <a href="about-1.html" class="site-button">Đăng ký</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-4 col-md-6 p-table-highlight m-b30">
-                                        <div class="pricing-table-1 circle-yellow">
-                                            <div class="p-table-recommended">Recommended</div>
-                                            <div class="p-table-title">
-                                                <h4 class="wt-title">
-                                                    Tiêu chuẩn
-                                                </h4>
-                                            </div>
-                                            <div class="p-table-inner">
-
-                                                <div class="p-table-price">
-                                                    <span>$499/</span>
-                                                    <p>Monthly</p>
-                                                </div>
-                                                <div class="p-table-list">
-                                                    <ul>
-                                                        <li><i class="feather-check"></i>1 job posting</li>
-                                                        <li><i class="feather-check"></i>0 featured job</li>
-                                                        <li>
-                                                            <i class="feather-check"></i>job displayed fo 20
-                                                            days
-                                                        </li>
-                                                        <li class="disable">
-                                                            <i class="feather-x"></i>Premium
-                                                            support 24/7
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div class="p-table-btn">
-                                                    <a href="about-1.html" class="site-button">Đăng ký</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-4 col-md-6 m-b30">
-                                        <div class="pricing-table-1 circle-pink">
-                                            <div class="p-table-title">
-                                                <h4 class="wt-title">
-                                                    Nâng cao
-                                                </h4>
-                                            </div>
-                                            <div class="p-table-inner">
-                                                <div class="p-table-price">
-                                                    <span>$1499/</span>
-                                                    <p>Monthly</p>
-                                                </div>
-                                                <div class="p-table-list">
-                                                    <ul>
-                                                        <li><i class="feather-check"></i>1 job posting</li>
-                                                        <li><i class="feather-check"></i>0 featured job</li>
-                                                        <li>
-                                                            <i class="feather-check"></i>job displayed fo 20
-                                                            days
-                                                        </li>
-                                                        <li>
-                                                            <i class="feather-check"></i>Premium support 24/7
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div class="p-table-btn">
-                                                    <a href="about-1.html" class="site-button">Đăng ký</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- OUR BLOG START -->
-    <div class="section-full p-t120 p-b90 site-bg-light-purple">
-        <div class="container">
-            <!-- TITLE START-->
-            <div class="section-head center wt-small-separator-outer">
-                <div class="wt-small-separator site-text-primary">
-                    <div>Our Blogs</div>
-                </div>
-                <h2 class="wt-title fw-bold">CÁC BÀI VIẾT MỚI NHẤT</h2>
-            </div>
-
-            <div class="section-content">
-                <div class="twm-blog-post-3-outer-wrap">
-                    <div class="row d-flex justify-content-center">
-                        <div class="col-lg-4 col-md-6 col-sm-12">
-                            <!--Block one-->
-                            <div class="blog-post twm-blog-post-3-outer">
-                                <div class="wt-post-media">
-                                    <a href="blog-single.html">
-                                        <img src="~/Content/images/blog/latest/bg10.jpg" alt="">
-                                    </a>
-                                </div>
-                                <div class="wt-post-info">
-                                    <div class="wt-post-meta ">
-                                        <ul>
-                                            <li class="post-date">March 05, 2023</li>
-                                            <li class="post-author">
-                                                By <a href="candidate-detail.html">
-                                                    Mark
-                                                    Petter
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="wt-post-title ">
-                                        <h4 class="post-title">
-                                            <a href="blog-single.html">How to convince recruiters.</a>
-                                        </h4>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 col-md-6 col-sm-12">
-                            <!--Block two-->
-                            <div class="blog-post twm-blog-post-3-outer">
-                                <div class="wt-post-media">
-                                    <a href="blog-single.html">
-                                        <img src="~/Content/images/blog/latest/bg11.jpg" alt="">
-                                    </a>
-                                </div>
-                                <div class="wt-post-info">
-                                    <div class="wt-post-meta ">
-                                        <ul>
-                                            <li class="post-date">March 05, 2023</li>
-                                            <li class="post-author">
-                                                By <a href="candidate-detail.html">
-                                                    David
-                                                    Wish
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="wt-post-title ">
-                                        <h4 class="post-title">
-                                            <a href="blog-single.html">5 things to know about the March.</a>
-                                        </h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 col-md-6 col-sm-12">
-                            <!--Block three-->
-                            <div class="blog-post twm-blog-post-3-outer">
-                                <div class="wt-post-media">
-                                    <a href="blog-single.html">
-                                        <img src="~/Content/images/blog/latest/bg12.jpg"
-                                             alt="">
-                                    </a>
-                                </div>
-                                <div class="wt-post-info">
-                                    <div class="wt-post-meta ">
-                                        <ul>
-                                            <li class="post-date">March 05, 2023</li>
-                                            <li class="post-author">
-                                                By <a href="candidate-detail.html">
-                                                    Mike
-                                                    Doe
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="wt-post-title ">
-                                        <h4 class="post-title">
-                                            <a href="blog-single.html">Job Board is the most important</a>
-                                        </h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <!-- OUR BLOG END -->
-
-
+</div>
+</div>
 </div>

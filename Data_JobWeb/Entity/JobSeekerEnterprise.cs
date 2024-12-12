@@ -19,6 +19,8 @@ public partial class JobSeekerEnterprise
 
     public string? SlugImg { get; set; }
 
+    public int? ViewCount { get; set; }
+
     public string? FacebookUrl { get; set; }
 
     public string? LinkedinUrl { get; set; }
