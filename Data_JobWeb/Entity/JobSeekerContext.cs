@@ -677,7 +677,7 @@ public partial class JobSeekerContext : DbContext
                 .HasMaxLength(200)
                 .HasColumnName("type_name");
             entity.Property(e => e.Title)
-                .HasMaxLength(100)
+                .HasMaxLength(500)
                 .HasColumnName("title");
         });
 

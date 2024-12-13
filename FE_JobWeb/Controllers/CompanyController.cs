@@ -346,9 +346,10 @@ namespace FE_JobWeb.Controllers
                 }
             }
         }
-        public async Task<IActionResult> PostJob(string? error)
+        public async Task<IActionResult> PostJob(string? error, string? success)
         {
             if (error != null) ViewBag.ErrorMessage = error;
+            if (success != null) ViewBag.SuccessMessage = success;
 
             ViewBag.Jobcategory = await GetJobCategory();
             ViewBag.Joblevel = await GetJobLevel();
@@ -458,6 +459,9 @@ namespace FE_JobWeb.Controllers
             if (error != null) ViewBag.ErrorMessage = error;
             if (success != null) ViewBag.SuccessMessage = success;
 
+            JobSeekerRecruiterProfile re = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == user.User.Id);
+            if (re == null) return View("Error");
+
             ViewBag.JobApply = await GetListJobApply();
             ViewBag.Jobcategory = await GetJobCategory();
             ViewBag.Joblevel = await GetJobLevel();
@@ -471,6 +475,8 @@ namespace FE_JobWeb.Controllers
                 {
                     data = await GetListPostJob();
 
+                    data = data.Where(p => p.EnterpriseId == re.EnterpriseId).ToList();
+
                     PaginatedList<JobSeekerJobPosting> paginatedJobs2 = PaginatedList<JobSeekerJobPosting>.Create(data, page, pageSize);
 
                     return View(paginatedJobs2);
@@ -481,6 +487,8 @@ namespace FE_JobWeb.Controllers
                 return View(paginatedJobs1);
             }
             List<JobSeekerJobPosting> a = await GetListPostJob();
+
+            a = a.Where(p => p.EnterpriseId == re.EnterpriseId).ToList();
 
             PaginatedList<JobSeekerJobPosting> paginatedJobs = PaginatedList<JobSeekerJobPosting>.Create(a, page, pageSize);
 
@@ -504,6 +512,9 @@ namespace FE_JobWeb.Controllers
                 #endregion
 
                 List<JobSeekerJobPosting> a = await GetListPostJob();
+
+                a = a.Where(p => p.EnterpriseId == r1.EnterpriseId).ToList();
+
                 if (search != null) a = a.Where(p => p.JobTitle.Contains(search)).ToList();
 
                 switch (status)

@@ -117,19 +117,27 @@
                         int d = 0;
                         foreach (JobSeekerNotification i in ViewBag.NotificationAdmin)
                         {
-                            if (i.IsSeen == true) continue;
-                            if (d == 5) break;
-                            d++;
-                            <div class="user-notification-item">
-                                @* <div class="user-notification-icon">
-                                    <img src="images/jobs-company/axon-active-logo.jpg" alt="">
+                            <a href="@Url.Action("NotificationForward","Home",new {id = i.Id, url = i.Title})">
+                                <div class="user-notification mt-4">
+                                    <div class="user-notification-item">
+                                        @* <div class="user-notification-icon">
+                                <img src="images/jobs-company/axon-active-logo.jpg" alt="">
                                 </div> *@
-                                <div class="user-notification-info">
-                                    <p>@i.Description</p>
-                                    <span>@(i.IsCreatedAt.HasValue ? i.IsCreatedAt.Value.ToString("dd/MM/yyyy HH:mm") : "Error")</span>
+                                        <div class="user-notification-info">
+                                            <p><b>@i.Description</b></p>
+                                            <span>@(i.IsCreatedAt.HasValue ? i.IsCreatedAt.Value.ToString("dd/MM/yyyy HH:mm") : "Error")</span>
+                                        </div>
+                                        @if (i.IsSeen == true)
+                                        {
+                                            <i class="feather-check" style="color: green;"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="feather-check" style="color: red;"></i>
+                                        }
+                                    </div>
                                 </div>
-                                <i class="feather-trash"></i>
-                            </div>
+                            </a>
                         }
                     }
                     @* <div class="user-notification-item">

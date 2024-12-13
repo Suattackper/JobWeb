@@ -27,8 +27,11 @@ namespace FE_JobWeb.Controllers
         {
             this.user = user;
         }
-        public IActionResult Login()
+        public IActionResult Login(string? error, string? success, string? x)
         {
+            if (error != null) ViewBag.ErrorMessage = error;
+            if (success != null) ViewBag.SuccessMessage = success;
+
             return View();
         }
         [HttpPost]
@@ -37,13 +40,11 @@ namespace FE_JobWeb.Controllers
             #region validate
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
-                ViewBag.ErrorMessage = "Vui lòng nhập đầy đủ!";
-                return View();
+                return RedirectToAction("Login", "Account", new { error = "Vui lòng nhập đầy đủ!" });
             }
             if (!IsValidEmail(email))
             {
-                ViewBag.ErrorMessage = "Email không hợp lệ!";
-                return View();
+                return RedirectToAction("Login", "Account", new { error = "Email không hợp lệ!" });
             }
             #endregion
             JobSeekerUserLoginDatum p = new JobSeekerUserLoginDatum();
@@ -98,8 +99,7 @@ namespace FE_JobWeb.Controllers
                 string errorDetails = await response.Content.ReadAsStringAsync();
                 Console.WriteLine("Register Candidate: Gui that bai voi ma loi: " + response.StatusCode);
                 Console.WriteLine("Chi tiet loi API: " + errorDetails);
-                ViewBag.ErrorMessage = "Email hoặc mật khẩu không chính xác!";
-                return View();
+                return RedirectToAction("Login", "Account", new { error = "Email hoặc mật khẩu không chính xác!" });
             }
         }
         [HttpGet]
@@ -203,9 +203,8 @@ namespace FE_JobWeb.Controllers
 
                 if (response1.IsSuccessStatusCode)
                 {
-                    ViewBag.ErrorMessage = "Chúng tôi đã gửi cho bạn một mail xác minh, vui lòng check mail và làm theo hướng dẫn để hoàn tất quy trình đăng ký!";
                     Console.WriteLine("gui mail xac nhan email thanh cong");
-                    return View("Login");
+                    return RedirectToAction("Login", "Account", new { success = "Chúng tôi đã gửi cho bạn một mail xác minh, vui lòng check mail và làm theo hướng dẫn để hoàn tất quy trình đăng ký!" });
                 }
                 else
                 {
@@ -373,9 +372,8 @@ namespace FE_JobWeb.Controllers
 
                 if (response1.IsSuccessStatusCode)
                 {
-                    ViewBag.ErrorMessage = "Chúng tôi đã gửi cho bạn một mail xác minh, vui lòng check mail và làm theo hướng dẫn để hoàn tất quy trình đăng ký!";
                     Console.WriteLine("gui mail xac nhan email thanh cong");
-                    return View("Login");
+                    return RedirectToAction("Login", "Account", new { success = "Chúng tôi đã gửi cho bạn một mail xác minh, vui lòng check mail và làm theo hướng dẫn để hoàn tất quy trình đăng ký!" });
                 }
                 else
                 {
@@ -442,9 +440,8 @@ namespace FE_JobWeb.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                ViewBag.SuccessMessage = "Chúng tôi đã gửi cho bạn một mail xác minh, vui lòng check mail và làm theo hướng dẫn để hoàn tất quy trình lấy lại mật khẩu!";
                 Console.WriteLine("gui mail xac nhan forgotpass thanh cong");
-                return View("Login");
+                return RedirectToAction("Login", "Account", new { success = "Chúng tôi đã gửi cho bạn một mail xác minh, vui lòng check mail và làm theo hướng dẫn để hoàn tất quy trình đăng ký!" });
             }
             else
             {

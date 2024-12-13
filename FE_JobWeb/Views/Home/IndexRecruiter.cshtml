@@ -1,5 +1,8 @@
-﻿
+﻿@using Data_JobWeb.Entity;
+@using FE_JobWeb.Others
+@inject ApplicationUser user
 @{
+    JobSeekerContext db = new JobSeekerContext();
     ViewData["Title"] = "IndexRecuiter";
     Layout = "~/Views/Shared/_LayoutRecuiter.cshtml";
 }
@@ -18,7 +21,7 @@
                         <div class="panel-body wt-panel-body dashboard-card-2 block-gradient">
                             <div class="wt-card-wrap-2">
                                 <div class="wt-card-icon-2"><i class="fa fa-file-alt"></i></div>
-                                <div class="wt-card-right wt-total-active-listing  ">25</div>
+                                <div class="wt-card-right wt-total-active-listing  ">@ViewBag.Totaljob</div>
                                 <div class="wt-card-bottom-2 ">
                                     <p class="m-b0 panel-title">Tất cả tin</p>
                                 </div>
@@ -31,7 +34,7 @@
                         <div class="panel-body wt-panel-body dashboard-card-2 block-gradient-3">
                             <div class="wt-card-wrap-2">
                                 <div class="wt-card-icon-2"><i class="fa fa-clock"></i></div>
-                                <div class="wt-card-right wt-total-listing-review  ">28</div>
+                                <div class="wt-card-right wt-total-listing-review  ">@ViewBag.Totalpendingjob</div>
                                 <div class="wt-card-bottom-2">
                                     <p class="m-b0 panel-title">Tin đang chờ duyệt</p>
                                 </div>
@@ -44,7 +47,7 @@
                         <div class="panel-body wt-panel-body dashboard-card-2 block-gradient-2">
                             <div class="wt-card-wrap-2">
                                 <div class="wt-card-icon-2"><i class="flaticon-resume"></i></div>
-                                <div class="wt-card-right  wt-total-listing-view  ">435</div>
+                                <div class="wt-card-right  wt-total-listing-view  ">@ViewBag.Totalcandidate</div>
                                 <div class="wt-card-bottom-2">
                                     <p class="m-b0 panel-title">Ứng viên ứng tuyển</p>
                                 </div>
@@ -57,7 +60,7 @@
                         <div class="panel-body wt-panel-body dashboard-card-2 block-gradient-4">
                             <div class="wt-card-wrap-2">
                                 <div class="wt-card-icon-2"><i class="fa fa-bell"></i></div>
-                                <div class="wt-card-right wt-total-listing-bookmarked  ">18</div>
+                                <div class="wt-card-right wt-total-listing-bookmarked  ">@ViewBag.Totalnotification</div>
                                 <div class="wt-card-bottom-2">
                                     <p class="m-b0 panel-title">Thông báo</p>
                                 </div>
@@ -70,367 +73,202 @@
 
         <div class="twm-pro-view-chart-wrap">
             <div class="row">
-                <div class="col-xl-6 col-lg-12 col-md-12 mb-4">
-                    <div class="panel panel-default site-bg-white">
+                <div class="col-lg-12 col-md-12">
+                    <div class="user-profile-card">
                         <div class="panel-heading wt-panel-heading p-a20">
-                            <h4 class="panel-tittle m-a0">
-                                <i class="far fa-chart-bar"></i>Your Profile Views
-                            </h4>
+                            <h4 class="panel-tittle m-a0"><i class="fa fa-bell"></i> Các thông báo</h4>
                         </div>
-                        <div class="panel-body wt-panel-body twm-pro-view-chart">
-                            <canvas id="profileViewChart"></canvas>
-                        </div>
+                        @if (ViewBag.Notification.Count > 0)
+                        {
+                            foreach (JobSeekerNotification i in ViewBag.Notification)
+                            {
+                                <a href="@Url.Action("NotificationForward","Home",new {id = i.Id, url = i.Title})">
+                                    <div class="user-notification mt-4">
+                                        <div class="user-notification-item">
+                                            @* <div class="user-notification-icon">
+                                    <img src="images/jobs-company/axon-active-logo.jpg" alt="">
+                                    </div> *@
+                                            <div class="user-notification-info">
+                                                <p><b>@i.Description</b></p>
+                                                <span>@(i.IsCreatedAt.HasValue ? i.IsCreatedAt.Value.ToString("dd/MM/yyyy HH:mm") : "Error")</span>
+                                            </div>
+                                            @if (i.IsSeen == true)
+                                            {
+                                                <i class="feather-check" style="color: green;"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="feather-check" style="color: red;"></i>
+                                            }
+                                        </div>
+                                    </div>
+                                </a>
+                            }
+                        }
                     </div>
                 </div>
-
-                <div class="col-xl-6 col-lg-12 col-md-12 mb-4">
-                    <div class="panel panel-default">
-                        <div class="panel-heading wt-panel-heading p-a20">
-                            <h4 class="panel-tittle m-a0">Inbox</h4>
-                        </div>
-                        <div class="panel-body wt-panel-body bg-white">
-                            <div class="dashboard-messages-box-scroll scrollbar-macosx">
-
-                                <div class="dashboard-messages-box">
-                                    <div class="dashboard-message-avtar">
-                                        <img src="~/Content/images/user-avtar/pic1.jpg"
-                                             alt="">
-                                    </div>
-                                    <div class="dashboard-message-area">
-                                        <h5>Lucy Smith<span>18 June 2023</span></h5>
-                                        <p>
-                                            Bring to the table win-win survival strategies to ensure proactive
-                                            domination. at the end of the day, going forward, a new normal that
-                                            has evolved from generation.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="dashboard-messages-box">
-                                    <div class="dashboard-message-avtar">
-                                        <img src="~/Content/images/user-avtar/pic3.jpg"
-                                             alt="">
-                                    </div>
-                                    <div class="dashboard-message-area">
-                                        <h5>Richred paul<span>19 June 2023</span></h5>
-                                        <p>
-                                            Bring to the table win-win survival strategies to ensure proactive
-                                            domination. at the end of the day, going forward, a new normal that
-                                            has evolved from generation.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="dashboard-messages-box">
-                                    <div class="dashboard-message-avtar">
-                                        <img src="~/Content/images/user-avtar/pic4.jpg"
-                                             alt="">
-                                    </div>
-                                    <div class="dashboard-message-area">
-                                        <h5>Jon Doe<span>20 June 2023</span></h5>
-                                        <p>
-                                            Bring to the table win-win survival strategies to ensure proactive
-                                            domination. at the end of the day, going forward, a new normal that
-                                            has evolved from generation.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="dashboard-messages-box">
-                                    <div class="dashboard-message-avtar">
-                                        <img src="~/Content/images/user-avtar/pic1.jpg"
-                                             alt="">
-                                    </div>
-                                    <div class="dashboard-message-area">
-                                        <h5>Thomas Smith<span>22 June 2023</span></h5>
-                                        <p>
-                                            Bring to the table win-win survival strategies to ensure proactive
-                                            domination. at the end of the day, going forward, a new normal that
-                                            has evolved from generation.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
-
                 <div class="col-lg-12 col-md-12 mb-4">
                     <div class="panel panel-default">
-                        <div class="panel-heading wt-panel-heading p-a20">
-                            <h4 class="panel-tittle m-a0">Danh sách tin đăng gần đây</h4>
+                        <div class="panel-heading wt-panel-heading p-a20 mb-3">
+                            <h4 class="panel-tittle m-a0"><i class="fa fa-newspaper"></i> Danh sách tin đăng gần đây</h4>
                         </div>
-                        <div class="twm-jobs-list-wrap pt-4">
-                            <ul>
-                                <li>
-                                    <div class="twm-jobs-list-style1 mb-4">
-                                        <div class="twm-media">
-                                            <img src="~/Content/images/jobs-company/pic1.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-mid-content">
-                                            <a href="job-detail.html" class="twm-job-title">
-                                                <h5>
-                                                    Senior Web Designer<span class="twm-job-post-duration">
-                                                        / 1
-                                                        days ago
-                                                    </span>
-                                                </h5>
-                                            </a>
-                                            <p class="twm-job-address">
-                                                1363-1385 Sunset Blvd Los Angeles, CA
-                                                90026, USA
-                                            </p>
-                                            <a href="https://themeforest.net/user/thewebmax/portfolio"
-                                               class="twm-job-websites site-text-primary">https://thewebmax.com</a>
-                                        </div>
-                                        <div class="twm-right-content">
-                                            <div class="twm-jobs-category green">
-                                                <span class="twm-bg-green badge-success">New</span>
-                                            </div>
-                                            <div class="twm-jobs-amount">$2500 <span>/ Month</span></div>
-                                            <a href="job-detail.html"
-                                               class="twm-jobs-browse site-text-primary">Apply Job</a>
-                                        </div>
-                                    </div>
-                                </li>
+                        <div class="table-responsive profile-applied-job">
+                            <table class="table text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Tên tin đăng</th>
+                                        <th>Ngày đăng</th>
+                                        <th>Thời hạn nộp</th>
+                                        <th>Lượt nộp</th>
+                                        <th>Trạng thái</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (ViewBag.Job != null && ViewBag.Job.Count > 0)
+                                    {
+                                        int d = 0;
+                                        foreach (JobSeekerJobPosting i in ViewBag.Job)
+                                        {
+                                            d++;
+                                            <tr>
+                                                <td>@d</td>
+                                                <td>
+                                                    <div class="profile-job-info">
+                                                        <div class="profile-job-content">
+                                                            <h6><a href="#">@i.JobTitle</a></h6>
+                                                            <ul class="profile-job-list">
+                                                                <li><i class="feather-map-pin"></i> @i.Province</li>
+                                                                @* <li>
+                                                        <a href="#" class="job-tag-urgent">Tuyển gấp</a>
+                                                        </li> *@
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>@(i.TimePost.HasValue ? i.TimePost.Value.ToString("dd/MM/yyyy") : "N/A")</td>
+                                                <td>@(i.ExpiredTime.HasValue ? i.ExpiredTime.Value.ToString("dd/MM/yyyy") : "N/A")</td>
+                                                @if (ViewBag.JobApply != null && ViewBag.JobApply.Count > 0)
+                                                {
+                                                    int dd = 0;
+                                                    foreach (var ii in ViewBag.JobApply)
+                                                    {
+                                                        if (i.Id == ii.JobPostingId) dd++;
+                                                    }
+                                                    <td>@dd</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>0</td>
+                                                }
+                                                @* <td>35</td> *@
+                                                @if (i.StatusCode == "SC5")
+                                                {
+                                                    <td><span class="job-tag-new">Đã duyệt</span></td>
+                                                }
+                                                else if (i.StatusCode == "SC6")
+                                                {
+                                                    <td><span class="job-tag-danger">Từ chối</span></td>
+                                                }
+                                                else
+                                                {
+                                                    <td><span class="job-tag-pending">Đang chờ duyệt</span></td>
+                                                }
+                                                <td>
+                                                    @{
+                                                        var dateString = i.ExpiredTime.HasValue ? i.ExpiredTime.Value.ToString("dd/MM/yyyy") : "N/A";
+                                                    }
+                                                    <a data-bs-toggle="modal" href="#JobPostingEditModal" onclick="loadEditForm('@Html.Raw(i.Id)', '@Html.Raw(i.JobTitle)', '@Html.Raw(i.Quantity)', '@Html.Raw(i.JobCategoryId)', '@Html.Raw(i.WorkingType)', '@Html.Raw(i.ExpRequirement)', '@Html.Raw(i.JobLevelCode)', '@Html.Raw(i.SalaryMin)', '@Html.Raw(i.SalaryMax)', '@Html.Raw(i.AcademicLevel)', '@Html.Raw(i.GenderRequire)', '@Html.Raw(i.Province)', '@Html.Raw(i.District)', '@Html.Raw(i.Ward)', '@Html.Raw(dateString)', '@Html.Raw(i.Address)', '@Html.Raw(i.JobDesc)', '@Html.Raw(i.JobRequirement)', '@Html.Raw(i.BenefitEnjoyed)')"
+                                                       class="btn btn-outline-secondary btn-sm">
+                                                        <i class="feather-edit"></i>
+                                                    </a>
+                                                    <a data-bs-toggle="modal" href="#DeleteJobModal" onclick="loadDeleteForm('@i.Id')"
+                                                       class="btn btn-outline-danger btn-sm">
+                                                        <i class="feather-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12 mb-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading wt-panel-heading p-a20 mb-3">
+                            <h4 class="panel-tittle m-a0"><i class="fa fa-newspaper"></i> Danh sách ứng viên gần đây</h4>
+                        </div>
+                        <div class="table-responsive profile-applied-job">
+                            <table class="table text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Tên ứng viên</th>
+                                        <th>Công việc ứng tuyển</th>
+                                        <th>Thời gian ứng tuyển</th>
+                                        <th>Hồ sơ</th>
+                                        <th>Trạng thái tuyển dụng</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (ViewBag.Candidate != null && ViewBag.Candidate.Count > 0)
+                                    {
+                                        int d = 0;
+                                        foreach (JobSeekerJobPostingApply i in ViewBag.Candidate)
+                                        {
+                                            JobSeekerJobPosting job = db.JobSeekerJobPostings.FirstOrDefault(p => p.Id == i.JobPostingId);
+                                            if (job == null) job = new JobSeekerJobPosting();
+                                            JobSeekerCandidateProfile can = db.JobSeekerCandidateProfiles.FirstOrDefault(p => p.CandidateId == i.CandidateId);
+                                            if (can == null) can = new JobSeekerCandidateProfile();
+                                            d++;
+                                            <tr>
+                                                <td>@d</td>
+                                                <td class="candidate-name">
+                                                    <a href="@Url.Action("CandidateDetailRecruiter","Home", new{ id = i.CandidateId, idjob = i.Id})">
+                                                        @can.Fullname
+                                                    </a>
+                                                </td>
+                                                <td>@job.JobTitle</td>
+                                                <td>@(i.ApplyTime.HasValue ? i.ApplyTime.Value.ToString("dd/MM/yyyy") : "Error")</td>
+                                                <td>
+                                                    <a href="@can.CvUrl" title="Download" target="blank" data-bs-toggle="tooltip" data-bs-placement="top" class="btn btn-outline-danger btn-sm">
+                                                        <i class="feather-download"></i> Hồ sơ
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    @if (i.StatusCode == "SC7")
+                                                    {
+                                                        <span class="tag-score tag-low">Đang xem xét</span>
+                                                    }
+                                                    else if (i.StatusCode == "SC6")
+                                                    {
+                                                        <span class="tag-score tag-fair">Không phù hợp</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="tag-score tag-good">Phù hợp</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <a data-bs-toggle="modal" href="#CandidateapplyModal" onclick="loadFormJobPost('@Html.Raw(i.Id)', '@Html.Raw(i.StatusCode)')"
+                                                       class="btn btn-outline-info btn-sm">
+                                                        <i class="feather-eye"></i>
+                                                    </a>
+                                                    <a data-bs-toggle="modal" href="#DeleteJobCategoryModal" onclick="loadFormDelete('@Html.Raw(i.Id)')"
+                                                       class="btn btn-outline-danger btn-sm">
+                                                        <i class="feather-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
 
-                                <li>
-                                    <div class="twm-jobs-list-style1 mb-4">
-                                        <div class="twm-media">
-                                            <img src="~/Content/images/jobs-company/pic2.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-mid-content">
-                                            <a href="job-detail.html" class="twm-job-title">
-                                                <h5>
-                                                    Sr. Rolling Stock Technician<span class="twm-job-post-duration">/ 15 days ago</span>
-                                                </h5>
-                                            </a>
-                                            <p class="twm-job-address">
-                                                1363-1385 Sunset Blvd Los Angeles, CA
-                                                90026, USA
-                                            </p>
-                                            <a href="https://themeforest.net/user/thewebmax/portfolio"
-                                               class="twm-job-websites site-text-primary">https://thewebmax.com</a>
-                                        </div>
-                                        <div class="twm-right-content">
-                                            <div class="twm-jobs-category green">
-                                                <span class="twm-bg-brown">Intership</span>
-                                            </div>
-                                            <div class="twm-jobs-amount">$2500 <span>/ Month</span></div>
-                                            <a href="job-detail.html"
-                                               class="twm-jobs-browse site-text-primary">Apply Job</a>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div class="twm-jobs-list-style1 mb-4">
-                                        <div class="twm-media">
-                                            <img src="~/Content/images/jobs-company/pic3.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-mid-content">
-                                            <a href="job-detail.html" class="twm-job-title">
-                                                <h5 class="twm-job-title">
-                                                    IT Department Manager<span class="twm-job-post-duration"> / 6 Month ago</span>
-                                                </h5>
-                                            </a>
-                                            <p class="twm-job-address">
-                                                1363-1385 Sunset Blvd Los Angeles, CA
-                                                90026, USA
-                                            </p>
-                                            <a href="https://themeforest.net/user/thewebmax/portfolio"
-                                               class="twm-job-websites site-text-primary">https://thewebmax.com</a>
-                                        </div>
-                                        <div class="twm-right-content">
-                                            <div class="twm-jobs-category green">
-                                                <span class="twm-bg-purple">Fulltime</span>
-                                            </div>
-                                            <div class="twm-jobs-amount">$2500 <span>/ Month</span></div>
-                                            <a href="job-detail.html"
-                                               class="twm-jobs-browse site-text-primary">Apply Job</a>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div class="twm-jobs-list-style1 mb-4">
-                                        <div class="twm-media">
-                                            <img src="~/Content/images/jobs-company/pic4.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-mid-content">
-                                            <a href="job-detail.html" class="twm-job-title">
-                                                <h5 class="twm-job-title">
-                                                    Art Production Specialist <span class="twm-job-post-duration">/ 2 days ago</span>
-                                                </h5>
-                                            </a>
-                                            <p class="twm-job-address">
-                                                1363-1385 Sunset Blvd Los Angeles, CA
-                                                90026, USA
-                                            </p>
-                                            <a href="https://themeforest.net/user/thewebmax/portfolio"
-                                               class="twm-job-websites site-text-primary">https://thewebmax.com</a>
-                                        </div>
-                                        <div class="twm-right-content">
-                                            <div class="twm-jobs-category green">
-                                                <span class="twm-bg-sky">Freelancer</span>
-                                            </div>
-                                            <div class="twm-jobs-amount">$1500 <span>/ Month</span></div>
-                                            <a href="job-detail.html"
-                                               class="twm-jobs-browse site-text-primary">Apply Job</a>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div class="twm-jobs-list-style1 mb-4">
-                                        <div class="twm-media">
-                                            <img src="~/Content/images/jobs-company/pic5.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-mid-content">
-                                            <a href="job-detail.html" class="twm-job-title">
-                                                <h5 class="twm-job-title">
-                                                    Recreation &amp; Fitness Worker <span class="twm-job-post-duration">/ 1 days ago</span>
-                                                </h5>
-                                            </a>
-                                            <p class="twm-job-address">
-                                                1363-1385 Sunset Blvd Los Angeles, CA
-                                                90026, USA
-                                            </p>
-                                            <a href="https://themeforest.net/user/thewebmax/portfolio"
-                                               class="twm-job-websites site-text-primary">https://thewebmax.com</a>
-                                        </div>
-                                        <div class="twm-right-content">
-                                            <div class="twm-jobs-category green">
-                                                <span class="twm-bg-golden">Temporary</span>
-                                            </div>
-                                            <div class="twm-jobs-amount">$800 <span>/ Month</span></div>
-                                            <a href="job-detail.html"
-                                               class="twm-jobs-browse site-text-primary">Apply Job</a>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div class="twm-jobs-list-style1 mb-4">
-                                        <div class="twm-media">
-                                            <img src="~/Content/images/jobs-company/pic1.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-mid-content">
-                                            <a href="job-detail.html" class="twm-job-title">
-                                                <h5>
-                                                    Senior Web Designer<span class="twm-job-post-duration">
-                                                        / 1
-                                                        days ago
-                                                    </span>
-                                                </h5>
-                                            </a>
-                                            <p class="twm-job-address">
-                                                1363-1385 Sunset Blvd Los Angeles, CA
-                                                90026, USA
-                                            </p>
-                                            <a href="https://themeforest.net/user/thewebmax/portfolio"
-                                               class="twm-job-websites site-text-primary">https://thewebmax.com</a>
-                                        </div>
-                                        <div class="twm-right-content">
-                                            <div class="twm-jobs-category green">
-                                                <span class="twm-bg-green badge-success">New</span>
-                                            </div>
-                                            <div class="twm-jobs-amount">$1000 <span>/ Month</span></div>
-                                            <a href="job-detail.html"
-                                               class="twm-jobs-browse site-text-primary">Apply Job</a>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div class="twm-jobs-list-style1 mb-4">
-                                        <div class="twm-media">
-                                            <img src="~/Content/images/jobs-company/pic2.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-mid-content">
-                                            <a href="job-detail.html" class="twm-job-title">
-                                                <h5>
-                                                    Sr. Rolling Stock Technician<span class="twm-job-post-duration">/ 15 days ago</span>
-                                                </h5>
-                                            </a>
-                                            <p class="twm-job-address">
-                                                1363-1385 Sunset Blvd Los Angeles, CA
-                                                90026, USA
-                                            </p>
-                                            <a href="https://themeforest.net/user/thewebmax/portfolio"
-                                               class="twm-job-websites site-text-primary">https://thewebmax.com</a>
-                                        </div>
-                                        <div class="twm-right-content">
-                                            <div class="twm-jobs-category green">
-                                                <span class="twm-bg-brown">Intership</span>
-                                            </div>
-                                            <div class="twm-jobs-amount">$1500 <span>/ Month</span></div>
-                                            <a href="job-detail.html"
-                                               class="twm-jobs-browse site-text-primary">Apply Job</a>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div class="twm-jobs-list-style1 mb-4">
-                                        <div class="twm-media">
-                                            <img src="~/Content/images/jobs-company/pic3.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-mid-content">
-                                            <a href="job-detail.html" class="twm-job-title">
-                                                <h5 class="twm-job-title">
-                                                    IT Department Manager<span class="twm-job-post-duration"> / 6 Month ago</span>
-                                                </h5>
-                                            </a>
-                                            <p class="twm-job-address">
-                                                1363-1385 Sunset Blvd Los Angeles, CA
-                                                90026, USA
-                                            </p>
-                                            <a href="https://themeforest.net/user/thewebmax/portfolio"
-                                               class="twm-job-websites site-text-primary">https://thewebmax.com</a>
-                                        </div>
-                                        <div class="twm-right-content">
-                                            <div class="twm-jobs-category green">
-                                                <span class="twm-bg-purple">Fulltime</span>
-                                            </div>
-                                            <div class="twm-jobs-amount">$2500 <span>/ Month</span></div>
-                                            <a href="job-detail.html"
-                                               class="twm-jobs-browse site-text-primary">Apply Job</a>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div class="twm-jobs-list-style1 mb-4">
-                                        <div class="twm-media">
-                                            <img src="~/Content/images/jobs-company/pic4.jpg" alt="#">
-                                        </div>
-                                        <div class="twm-mid-content">
-                                            <a href="job-detail.html" class="twm-job-title">
-                                                <h5 class="twm-job-title">
-                                                    Art Production Specialist <span class="twm-job-post-duration">/ 2 days ago</span>
-                                                </h5>
-                                            </a>
-                                            <p class="twm-job-address">
-                                                1363-1385 Sunset Blvd Los Angeles, CA
-                                                90026, USA
-                                            </p>
-                                            <a href="https://themeforest.net/user/thewebmax/portfolio"
-                                               class="twm-job-websites site-text-primary">https://thewebmax.com</a>
-                                        </div>
-                                        <div class="twm-right-content">
-                                            <div class="twm-jobs-category green">
-                                                <span class="twm-bg-sky">Freelancer</span>
-                                            </div>
-                                            <div class="twm-jobs-amount">$3000 <span>/ Month</span></div>
-                                            <a href="job-detail.html"
-                                               class="twm-jobs-browse site-text-primary">Apply Job</a>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -438,10 +276,474 @@
         </div>
     </div>
 </div>
-@if (ViewBag.ErrorMessage != null)
-{
-    <script>
-        alert("@Html.Raw(ViewBag.ErrorMessage)");
-    </script>
-}
+<!-- Job Posting Edit Popup -->
+<div class="panel panel-default mb-3">
+    <div class="modal fade twm-saved-jobs-view" id="JobPostingEditModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form action="@Url.Action("ListPostJob","Company", new{ type = "2"})" method="post">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Thông tin tuyển dụng</h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <input class="form-control" name="id" type="hidden" id="id" required>
+                            <!--Job title-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="jobTitle" class="form-label">
+                                        Tên công việc <span class="required">*</span>
+                                    </label>
+                                    <div class="ls-inputicon-box">
+                                        <input class="form-control" name="title" type="text" id="title" required
+                                               placeholder="Name">
+                                        <i class="fs-input-icon fa fa-address-card"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Quantity -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="jobSalaryMin" class="form-label">Số lượng <span class="required">*</span></label>
+                                    <div class="ls-inputicon-box">
+                                        <input class="form-control" name="quantity" id="quantity" type="number" min="1" required
+                                               placeholder="Quantity" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                        <i class="fs-input-icon fa fa-dollar-sign"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Job Category-->
+                            <div class="col-md-6">
+                                <div class="form-group city-outer-bx has-feedback">
+                                    <label for="jobCategory" class="form-label">
+                                        Ngành nghề <span class="required">*</span>
+                                    </label>
+                                    <div class="ls-inputicon-box">
+                                        <select class="form-select form-control" data-live-search="true" title="" name="category" required
+                                                id="category" data-bv-field="size">
+                                            @if (ViewBag.Jobcategory != null)
+                                            {
+                                                <option value="">Chọn ngành nghề</option>
+                                                foreach (var i in ViewBag.Jobcategory)
+                                                {
+                                                    <option value="@i.Id">@i.JobCategoryName</option>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <option value="">Chọn ngành nghề</option>
+                                            }
+                                        </select>
+                                        <i class="fs-input-icon fa fa-border-all"></i>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- Job Type -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="jobWorkingType">
+                                        Hình thức làm việc <span class="required">*</span>
+                                    </label>
+                                    <div class="ls-inputicon-box">
+                                        <select class="form-select form-control" data-live-search="true" title="" required
+                                                name="worktype" id="worktype" data-bv-field="size">
+                                            <option class="bs-title-option" value="">Hình thức</option>
+                                            <option selected value="fulltime">Toàn thời gian</option>
+                                            <option value="parttime">Bán thời gian</option>
+                                            <option value="intern">Thực tập</option>
+                                        </select>
+                                        <i class="fs-input-icon fa fa-file-alt"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Experience -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="jobExperience">
+                                        Kinh nghiệm <span class="required">*</span>
+                                    </label>
+                                    <div class="ls-inputicon-box">
+                                        <select class="form-select form-control" data-live-search="true" title="" required
+                                                name="exp" id="exp" data-bv-field="size">
+                                            <option class="bs-title-option" value="">Chọn kinh nghiệm</option>
+                                            <option selected value="0">Không yêu cầu kinh nghiệm</option>
+                                            <option value="1">1 năm</option>
+                                            <option value="2">2 năm</option>
+                                            <option value="3">3 năm</option>
+                                            <option value="4">4 năm</option>
+                                            <option value="5">5 năm</option>
+                                            <option value="5+">Trên 5 năm</option>
+                                        </select>
+                                        <i class="fs-input-icon fa fa-user-edit"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Level -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="jobLevel">
+                                        Vị trí/ Cấp bậc <span class="required">*</span>
+                                    </label>
+                                    <div class="ls-inputicon-box">
+                                        <select class="form-select form-control" data-live-search="true" title="" required
+                                                name="level" id="level" data-bv-field="size">
+                                            @* <option class="bs-title-option" value="">Chọn vị trí - cấp bậc</option> *@
+                                            @if (ViewBag.Joblevel != null)
+                                            {
+                                                <option value="">Chọn vị trí - cấp bậc</option>
+                                                foreach (var i in ViewBag.Joblevel)
+                                                {
+                                                    <option value="@i.Id">@i.JobLevelName</option>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <option value="">Chọn vị trí - cấp bậc</option>
+                                            }
+                                        </select>
+                                        <i class="fs-input-icon fa fa-user-edit"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Salary Min -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="jobSalaryMin" class="form-label">Mức lương tối thiểu <span class="required">*</span></label>
+                                    <div class="ls-inputicon-box">
+                                        <input class="form-control" name="salarymin" id="salarymin" type="number" min="0" required
+                                               placeholder="Min" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                        <i class="fs-input-icon fa fa-dollar-sign"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Salary Max -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="jobSalaryMax" class="form-label">Mức lương tối đa <span class="required">*</span></label>
+                                    <div class="ls-inputicon-box">
+                                        <input class="form-control" name="salarymax" id="salarymax" type="number" min="1" required
+                                               placeholder="Max" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                        <i class="fs-input-icon fa fa-dollar-sign"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="jobAcademicLevel">
+                                        Yêu cầu bằng cấp <span class="required">*</span>
+                                    </label>
+                                    <div class="ls-inputicon-box">
+                                        <select class="form-select form-control" data-live-search="true" title="" required
+                                                name="degree" id="degree" data-bv-field="size">
+                                            <option class="bs-title-option" value="">Chọn yêu cầu học vấn</option>
+                                            <option value="Không">Không yêu cầu</option>
+                                            <option value="Cử nhân">Cử nhân</option>
+                                            <option value="Kỹ sư">Kỹ sư</option>
+                                            <option value="Thạc sĩ">Thạc sĩ</option>
+                                            <option value="Tiến sĩ">Tiến sĩ</option>
+                                        </select>
+                                        <i class="fs-input-icon fa fa-user-graduate"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Gender-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="jobGender">
+                                        Giới tính <span class="required">*</span>
+                                    </label>
+                                    <div class="ls-inputicon-box">
+                                        <select class="form-select form-control" data-live-search="true" title="" required
+                                                name="gender" id="gender" data-bv-field="size">
+                                            <option class="bs-title-option" value="">Chọn giới tính</option>
+                                            <option value="male">Nam</option>
+                                            <option value="female">Nữ</option>
+                                            <option value="other">Không yêu cầu</option>
+                                        </select>
+                                        <i class="fs-input-icon fa fa-venus-mars"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--City-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="city" class="form-label">
+                                        Tỉnh/ Thành phố <span class="required">*</span>
+                                    </label>
+                                    <div class="ls-inputicon-box">
+                                        <select class="form-select form-control" data-live-search="true" title="" name="city" required
+                                                id="city" data-bv-field="size">
+                                            <option class="bs-title-option" value="">
+                                                Tỉnh/ Thành phố
+                                            </option>
+                                        </select>
+                                        <i class="fs-input-icon fa fa-city"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- District -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="district" class="form-label">
+                                        Quận/ Huyện <span class="required">*</span>
+                                    </label>
+                                    <div class="ls-inputicon-box">
+                                        <select class="form-select form-control" data-live-search="true" title="" name="district" required
+                                                id="district" data-bv-field="size">
+                                            <option class="bs-title-option" value="">
+                                                Quận/ Huyện
+                                            </option>
+                                        </select>
+                                        <i class="fs-input-icon fa fa-map-marker-alt"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Ward -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="ward" class="form-label">Phường/ Xã <span class="required">*</span></label>
+                                    <div class="ls-inputicon-box">
+                                        <select class="form-select form-control" data-live-search="true" title="" name="ward" required
+                                                id="ward" data-bv-field="size">
+                                            <option class="bs-title-option" value="">
+                                                Phường/ Xã
+                                            </option>
+                                        </select>
+                                        <i class="fs-input-icon fa fa-map-marker-alt"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--End Date-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="jobExpired">
+                                        Hạn nộp <span class="required">*</span>
+                                    </label>
+                                    <div class="ls-inputicon-box">
+                                        <input class="form-control datepicker" data-provide="datepicker" required
+                                               id="expiredtime" name="expiredtime" type="text"
+                                               placeholder="dd/mm/yyyy">
+                                        <i class="fs-input-icon far fa-calendar"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Complete Address-->
+                            <div class="col-xl-12 col-lg-12 col-md-12">
+                                <div class="form-group">
+                                    <label class="form-label" for="jobAddress">Địa chỉ <span class="required">*</span></label>
+                                    <div class="ls-inputicon-box">
+                                        <input class="form-control" name="address" id="address" type="text" required
+                                               placeholder="Address">
+                                        <i class="fs-input-icon fa fa-home"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="col-xl-12 col-lg-12 col-md-12">
+                                <div class="form-group">
+                                    <label for="jobDesc" class="form-label">
+                                        Mô tả công việc <span class="required">*</span>
+                                    </label>
+                                    <textarea id="description" rows="5" name="description" class="form-control" required style="height: 150px"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Requirement -->
+                            <div class="col-xl-12 col-lg-12 col-md-12">
+                                <div class="form-group">
+                                    <label for="jobRequirement" class="form-label">
+                                        Yêu cầu công việc <span class="required">*</span>
+                                    </label>
+                                    <textarea id="require" rows="5" name="require" class="form-control" required style="height: 150px"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Benefit -->
+                            <div class="col-xl-12 col-lg-12 col-md-12">
+                                <div class="form-group">
+                                    <label for="jobBenefit" class="form-label">
+                                        Quyền lợi <span class="required">*</span>
+                                    </label>
+                                    <textarea id="benefit" rows="5" name="benefit" class="form-control" required style="height: 150px"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="site-button m-r10">Cập nhật</button>
+                        <button type="button" class="site-button" data-bs-dismiss="modal">Hủy</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default mb-3">
+    <div class="modal fade twm-saved-jobs-view" id="CandidateapplyModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form action="@Url.Action("CandidateApplyRecruiter","Home",new {type = 2})" method="post">
+                    <input name="idedit" type="hidden" id="idedit" required>
+                    <div class="modal-header">
+                        <h3 class="modal-title">Thông tin tuyển dụng</h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <input class="form-control" name="id" type="hidden" id="id" required>
+                            <!--Job Category-->
+                            <div class="col-xl-12 col-lg-12 col-md-12">
+                                <div class="form-group city-outer-bx has-feedback">
+                                    <label for="jobCategory" class="form-label">
+                                        Ngành nghề <span class="required">*</span>
+                                    </label>
+                                    <div class="ls-inputicon-box">
+                                        <select class="form-select form-control"
+                                                data-live-search="true" title="" id="statusedit" required
+                                                name="statusedit" data-bv-field="size">
+                                            <option class="bs-title-option" value="">
+                                                Trạng thái
+                                            </option>
+                                            <option value="SC7">Đang xem xét</option>
+                                            <option value="SC6">Không phù hợp</option>
+                                            <option value="SC5">Phù hợp</option>
+                                        </select>
+                                        <i class="fs-input-icon fa fa-chart-area"></i>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="site-button m-r10">Cập nhật</button>
+                        <button type="button" class="site-button" data-bs-dismiss="modal">Hủy</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade twm-model-popup" id="DeleteJobCategoryModal" data-bs-backdrop="static"
+     data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="@Url.Action("CandidateApplyRecruiter","Home",new {type = 3})" method="post">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h4 class="modal-title">Bạn có chắc chắn muốn xóa?</h4>
+                </div>
+                <input id="iddelete" name="iddelete" type="hidden" required />
+                <div class="modal-footer">
+                    <button type="button" class="theme-btn theme-btn2 mt-3" data-bs-dismiss="modal">Không</button>
+                    <button type="submit" class="theme-btn theme-btn2 mt-3">Có</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+<script>
+    function loadFormJobPost(idedit, statusedit) {
+        document.getElementById('idedit').value = idedit;
+        document.getElementById('statusedit').value = statusedit;
+    }
+    function loadFormDelete(iddelete) {
+        document.getElementById('iddelete').value = iddelete;
+    }
+    function loadEditForm(id, title, quantity, category, worktype, exp, level, salarymin, salarymax, degree, gender, city, district, ward, expiredtime, address, description, require, benefit) {
+        document.getElementById('id').value = id;
+        document.getElementById('title').value = title;
+        document.getElementById('quantity').value = quantity;
+        document.getElementById('category').value = category;
+        document.getElementById('worktype').value = worktype;
+        document.getElementById('exp').value = exp;
+        document.getElementById('level').value = level;
+        document.getElementById('salarymin').value = salarymin;
+        document.getElementById('salarymax').value = salarymax;
+        document.getElementById('degree').value = degree;
+        document.getElementById('gender').value = gender;
+        document.getElementById('city').value = city;
+        citis.onchange();
+        document.getElementById('district').value = district;
+        districts.onchange();
+        document.getElementById('ward').value = ward;
+        document.getElementById('expiredtime').value = expiredtime;
+        document.getElementById('address').value = address;
+        document.getElementById('description').value = description;
+        document.getElementById('require').value = require;
+        document.getElementById('benefit').value = benefit;
+    }
+    function loadDeleteForm(modaldeleteid) {
+        document.getElementById('modaldeleteid').value = modaldeleteid;
+    }
+
+    var citis = document.getElementById("city");
+    var districts = document.getElementById("district");
+    var wards = document.getElementById("ward");
+    var Parameter = {
+        url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
+        method: "GET",
+        responseType: "application/json",
+    };
+    var promise = axios(Parameter);
+    promise.then(function (result) {
+        renderCity(result.data);
+    });
+
+    function renderCity(data) {
+        for (const x of data) {
+            var option = new Option(x.Name, x.Name);
+            citis.options[citis.options.length] = option;
+        }
+        citis.onchange = function () {
+            district.length = 1;
+            ward.length = 1;
+            if (this.value != "") {
+                const result = data.filter(n => n.Name === this.value);
+
+                for (const k of result[0].Districts) {
+                    var option = new Option(k.Name, k.Name);
+                    districts.options[districts.options.length] = option;
+                }
+            }
+        };
+        districts.onchange = function () {
+            ward.length = 1;
+            const dataCity = data.filter((n) => n.Name === citis.value);
+            if (this.value != "") {
+                const dataWards = dataCity[0].Districts.filter(n => n.Name === this.value)[0].Wards;
+
+                for (const w of dataWards) {
+                    var option = new Option(w.Name, w.Name);
+                    wards.options[wards.options.length] = option;
+                }
+            }
+        };
+    }
+</script>
 

@@ -620,6 +620,21 @@ namespace FE_JobWeb.Controllers
         //candidate
         public IActionResult IndexCandidate()
         {
+            JobSeekerUserLoginDatum u = db.JobSeekerUserLoginData.FirstOrDefault(x => x.Id == user.User.Id);
+            if (u == null) View("Error");
+
+            ViewBag.Totalapply = db.JobSeekerJobPostingApplies.Where(p => p.CandidateId == user.User.Id).Count();
+
+            ViewBag.Totalsave = db.JobSeekerSavedJobPostings.Where(p => p.CandidateId == user.User.Id).Count();
+
+            ViewBag.Totalnotification = db.JobSeekerNotifications.OrderByDescending(p => p.IsCreatedAt).Where(p => p.IdUserReceive == user.User.Id && p.IsSeen == false).Count();
+
+            ViewBag.Notification = db.JobSeekerNotifications.OrderByDescending(p => p.IsCreatedAt).Where(p => p.IdUserReceive == user.User.Id && p.IsSeen == false).Take(5).ToList();
+
+            ViewBag.Jobapply = db.JobSeekerJobPostingApplies.OrderByDescending(p => p.ApplyTime).Where(p => p.CandidateId == user.User.Id).Take(5).ToList();
+
+            ViewBag.Jobsave = db.JobSeekerSavedJobPostings.OrderByDescending(p => p.SavedAt).Where(p => p.CandidateId == user.User.Id).Take(5).ToList();
+
             return View();
         }
         public IActionResult JobApplyCandidate(string? error, string? success, int page = 1)
@@ -646,7 +661,7 @@ namespace FE_JobWeb.Controllers
                 return View(paginatedJobs1);
             }
 
-            List<JobSeekerJobPostingApply> jobapply = db.JobSeekerJobPostingApplies.Where(p => p.CandidateId == user.User.Id).ToList();
+            List<JobSeekerJobPostingApply> jobapply = db.JobSeekerJobPostingApplies.OrderByDescending(p => p.ApplyTime).Where(p => p.CandidateId == user.User.Id).ToList();
 
             PaginatedList<JobSeekerJobPostingApply> paginatedJobs = PaginatedList<JobSeekerJobPostingApply>.Create(jobapply, page, pageSize);
 
@@ -675,7 +690,7 @@ namespace FE_JobWeb.Controllers
             if (error != null) ViewBag.ErrorMessage = error;
             if (success != null) ViewBag.SuccessMessage = success;
 
-            List<JobSeekerSavedJobPosting> jobapply = db.JobSeekerSavedJobPostings.Where(p => p.CandidateId == user.User.Id).ToList();
+            List<JobSeekerSavedJobPosting> jobapply = db.JobSeekerSavedJobPostings.OrderByDescending(p => p.SavedAt).Where(p => p.CandidateId == user.User.Id).ToList();
 
             PaginatedList<JobSeekerSavedJobPosting> paginatedJobs = PaginatedList<JobSeekerSavedJobPosting>.Create(jobapply, page, pageSize);
 
@@ -698,8 +713,50 @@ namespace FE_JobWeb.Controllers
         }
 
         //recruiter
-        public IActionResult IndexRecruiter()
+        public async Task<IActionResult> IndexRecruiter()
         {
+            JobSeekerUserLoginDatum u = db.JobSeekerUserLoginData.FirstOrDefault(x => x.Id == user.User.Id);
+            if (u == null) View("Error");
+
+            JobSeekerRecruiterProfile re = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == user.User.Id);
+            if (re == null) return View("Error");
+
+            List<JobSeekerJobPosting> ljob = db.JobSeekerJobPostings.Where(p => p.EnterpriseId == re.EnterpriseId).ToList();
+            List<JobSeekerJobPostingApply> lapply = new List<JobSeekerJobPostingApply>();
+
+            ViewBag.Totaljob = ljob.Count();
+
+            ViewBag.Totalpendingjob = db.JobSeekerJobPostings.Where(p => p.EnterpriseId == re.EnterpriseId && p.StatusCode == "SC&").Count();
+
+            int d = 0;
+            if(ljob.Count > 0)
+            {
+                foreach(JobSeekerJobPosting i in ljob)
+                {
+                    JobSeekerJobPostingApply j = db.JobSeekerJobPostingApplies.FirstOrDefault(p => p.JobPostingId == i.Id);
+                    if (j != null)
+                    {
+                        d++;
+                        lapply.Add(j);
+                    }
+                }
+            }
+            ViewBag.Totalcandidate = d;
+
+            ViewBag.Totalnotification = db.JobSeekerNotifications.OrderByDescending(p => p.IsCreatedAt).Where(p => p.IdUserReceive == user.User.Id && p.IsSeen == false).Count();
+
+            ViewBag.Notification = db.JobSeekerNotifications.OrderByDescending(p => p.IsCreatedAt).Where(p => p.IdUserReceive == user.User.Id && p.IsSeen == false).Take(5).ToList();
+
+            ViewBag.JobApply = db.JobSeekerJobPostingApplies.ToList();
+            ViewBag.Jobcategory = db.JobSeekerJobCategories.ToList();
+            ViewBag.Joblevel = db.JobSeekerJobLevels.ToList();
+
+            ViewBag.Job = db.JobSeekerJobPostings.Where(p => p.EnterpriseId == re.EnterpriseId && p.StatusCode == "SC5").Take(5).ToList();
+
+            lapply = lapply.OrderByDescending(p => p.ApplyTime).Take(5).ToList();
+
+            ViewBag.Candidate = lapply;
+
             return View();
         }
         public IActionResult CandidateApplyRecruiter(string? error, string? success, int page = 1)
@@ -780,6 +837,7 @@ namespace FE_JobWeb.Controllers
                     }
                 }
             }
+            jobapply = jobapply.OrderByDescending(p => p.ApplyTime).ToList();
 
             PaginatedList<JobSeekerJobPostingApply> paginatedJobs = PaginatedList<JobSeekerJobPostingApply>.Create(jobapply, page, pageSize);
 
@@ -934,7 +992,7 @@ namespace FE_JobWeb.Controllers
                 }
             }
         }
-        public IActionResult CandidateDetailRecruiter(Guid id, int idjob)
+        public IActionResult CandidateDetailRecruiter(Guid id, int? idjob)
         {
             JobSeekerCandidateProfile can = db.JobSeekerCandidateProfiles.FirstOrDefault(p => p.CandidateId == id);
             if(can == null) return RedirectToAction("CandidateApplyRecruiter", "Home", new { error = "Không tìm thấy thông tin ứng viên!" });
@@ -943,7 +1001,7 @@ namespace FE_JobWeb.Controllers
             List<JobSeekerWorkingExperience> lexp = db.JobSeekerWorkingExperiences.Where(p => p.CandidateId == id).ToList();
             List<JobSeekerCertificate> lcer = db.JobSeekerCertificates.Where(p => p.CandidateId == id).ToList();
 
-            NotificationCandidate(idjob);
+            if(idjob != null) NotificationCandidate(idjob);
 
             ViewBag.Education = ledu;
             ViewBag.Experience = lexp;
@@ -985,8 +1043,8 @@ namespace FE_JobWeb.Controllers
             ViewBag.JobApply = jobApply;
             ViewBag.Jobcategory = jobCategory;
             ViewBag.Joblevel = jobLevel;
-            ViewBag.NotificationAdmin = notificationAd;
 
+            ViewBag.NotificationAdmin = notificationAd.OrderByDescending(p => p.IsCreatedAt).Where(p => p.Type.Contains("admin")).Take(5).ToList();
             ViewBag.Account = user.OrderByDescending(p => p.IsCreatedAt).Where(p => p.RoleId == 3 || p.RoleId == 2).Take(5).ToList();
             ViewBag.Jobpost = jobPosting.OrderByDescending(p => p.IsCreatedAt).Take(5).ToList();
             return View();
@@ -1812,8 +1870,9 @@ namespace FE_JobWeb.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
         //Gửi thông báo đến candidate
-        public async Task NotificationCandidate(int id)
+        public async Task NotificationCandidate(int? id)
         {
+            if (id == null) return;
             HttpClient client = new HttpClient();
             //Call api
             var apiUrl = $"http://localhost:5281/api/notification/notificationcandidate/{id}";
