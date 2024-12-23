@@ -542,6 +542,9 @@ public partial class JobSeekerContext : DbContext
             entity.Property(e => e.ExpRequirement)
                 .HasMaxLength(100)
                 .HasColumnName("exp_requirement");
+            entity.Property(e => e.KeyWord)
+                .HasMaxLength(500)
+                .HasColumnName("keyword");
             entity.Property(e => e.ExpiredTime)
                 .HasColumnType("datetime")
                 .HasColumnName("expired_time");

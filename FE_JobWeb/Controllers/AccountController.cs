@@ -610,9 +610,23 @@ namespace FE_JobWeb.Controllers
             }
         }
         [HttpPost]
-        public IActionResult NotificationSettingCandidate()
+        public IActionResult NotificationSettingCandidate(string keyword)
         {
-            return View();
+            if(string.IsNullOrEmpty(keyword))
+            {
+                ViewBag.ErrorMessage = "Vui lòng nhập đầy đủ!";
+                return View("MyProfile");
+            }
+
+            JobSeekerNotificationType o = new JobSeekerNotificationType();
+            o.Id = Guid.NewGuid().ToString();
+            o.IdUser = user.User.Id;
+            o.TypeName = "signupnotification";
+            o.Description = keyword;
+            db.JobSeekerNotificationTypes.Add(o);
+            db.SaveChanges();
+            ViewBag.SuccessMessage = $"Đăng ký thông báo với từ khóa {keyword} thành công!";
+            return View("MyProfile");
         }
         public IActionResult CandidateProfile(string? error, string? success)
         {

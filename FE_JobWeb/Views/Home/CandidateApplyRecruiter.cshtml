@@ -1,7 +1,35 @@
 ﻿@using Data_JobWeb.Entity;
 @using FE_JobWeb.Others
+@using UglyToad.PdfPig
 @inject ApplicationUser user
 @model PaginatedList<JobSeekerJobPostingApply>
+@{
+    //download pdf from url
+    async Task<string> ExtractTextFromPdfUrl(string url)
+    {
+        using (HttpClient client = new HttpClient())
+        {
+            // Tải file PDF từ URL và lưu vào MemoryStream
+            using (var responseStream = await client.GetStreamAsync(url))
+            using (var memoryStream = new MemoryStream())
+            {
+                await responseStream.CopyToAsync(memoryStream);
+                memoryStream.Position = 0; // Reset vị trí về đầu stream
+
+                // Đọc nội dung PDF từ MemoryStream
+                using (var document = PdfDocument.Open(memoryStream))
+                {
+                    string word = "";
+                    foreach (var page in document.GetPages())
+                    {
+                        word += page.Text;
+                    }
+                    return word;
+                }
+            }
+        }
+    }
+}
 @{
     ViewData["Title"] = "CandidateApplyRecruiter";
     Layout = "~/Views/Shared/_LayoutRecuiter.cshtml";
@@ -77,6 +105,7 @@
                                                 <th>Tên ứng viên</th>
                                                 <th>Công việc ứng tuyển</th>
                                                 <th>Thời gian ứng tuyển</th>
+                                                <th>Tỷ lệ phù hợp</th>
                                                 <th>Hồ sơ</th>
                                                 <th>Trạng thái tuyển dụng</th>
                                                 <th>Hành động</th>
@@ -103,6 +132,43 @@
                                                     </td>
                                                     <td>@job.JobTitle</td>
                                                     <td>@(i.ApplyTime.HasValue ? i.ApplyTime.Value.ToString("dd/MM/yyyy") : "Error")</td>
+                                                    @{
+                                                        int tyle = 0;
+                                                        if(job.KeyWord != null)
+                                                        {
+                                                            List<string> list = job.KeyWord.Split(',')
+                                                            .Select(s => s.Trim())
+                                                            .Where(s => !string.IsNullOrEmpty(s)) // Loại bỏ từ khóa rỗng
+                                                            .ToList();
+                                                            string cv = await ExtractTextFromPdfUrl(can.CvUrl);
+                                                            cv = cv.ToLower();
+                                                            int sl = list.Count;
+                                                            int check = 0;
+                                                            if(sl > 0)
+                                                            {
+                                                                foreach (string key in list)
+                                                                {
+                                                                    if (cv.Contains(key.ToLower())) check++;
+                                                                }
+                                                            }
+                                                            float tl = ((float)check/sl) *100;
+                                                            tyle = ((int)tl);
+                                                        }
+                                                    }
+                                                    <td>
+                                                        @if (tyle <= 33)
+                                                        {
+                                                            <span class="tag-score tag-fair">@tyle %</span>
+                                                        }
+                                                        else if (tyle < 66)
+                                                        {
+                                                            <span class="tag-score tag-low">@tyle %</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="tag-score tag-good">@tyle %</span>
+                                                        }
+                                                    </td>
                                                     <td>
                                                         <a href="@can.CvUrl" title="Download" target="blank" data-bs-toggle="tooltip" data-bs-placement="top" class="btn btn-outline-danger btn-sm">
                                                             <i class="feather-download"></i> Hồ sơ

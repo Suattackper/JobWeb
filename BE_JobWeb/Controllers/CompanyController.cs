@@ -139,6 +139,7 @@ namespace BE_JobWeb.Controllers
             o.District = p.District;
             o.Ward = p.Ward;
             o.ExpiredTime = p.ExpiredTime;
+            o.KeyWord = p.KeyWord;
             o.Address = p.Address;
             o.JobDesc = p.JobDesc;
             o.JobRequirement = p.JobRequirement;

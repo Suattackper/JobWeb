@@ -271,3 +271,10 @@ D:\c#\JobWeb\JobWeb\FE_JobWeb\obj\Debug\net8.0\FE_JobWeb.pdb
 D:\c#\JobWeb\JobWeb\FE_JobWeb\obj\Debug\net8.0\FE_JobWeb.genruntimeconfig.cache
 D:\c#\JobWeb\JobWeb\FE_JobWeb\obj\Debug\net8.0\ref\FE_JobWeb.dll
 D:\c#\JobWeb\JobWeb\FE_JobWeb\obj\Debug\net8.0\FE_JobWeb.sourcelink.json
+D:\c#\JobWeb\JobWeb\FE_JobWeb\bin\Debug\net8.0\UglyToad.PdfPig.Core.dll
+D:\c#\JobWeb\JobWeb\FE_JobWeb\bin\Debug\net8.0\UglyToad.PdfPig.DocumentLayoutAnalysis.dll
+D:\c#\JobWeb\JobWeb\FE_JobWeb\bin\Debug\net8.0\UglyToad.PdfPig.Fonts.dll
+D:\c#\JobWeb\JobWeb\FE_JobWeb\bin\Debug\net8.0\UglyToad.PdfPig.Package.dll
+D:\c#\JobWeb\JobWeb\FE_JobWeb\bin\Debug\net8.0\UglyToad.PdfPig.Tokenization.dll
+D:\c#\JobWeb\JobWeb\FE_JobWeb\bin\Debug\net8.0\UglyToad.PdfPig.Tokens.dll
+D:\c#\JobWeb\JobWeb\FE_JobWeb\bin\Debug\net8.0\UglyToad.PdfPig.dll

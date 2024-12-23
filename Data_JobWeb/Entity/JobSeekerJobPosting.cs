@@ -22,6 +22,7 @@ public partial class JobSeekerJobPosting
     public int? SalaryMax { get; set; }
 
     public string? ExpRequirement { get; set; }
+    public string? KeyWord { get; set; }
 
     public int? JobLevelCode { get; set; }
     public int? ViewCount { get; set; }

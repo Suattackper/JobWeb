@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Data_JobWeb")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b060a048fbb5494c4722c91311bd893cdf3b2afe")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4c28e10d227850ba595522e1c3302e779fce22c4")]
 [assembly: System.Reflection.AssemblyProductAttribute("Data_JobWeb")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Data_JobWeb")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

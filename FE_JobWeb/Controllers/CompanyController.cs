@@ -6,8 +6,10 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
 using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
+using UglyToad.PdfPig;
 
 namespace FE_JobWeb.Controllers
 {
@@ -357,7 +359,7 @@ namespace FE_JobWeb.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> PostJob(string title, string quantity, string category, string worktype, string exp, string level, string salarymin, string salarymax, string degree, string gender, string city, string district, string ward, DateTime expiredtime, string address, string description, string require, string benefit)
+        public async Task<IActionResult> PostJob(string title, string quantity, string category, string worktype, string exp, string level, string salarymin, string salarymax, string degree, string gender, string city, string district, string ward, DateTime expiredtime, string address, string description, string require, string benefit, string keyword)
         {
             JobSeekerRecruiterProfile r1 = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == user.User.Id);
             if (r1 == null) return RedirectToAction("ListPostJob", "Company", new { error = "Không tìm thấy hồ sơ nhà tuyển dụng!" });
@@ -368,7 +370,7 @@ namespace FE_JobWeb.Controllers
             if (e1.IsCensorship == null || e1.IsCensorship == false) return RedirectToAction("ListPostJob", "Company", new { error = "Công ty chưa được kiểm duyệt!" });
 
             #region validate
-            if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(category) || string.IsNullOrEmpty(worktype) || string.IsNullOrEmpty(exp) || string.IsNullOrEmpty(salarymin) | string.IsNullOrEmpty(salarymax) || string.IsNullOrEmpty(degree) || string.IsNullOrEmpty(gender) || string.IsNullOrEmpty(city) || string.IsNullOrEmpty(district) || string.IsNullOrEmpty(ward) || string.IsNullOrEmpty(address) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(require) || string.IsNullOrEmpty(benefit) || expiredtime == null) 
+            if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(category) || string.IsNullOrEmpty(worktype) || string.IsNullOrEmpty(exp) || string.IsNullOrEmpty(salarymin) | string.IsNullOrEmpty(salarymax) || string.IsNullOrEmpty(degree) || string.IsNullOrEmpty(gender) || string.IsNullOrEmpty(city) || string.IsNullOrEmpty(district) || string.IsNullOrEmpty(ward) || string.IsNullOrEmpty(address) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(require) || string.IsNullOrEmpty(benefit)|| string.IsNullOrEmpty(keyword) || expiredtime == null) 
                 return RedirectToAction("PostJob","Company", new {error = "Vui lòng nhập đầy đủ!"});
 
             if (DateOnly.FromDateTime(expiredtime) < DateOnly.FromDateTime(DateTime.Now)) return RedirectToAction("PostJob", "Company", new { error = "Ngày hết hạn không hợp lệ!" });
@@ -406,6 +408,7 @@ namespace FE_JobWeb.Controllers
             o.JobDesc = description;
             o.JobRequirement = require;
             o.BenefitEnjoyed = benefit;
+            o.KeyWord = keyword;
             o.EnterpriseId = enterprise.EnterpriseId;
             o.StatusCode = "SC7";
             o.IsCreatedAt = DateTime.Now;
@@ -495,7 +498,7 @@ namespace FE_JobWeb.Controllers
             return View(paginatedJobs);
         }
         [HttpPost]
-        public async Task<IActionResult> ListPostJob(string type, string search, string status, Guid id, string title, string quantity, string category, string worktype, string exp, string level, string salarymin, string salarymax, string degree, string gender, string city, string district, string ward, DateTime expiredtime, string address, string description, string require, string benefit)
+        public async Task<IActionResult> ListPostJob(string type, string search, string status, Guid id, string title, string quantity, string category, string worktype, string exp, string level, string salarymin, string salarymax, string degree, string gender, string city, string district, string ward, DateTime expiredtime, string address, string description, string require, string benefit, string keyword)
         {
             JobSeekerRecruiterProfile r1 = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == user.User.Id);
             if (r1 == null) return RedirectToAction("ListPostJob", "Company", new { error = "Không tìm hồ sơ nhà tuyển dụng!" });
@@ -545,7 +548,7 @@ namespace FE_JobWeb.Controllers
             else
             {
                 #region validate
-                if (id == null || string.IsNullOrEmpty(title) || string.IsNullOrEmpty(category) || string.IsNullOrEmpty(worktype) || string.IsNullOrEmpty(exp) || string.IsNullOrEmpty(salarymin) | string.IsNullOrEmpty(salarymax) || string.IsNullOrEmpty(degree) || string.IsNullOrEmpty(gender) || string.IsNullOrEmpty(city) || string.IsNullOrEmpty(district) || string.IsNullOrEmpty(ward) || string.IsNullOrEmpty(address) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(require) || string.IsNullOrEmpty(benefit) || expiredtime == null)
+                if (id == null || string.IsNullOrEmpty(title) || string.IsNullOrEmpty(category) || string.IsNullOrEmpty(worktype) || string.IsNullOrEmpty(exp) || string.IsNullOrEmpty(salarymin) | string.IsNullOrEmpty(salarymax) || string.IsNullOrEmpty(degree) || string.IsNullOrEmpty(gender) || string.IsNullOrEmpty(city) || string.IsNullOrEmpty(district) || string.IsNullOrEmpty(ward) || string.IsNullOrEmpty(address) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(require) || string.IsNullOrEmpty(benefit) || string.IsNullOrEmpty(keyword) || expiredtime == null)
                     return RedirectToAction("ListPostJob", "Company", new { error = "Vui lòng nhập đầy đủ!" });
 
                 if (DateOnly.FromDateTime(expiredtime) < DateOnly.FromDateTime(DateTime.Now)) return RedirectToAction("ListPostJob", "Company", new { error = "Ngày hết hạn không hợp lệ!" });
@@ -576,6 +579,7 @@ namespace FE_JobWeb.Controllers
                 o.GenderRequire = gender;
                 o.Province = city;
                 o.District = district;
+                o.KeyWord = keyword;
                 o.Ward = ward;
                 o.ExpiredTime = expiredtime;
                 o.Address = address;

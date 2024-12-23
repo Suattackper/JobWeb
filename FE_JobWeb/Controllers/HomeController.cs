@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Http;
 using Data_JobWeb.Dtos;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
+using UglyToad.PdfPig;
+using System.Security.Policy;
 
 namespace FE_JobWeb.Controllers
 {

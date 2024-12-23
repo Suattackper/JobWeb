@@ -765,6 +765,11 @@ namespace Data_JobWeb.Migrations
                         .HasColumnType("nvarchar(200)")
                         .HasColumnName("job_title");
 
+                    b.Property<string>("KeyWord")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnName("keyword");
+
                     b.Property<string>("Province")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")

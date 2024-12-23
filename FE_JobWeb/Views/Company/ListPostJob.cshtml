@@ -119,7 +119,7 @@
                                                     @{
                                                         var dateString = i.ExpiredTime.HasValue ? i.ExpiredTime.Value.ToString("dd/MM/yyyy") : "N/A";
                                                     }
-                                                    <a data-bs-toggle="modal" href="#JobPostingEditModal" onclick="loadEditForm('@Html.Raw(i.Id)', '@Html.Raw(i.JobTitle)', '@Html.Raw(i.Quantity)', '@Html.Raw(i.JobCategoryId)', '@Html.Raw(i.WorkingType)', '@Html.Raw(i.ExpRequirement)', '@Html.Raw(i.JobLevelCode)', '@Html.Raw(i.SalaryMin)', '@Html.Raw(i.SalaryMax)', '@Html.Raw(i.AcademicLevel)', '@Html.Raw(i.GenderRequire)', '@Html.Raw(i.Province)', '@Html.Raw(i.District)', '@Html.Raw(i.Ward)', '@Html.Raw(dateString)', '@Html.Raw(i.Address)', '@Html.Raw(i.JobDesc)', '@Html.Raw(i.JobRequirement)', '@Html.Raw(i.BenefitEnjoyed)')"
+                                                    <a data-bs-toggle="modal" href="#JobPostingEditModal" onclick="loadEditForm('@Html.Raw(i.Id)', '@Html.Raw(i.JobTitle)', '@Html.Raw(i.Quantity)', '@Html.Raw(i.JobCategoryId)', '@Html.Raw(i.WorkingType)', '@Html.Raw(i.ExpRequirement)', '@Html.Raw(i.JobLevelCode)', '@Html.Raw(i.SalaryMin)', '@Html.Raw(i.SalaryMax)', '@Html.Raw(i.AcademicLevel)', '@Html.Raw(i.GenderRequire)', '@Html.Raw(i.Province)', '@Html.Raw(i.District)', '@Html.Raw(i.Ward)', '@Html.Raw(dateString)', '@Html.Raw(i.Address)', '@Html.Raw(i.JobDesc)', '@Html.Raw(i.JobRequirement)', '@Html.Raw(i.BenefitEnjoyed)','@Html.Raw(i.KeyWord)')"
                                                        class="btn btn-outline-secondary btn-sm">
                                                         <i class="feather-edit"></i>
                                                     </a>
@@ -571,6 +571,15 @@
                                     <textarea id="benefit" rows="5" name="benefit" class="form-control" required style="height: 150px"></textarea>
                                 </div>
                             </div>
+                            <!-- keywword -->
+                            <div class="col-xl-12 col-lg-12 col-md-12">
+                                <div class="form-group">
+                                    <label for="jobBenefit" class="form-label">
+                                        Mong muốn <span class="required">*</span>
+                                    </label>
+                                    <textarea id="keyword" rows="5" name="keyword" class="form-control" required style="height: 100px"></textarea>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -585,7 +594,7 @@
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
 <script>
-    function loadEditForm(id, title, quantity, category, worktype, exp, level, salarymin, salarymax, degree, gender, city, district, ward, expiredtime, address, description, require, benefit) {
+    function loadEditForm(id, title, quantity, category, worktype, exp, level, salarymin, salarymax, degree, gender, city, district, ward, expiredtime, address, description, require, benefit, keyword) {
         document.getElementById('id').value = id;
         document.getElementById('title').value = title;
         document.getElementById('quantity').value = quantity;
@@ -607,6 +616,7 @@
         document.getElementById('description').value = description;
         document.getElementById('require').value = require;
         document.getElementById('benefit').value = benefit;
+        document.getElementById('keyword').value = keyword;
     }
     function loadDeleteForm(modaldeleteid) {
         document.getElementById('modaldeleteid').value = modaldeleteid;
