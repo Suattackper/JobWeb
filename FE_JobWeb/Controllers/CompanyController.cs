@@ -842,7 +842,7 @@ namespace FE_JobWeb.Controllers
         //checkphone
         public bool IsValidPhoneNumber(string phoneNumber)
         {
-            string pattern = @"^0\d{9,10}$";
+            string pattern = @"^0\d{9}$";
             Regex regex = new Regex(pattern);
             return regex.IsMatch(phoneNumber);
         }

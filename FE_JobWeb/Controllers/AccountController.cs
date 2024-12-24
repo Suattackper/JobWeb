@@ -83,9 +83,10 @@ namespace FE_JobWeb.Controllers
                     Response.Cookies.Append("jwtToken", token, options);
 
                     Console.WriteLine("login thanh cong");
-                    if(user.User.RoleId == 3) return RedirectToAction("Index", "Home");
-                    else if(user.User.RoleId == 2) return RedirectToAction("IndexRecruiter", "Home");
-                    else return RedirectToAction("IndexAdmin", "Home");
+                    string chaomung = $"Xin chào {user.User.FullName}, chào mừng bạn đến với GrabWork!";
+                    if (user.User.RoleId == 3) return RedirectToAction("Index", "Home", new { success = chaomung});
+                    else if(user.User.RoleId == 2) return RedirectToAction("IndexRecruiter", "Home", new { success = chaomung });
+                    else return RedirectToAction("IndexAdmin", "Home", new { success = chaomung });
                 }
                 else
                 {
@@ -733,7 +734,7 @@ namespace FE_JobWeb.Controllers
                 {
                     user.User.AvartarUrl = o.AvartarUrl;
                     Console.WriteLine("cat nhat thong tin ho so thanh cong");
-                    return RedirectToAction("CandidateProfile", "Account", new { error = "Cật nhật thông tin hồ sơ thành công!" });
+                    return RedirectToAction("CandidateProfile", "Account", new { success = "Cật nhật thông tin hồ sơ thành công!" });
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized) // 401
                 {
@@ -1430,7 +1431,7 @@ namespace FE_JobWeb.Controllers
         //checkphone
         public bool IsValidPhoneNumber(string phoneNumber)
         {
-            string pattern = @"^0\d{9,10}$";
+            string pattern = @"^0\d{9}$";
             Regex regex = new Regex(pattern);
             return regex.IsMatch(phoneNumber);
         }

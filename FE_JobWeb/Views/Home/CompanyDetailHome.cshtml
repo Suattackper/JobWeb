@@ -57,14 +57,14 @@
                                                         JobSeekerEnterpriseFollowed check = db.JobSeekerEnterpriseFolloweds.FirstOrDefault(p => p.EnterpriseId == Model.EnterpriseId && p.CandidateId == user.User.Id);
                                                         if (check != null)
                                                         {
-                                                            <a href="@Url.Action("CompanyHomeFollow", "Home", new {type = 2, id = Model.EnterpriseId})">
+                                                            <a href="@Url.Action("CompanyHomeFollow", "Home", new {type = 2, id = Model.EnterpriseId})" style="color: white">
                                                                 <i class="fa fa-minus"></i> Đã theo
                                                                 dõi
                                                             </a>
                                                         }
                                                         else
                                                         {
-                                                            <a href="@Url.Action("CompanyHomeFollow", "Home", new {type = 1, id = Model.EnterpriseId})">
+                                                            <a href="@Url.Action("CompanyHomeFollow", "Home", new {type = 1, id = Model.EnterpriseId})" style="color: white">
                                                                 <i class="fa fa-plus"></i> Theo
                                                                 dõi
                                                             </a>
@@ -72,7 +72,7 @@
                                                     }
                                                     else
                                                     {
-                                                        <a href="@Url.Action("CompanyHomeFollow", "Home", new {type = 1, id = Model.EnterpriseId})">
+                                                        <a href="@Url.Action("CompanyHomeFollow", "Home", new {type = 1, id = Model.EnterpriseId})" style="color: white">
                                                             <i class="fa fa-plus"></i> Theo
                                                             dõi
                                                         </a>

@@ -66,8 +66,11 @@ namespace FE_JobWeb.Controllers
             return Redirect(url);
         }
         //home
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? error, string? success)
         {
+            if (error != null) ViewBag.ErrorMessage = error;
+            if (success != null) ViewBag.SuccessMessage = success;
+
             // Gọi đồng thời tất cả các API cần thiết
             var jobCategoriesTask = GetJobCategory();
             var enterprisesTask = GetListEnterprise();
@@ -503,6 +506,8 @@ namespace FE_JobWeb.Controllers
             if (error != null) ViewBag.ErrorMessage = error;
             if (success != null) ViewBag.SuccessMessage = success;
 
+            if (user.User == null) return RedirectToAction("Login", "Account", new { error = "Vui lòng đăng nhập để thực hiện chức năng này!" });
+
             HttpClient client = new HttpClient();
             //Call api
             var apiUrl = $"http://localhost:5281/api/company/getpostjobbyid/{id}";
@@ -728,7 +733,7 @@ namespace FE_JobWeb.Controllers
 
             ViewBag.Totaljob = ljob.Count();
 
-            ViewBag.Totalpendingjob = db.JobSeekerJobPostings.Where(p => p.EnterpriseId == re.EnterpriseId && p.StatusCode == "SC&").Count();
+            ViewBag.Totalpendingjob = db.JobSeekerJobPostings.Where(p => p.EnterpriseId == re.EnterpriseId && p.StatusCode == "SC7").Count();
 
             int d = 0;
             if(ljob.Count > 0)

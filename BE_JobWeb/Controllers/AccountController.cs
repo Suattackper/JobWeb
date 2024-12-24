@@ -78,10 +78,10 @@ namespace BE_JobWeb.Controllers
             db.JobSeekerUserLoginData.Add(p);
             db.SaveChanges();
             //Tạo nhà cung cấp
-            JobSeekerUserLoginDataExternal e = new JobSeekerUserLoginDataExternal();
-            e.Id = p.Id;
-            e.ProviderName = "system";
-            db.JobSeekerUserLoginDataExternals.Add(e);
+            JobSeekerUserLoginDataExternal f = new JobSeekerUserLoginDataExternal();
+            f.Id = p.Id;
+            f.ProviderName = "system";
+            db.JobSeekerUserLoginDataExternals.Add(f);
             db.SaveChanges();
             //Tạo hồ sơ 
             JobSeekerCandidateProfile c = new JobSeekerCandidateProfile();
@@ -92,7 +92,47 @@ namespace BE_JobWeb.Controllers
             db.JobSeekerCandidateProfiles.Add(c);
             db.SaveChanges();
 
-            return Ok("Add Candidate success!");
+            JobSeekerUserLoginDatum admin = db.JobSeekerUserLoginData.FirstOrDefault(p => p.RoleId == 1);
+            if (admin == null) Ok("Add Candidate success, notification error!");
+
+            JobSeekerNotification notification = new JobSeekerNotification();
+            notification.Id = Guid.NewGuid().ToString();
+            notification.Type = "admin_newcandidate";
+            notification.Description = $"Vừa có 1 ứng viên mới tham gia website Grabwork!";
+            notification.IsSeen = false;
+            notification.IsCreatedAt = DateTime.Now;
+            notification.IdConcern = p.Id;
+            notification.IdUserReceive = admin.Id;
+            notification.Title = $"http://localhost:5080/Home/ManageAccountAdmin";
+            db.JobSeekerNotifications.Add(notification);
+            db.SaveChanges();
+
+            EmailService e = new EmailService();
+            string title = $"Vừa có 1 ứng viên mới tham gia website!";
+            string url = $"http://localhost:5080/Home/Notification/{admin.Id}";
+            string message = $"<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <title>{title}</title>\r\n</head>\r\n<body>\r\n    <h2>Chào {admin.FullName},</h2>\r\n    <p>Kiểm tra các thông báo của bạn tại đây:</p>\r\n    <a href=\"{url}\" style=\"background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; display: inline-block;\">Thông báo</a>\r\n    <p>Cảm ơn bạn,</p>\r\n    <p>Đội ngũ JobWeb</p>\r\n</body>\r\n</html>";
+
+            e.SendEmail(admin.Email, title, message);
+
+            JobSeekerNotification notification1 = new JobSeekerNotification();
+            notification1.Id = Guid.NewGuid().ToString();
+            notification1.Type = "candidate_wellcome";
+            notification1.Description = $"Chào mừng bạn đến với website Grabwork của chúng tôi!";
+            notification1.IsSeen = false;
+            notification1.IsCreatedAt = DateTime.Now;
+            notification1.IdConcern = p.Id;
+            notification1.IdUserReceive = p.Id;
+            notification1.Title = $"http://localhost:5080/Home/Index";
+            db.JobSeekerNotifications.Add(notification1);
+            db.SaveChanges();
+
+            title = $"Chào mừng bạn đến với website Grabwork của chúng tôi!";
+            url = $"http://localhost:5080/Home/Notification/{p.Id}";
+            message = $"<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <title>{title}</title>\r\n</head>\r\n<body>\r\n    <h2>Chào {p.FullName},</h2>\r\n <p> Chào mừng bạn đến với Grabwork, tại đây bạn có thể tìm được công việc bạn muốn mà trên hệ thống chúng tôi có đăng tuyển.</p>\r\n    <p>Kiểm tra các thông báo của bạn tại đây:</p>\r\n    <a href=\"{url}\" style=\"background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; display: inline-block;\">Thông báo</a>\r\n    <p>Cảm ơn bạn,</p>\r\n    <p>Đội ngũ JobWeb</p>\r\n</body>\r\n</html>";
+
+            e.SendEmail(p.Email, title, message);
+
+            return Ok("Add Candidate success, notification success!");
         }
         [HttpPost("addrecruiter")]
         public IActionResult AddRecruiter(RegisterRecruiter p)
@@ -118,7 +158,48 @@ namespace BE_JobWeb.Controllers
             db.JobSeekerRecruiterProfiles.Add(c);
             db.SaveChanges();
 
-            return Ok("Add Recruiter success!");
+
+            JobSeekerUserLoginDatum admin = db.JobSeekerUserLoginData.FirstOrDefault(p => p.RoleId == 1);
+            if (admin == null) Ok("Add Recruiter success, notification error!");
+
+            JobSeekerNotification notification = new JobSeekerNotification();
+            notification.Id = Guid.NewGuid().ToString();
+            notification.Type = "admin_newrecruiter";
+            notification.Description = $"Vừa có 1 nhà tuyển mới tham gia website Grabwork!";
+            notification.IsSeen = false;
+            notification.IsCreatedAt = DateTime.Now;
+            notification.IdConcern = c.RecruiterId;
+            notification.IdUserReceive = admin.Id;
+            notification.Title = $"http://localhost:5080/Home/ManageAccountAdmin";
+            db.JobSeekerNotifications.Add(notification);
+            db.SaveChanges();
+
+            EmailService e = new EmailService();
+            string title = $"Vừa có 1 ứng viên mới tham gia website!";
+            string url = $"http://localhost:5080/Home/Notification/{admin.Id}";
+            string message = $"<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <title>{title}</title>\r\n</head>\r\n<body>\r\n    <h2>Chào {admin.FullName},</h2>\r\n    <p>Kiểm tra các thông báo của bạn tại đây:</p>\r\n    <a href=\"{url}\" style=\"background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; display: inline-block;\">Thông báo</a>\r\n    <p>Cảm ơn bạn,</p>\r\n    <p>Đội ngũ JobWeb</p>\r\n</body>\r\n</html>";
+
+            e.SendEmail(admin.Email, title, message);
+
+            JobSeekerNotification notification1 = new JobSeekerNotification();
+            notification1.Id = Guid.NewGuid().ToString();
+            notification1.Type = "candidate_wellcome";
+            notification1.Description = $"Chào mừng bạn đến với website Grabwork của chúng tôi!";
+            notification1.IsSeen = false;
+            notification1.IsCreatedAt = DateTime.Now;
+            notification1.IdConcern = c.RecruiterId;
+            notification1.IdUserReceive = c.RecruiterId;
+            notification1.Title = $"http://localhost:5080/Home/Index";
+            db.JobSeekerNotifications.Add(notification1);
+            db.SaveChanges();
+
+            title = $"Chào mừng bạn đến với website Grabwork của chúng tôi!";
+            url = $"http://localhost:5080/Home/Notification/{c.RecruiterId}";
+            message = $"<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <title>{title}</title>\r\n</head>\r\n<body>\r\n    <h2>Chào {c.Fullname},</h2>\r\n <p> Chào mừng bạn đến với Grabwork, tại đây bạn có thể tìm được các ứng viên lý lưởng đã đăng ký trên hệ thống của chúng tôi.</p>\r\n    <p>Kiểm tra các thông báo của bạn tại đây:</p>\r\n    <a href=\"{url}\" style=\"background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; display: inline-block;\">Thông báo</a>\r\n    <p>Cảm ơn bạn,</p>\r\n    <p>Đội ngũ JobWeb</p>\r\n</body>\r\n</html>";
+
+            e.SendEmail(c.Email, title, message);
+
+            return Ok("Add Recuiter success, notification success!");
         }
         [HttpGet("verifyemail/{email}")]
         public IActionResult VerifyEmail(string email)
@@ -154,6 +235,7 @@ namespace BE_JobWeb.Controllers
                         notification.IsSeen = false;
                         notification.IsCreatedAt = DateTime.Now;
                         notification.IdConcern = enterprise.EnterpriseId;
+                        notification.IdUserReceive = admin.Id;
                         notification.Title = $"http://localhost:5080/Home/ManageCompanyAdmin";
                         db.JobSeekerNotifications.Add(notification);
                         db.SaveChanges();
@@ -163,7 +245,7 @@ namespace BE_JobWeb.Controllers
                         string url = $"http://localhost:5080/Home/Notification/{admin.Id}";
                         string message = $"<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <title>{title}</title>\r\n</head>\r\n<body>\r\n    <h2>Chào {admin.FullName},</h2>\r\n    <p>Kiểm tra các thông báo của bạn tại đây:</p>\r\n    <a href=\"{url}\" style=\"background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; display: inline-block;\">Thông báo</a>\r\n    <p>Cảm ơn bạn,</p>\r\n    <p>Đội ngũ JobWeb</p>\r\n</body>\r\n</html>";
 
-                        e.SendEmail("khidot705@gmail.com", title, message);
+                        e.SendEmail(admin.Email, title, message);
                     }
 
                     //return Ok("Xác nhận email thành công");
@@ -239,7 +321,6 @@ namespace BE_JobWeb.Controllers
             else return BadRequest($"Không tồn tại tài khoản có id {e.Id} trong hệ thống");
         }
         [HttpPost("updateprofile")]
-        [Authorize(Roles = "3")]
         public IActionResult UpdateProfile(JobSeekerUserLoginDatum e)
         {
             JobSeekerUserLoginDatum r = db.JobSeekerUserLoginData.FirstOrDefault(p => p.Id == e.Id);

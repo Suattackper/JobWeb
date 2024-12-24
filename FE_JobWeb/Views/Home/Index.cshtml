@@ -25,7 +25,7 @@
                         <div class="row">
                             <!--Title-->
                             <div class="form-group col-xl-3 col-lg-6 col-md-6">
-                                <label>What</label>
+                                <label>Tên công việc</label>
                                 <div class="twm-inputicon-box">
                                     <input name="search" type="text" class="form-control"
                                            placeholder="Job Title">
@@ -35,7 +35,7 @@
                             <input name="joblevel" type="hidden" value="all">
                             <!--All Category-->
                             <div class="form-group col-xl-4 col-lg-6 col-md-6">
-                                <label>Type</label>
+                                <label>Ngành nghề</label>
                                 <select class="wt-search-bar-select selectpicker" data-live-search="true" name="category" required
                                         title="" id="j-All_Category" data-bv-field="size">
                                     <option disabled value="">Select Category</option>
@@ -52,7 +52,7 @@
 
                             <!--Location-->
                             <div class="form-group col-xl-3 col-lg-6 col-md-6">
-                                <label>Location</label>
+                                <label>Địa điểm</label>
                                 <div class="twm-inputicon-box">
                                     <select class="wt-search-bar-select selectpicker" data-live-search="true" name="city" required
                                             title="" id="j-All_Category" data-bv-field="size">
@@ -74,7 +74,7 @@
 
                             <!--Find job btn-->
                             <div class="form-group col-xl-2 col-lg-6 col-md-6">
-                                <button type="submit" class="site-button">Find Job</button>
+                                <button type="submit" class="site-button">Tìm kiếm</button>
                             </div>
 
                         </div>
@@ -405,7 +405,7 @@
                                                 <div class="twm-rec-media">
                                                     <img src="@i.LogoUrl" alt="#">
                                                 </div>
-                                                <div class="twm-rec-jobs">@(db.JobSeekerJobPostings.Where(p => p.EnterpriseId == i.EnterpriseId).Count()) Jobs</div>
+                                                <div class="twm-rec-jobs">@(db.JobSeekerJobPostings.Where(p => p.EnterpriseId == i.EnterpriseId && p.StatusCode == "SC5").Count()) Jobs</div>
                                             </div>
                                             <div class="twm-rec-content">
                                                         <h4 class="twm-title"><a href="@Url.Action("CompanyDetailHome","Home",new{ id = i.EnterpriseId})">@i.FullCompanyName</a></h4>
