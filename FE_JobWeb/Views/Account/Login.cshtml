@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Login";
 }
 <!DOCTYPE html>
@@ -182,7 +182,7 @@
 
 </html>
 
-<div id="toast-notification"></div>
+<div id="toast-notification"></div>@* 
 @if (ViewBag.ErrorMessage != null)
 {
     <script>
@@ -204,6 +204,6 @@
             duration: 3000
         });
     </script>
-}
+} *@
 
 

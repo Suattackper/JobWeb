@@ -1,6 +1,14 @@
 ﻿@using Data_JobWeb.Entity;
 @using FE_JobWeb.Others
-@inject ApplicationUser user
+@using Newtonsoft.Json
+@{
+    string json = Context.Session.GetString("User");
+    JobSeekerUserLoginDatum user = null;
+    if (!string.IsNullOrEmpty(json))
+    {
+        user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+    }
+}
 @{
 
     JobSeekerContext db = new JobSeekerContext();
@@ -8,11 +16,12 @@
     Layout = "~/Views/Shared/_LayoutRecuiter.cshtml";
 }
 
+
 <div id="content">
     <div class="content-admin-main">
         <div class="wt-admin-right-page-header clearfix">
-            <h2>Hello <span> Huynh Nhu</span></h2>
-            <div class="breadcrumbs"><a href="@Url.Action("Index","Home")">Home</a><span>Dasboard</span></div>
+            <h2>Hello <span> @(user != null ? user.FullName : "")</span></h2>
+            <div class="breadcrumbs"><a href="@Url.Action("Index","Home")">Home</a><span> Dashboard</span></div>
         </div>
 
         <div class="twm-dash-b-blocks mb-5">
@@ -218,7 +227,7 @@
                                         if (job == null) job = new JobSeekerJobPosting();
                                         JobSeekerEnterprise ent = db.JobSeekerEnterprises.FirstOrDefault(p => p.EnterpriseId == job.EnterpriseId);
                                         if (ent == null) ent = new JobSeekerEnterprise();
-                                        JobSeekerCandidateProfile can = db.JobSeekerCandidateProfiles.FirstOrDefault(p => p.CandidateId == user.User.Id);
+                                        JobSeekerCandidateProfile can = db.JobSeekerCandidateProfiles.FirstOrDefault(p => p.CandidateId == user.Id);
                                         if (can == null) can = new JobSeekerCandidateProfile();
                                         d++;
                                         <tr>

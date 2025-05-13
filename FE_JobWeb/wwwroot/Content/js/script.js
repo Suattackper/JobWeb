@@ -299,3 +299,5 @@ function previewFileJobCategory() {
       reader.readAsDataURL(file);
   }
 }
+
+

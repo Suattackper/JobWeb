@@ -1,15 +1,22 @@
 ﻿@using FE_JobWeb.Others
 @using Data_JobWeb.Entity;
-@inject ApplicationUser user
+@using Newtonsoft.Json
 @{
+    string json = Context.Session.GetString("User");
+    JobSeekerUserLoginDatum user = null;
+    if (!string.IsNullOrEmpty(json))
+    {
+        user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+    }
+    // string userId = Context.Session.GetString("UserId");
     string notification = "";
     List<JobSeekerNotification> lnoti = new List<JobSeekerNotification>();
-    if (user.User != null)
+    if (user != null)
     {
         JobSeekerContext db = new JobSeekerContext();
 
 
-        JobSeekerUserLoginDatum u = db.JobSeekerUserLoginData.FirstOrDefault(x => x.Id == user.User.Id);
+        JobSeekerUserLoginDatum u = db.JobSeekerUserLoginData.FirstOrDefault(x => x.Id == user.Id);
         if (u == null) notification = "Error";
         else if (u.RoleId == 1)
         {
@@ -18,8 +25,8 @@
         }
         else
         {
-            notification += db.JobSeekerNotifications.Where(p => p.IdUserReceive == user.User.Id && p.IsSeen == false).ToList().Count();
-            lnoti = db.JobSeekerNotifications.OrderByDescending(p => p.IsCreatedAt).Where(p => p.IdUserReceive == user.User.Id && p.IsSeen == false).Take(5).ToList();
+            notification += db.JobSeekerNotifications.Where(p => p.IdUserReceive == user.Id && p.IsSeen == false).ToList().Count();
+            lnoti = db.JobSeekerNotifications.OrderByDescending(p => p.IsCreatedAt).Where(p => p.IdUserReceive == user.Id && p.IsSeen == false).Take(5).ToList();
         }
     }
 }
@@ -61,6 +68,7 @@
     <link rel="stylesheet" type="text/css" href="~/Content/css/flaticon.css"> <!-- Flaticon -->
     <link rel="stylesheet" type="text/css" href="~/Content/css/swiper-bundle.min.css"><!-- Swiper Slider -->
     <link rel="stylesheet" type="text/css" href="~/Content/css/style.css"><!-- MAIN STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/chatbot.css">
     <!-- THEME COLOR CHANGE STYLE SHEET -->
     @* <link rel="stylesheet" class="skin" type="text/css" href="~/Content/css/skins-type/skin-6.css"> *@
     <!-- SIDE SWITCHER STYLE SHEET -->
@@ -116,14 +124,20 @@
                         <div class="nav-animation header-nav navbar-collapse collapse d-flex justify-content-center">
                             <ul class=" nav navbar-nav">
                                 <li class="has-mega-menu">
-                                    <a href="@Url.Action("Index","Home")">Trang chủ</a>
+                                    <a @((Context.Request.Path.Value.Equals("/")) ? "style = color:#0d6efd" : "") href="@Url.Action("Index", "Home")">Trang chủ</a>
                                 </li>
                                 <li class="has-child">
-                                    <a href="@Url.Action("JobHome","Home")">Công việc</a>
+                                    <a @((Context.Request.Path.Value.Contains("JobHome")) ? "style = color:#0d6efd" : "") href="@Url.Action("JobHome", "Home")">Công việc</a>
                                 </li>
                                 <li class="has-child">
-                                    <a href="@Url.Action("CompanyHome","Home")">Doanh nghiệp</a>
+                                    <a @((Context.Request.Path.Value.Contains("CompanyHome")) ? "style = color:#0d6efd" : "") href="@Url.Action("CompanyHome", "Home")">Doanh nghiệp</a>
                                 </li>
+                                @if (user != null && (user.RoleId == 1 || user.RoleId == 2))
+                                {
+                                    <li class="has-child">
+                                        <a @((Context.Request.Path.Value.Contains("CandidateHome")) ? "style = color:#0d6efd" : "") href="@Url.Action("CandidateHome", "Home")">Ứng viên</a>
+                                    </li>
+                                }
                                @*  <li class="has-child">
                                     <a href="about-1.html">Về chúng tôi</a>
                                 </li> *@
@@ -141,7 +155,7 @@
                                     <a href="#search" class="header-search-icon"><i class="feather-search"></i></a>
                                 </div>
                             </div> *@
-                            @if(user.User != null)
+                            @if(user != null)
                             {
                                 <div class="extra-cell">
                                     <!-- Right Side Content -->
@@ -255,7 +269,7 @@
                                                             </ul>
 
                                                             <div class="noti-view-all">
-                                                                <a href="@Url.Action("Notification","Home", new{ id = user.User.Id})">View All</a>
+                                                                <a href="@Url.Action("Notification","Home", new{ id = user.Id})">View All</a>
                                                             </div>
 
                                                         </div>
@@ -275,19 +289,38 @@
                                                                id="ID-ACCOUNT_dropdown" data-bs-toggle="dropdown">
                                                                 <div class="user-name text-black">
                                                                     <span>
-                                                                        <img src="@user.User.AvartarUrl" alt="">
-                                                                    </span>@user.User.FullName
+                                                                        <img src="@user.AvartarUrl" alt="">
+                                                                    </span>@user.FullName
                                                                 </div>
                                                             </a>
                                                             <div class="dropdown-menu"
                                                                  aria-labelledby="ID-ACCOUNT_dropdown">
 
                                                                 <ul>
-                                                                    <li>
-                                                                        <a href="@Url.Action("IndexCandidate","Home")">
-                                                                            <i class="feather-home"></i>Dashboard
-                                                                        </a>
-                                                                    </li>
+                                                                    @if (user.RoleId == 3)
+                                                                    {
+                                                                        <li>
+                                                                            <a href="@Url.Action("IndexCandidate","Home")">
+                                                                                <i class="feather-home"></i>Dashboard
+                                                                            </a>
+                                                                        </li>
+                                                                    }
+                                                                    @if (user.RoleId == 2)
+                                                                    {
+                                                                        <li>
+                                                                            <a href="@Url.Action("IndexRecruiter","Home")">
+                                                                                <i class="feather-home"></i>Dashboard
+                                                                            </a>
+                                                                        </li>
+                                                                    }
+                                                                    @if (user.RoleId == 1)
+                                                                    {
+                                                                        <li>
+                                                                            <a href="@Url.Action("IndexAdmin","Home")">
+                                                                                <i class="feather-home"></i>Dashboard
+                                                                            </a>
+                                                                        </li>
+                                                                    }
                                                                     @* <li>
                                                                         <a href="candidate-chat.html">
                                                                             <i class="feather-mail"></i>
@@ -494,6 +527,24 @@
         <!-- FOOTER END -->
         <!-- BUTTON TOP START -->
         <button class="scroltop"><span class="fa fa-angle-up  relative" id="btn-vibrate"></span></button>
+        <!-- Icon mở chatbot -->
+        <div id="chat-icon" class="chat-icon">
+            <img src="~/Content/images/bot.jpg" alt="Chat Icon">
+        </div>
+
+        <!-- Chatbot container -->
+        <div class="chat-container" id="chat-container">
+            <div class="chat-header">
+                <img src="~/Content/images/bot.jpg" alt="bot" class="bot-icon" />
+                <span>AI Consulting Assistant</span>
+                <button onclick="toggleChat()">×</button>
+            </div>
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="chat-input-container">
+                <textarea id="user-input" placeholder="Type your message..." rows="1"></textarea>
+                <button id="send-button">Send</button>
+            </div>
+        </div>
 
         <!--Model Popup Section Start-->
         <!--Signup popup -->
@@ -825,6 +876,7 @@
         </div>
         <!--Model Popup Section End-->
 
+        
 
     </div>
 
@@ -856,6 +908,7 @@
     <script src="~/Content/js/switcher.js"></script><!-- SHORTCODE FUCTIONS  -->
     <script src="~/Content/js/notification.js"></script>
     <script src="~/Content/js/nice-select.min.js"></script>
+    <script src="~/Content/js/chatbot.js"></script>
 </body>
 
 </html>

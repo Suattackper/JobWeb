@@ -21,15 +21,14 @@ namespace FE_JobWeb.Controllers
     public class HomeController : Controller
     {
         private JobSeekerContext db = new JobSeekerContext();
-        private readonly ILogger<HomeController> _logger;
+        //private readonly ILogger<HomeController> _logger;
         int pageSize = 9;
-        private ApplicationUser user;
+        //private ApplicationUser user;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationUser user)
-        {
-            _logger = logger;
-            this.user = user;
-        }
+        //public HomeController(ILogger<HomeController> logger, ApplicationUser user)
+        //{
+        //    _logger = logger;
+        //}
         //Notification candidate, recruiter, admin
         public IActionResult Notification(Guid id, string? error, string? success)
         {
@@ -53,12 +52,19 @@ namespace FE_JobWeb.Controllers
         }
         public IActionResult NotificationForward(string id, string url)
         {
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+
             #region validate
-            if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(id)) return RedirectToAction("Notification", "Home", new { id = user.User.Id, error = "Có vấn đề khi chuyển tiếp thông báo!" });
+            if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(id)) return RedirectToAction("Notification", "Home", new { id = user.Id, error = "Có vấn đề khi chuyển tiếp thông báo!" });
             #endregion
 
             JobSeekerNotification noti = db.JobSeekerNotifications.FirstOrDefault(p => p.Id == id);
-            if(noti == null) return RedirectToAction("Notification", "Home", new { id = user.User.Id, error = "Không tìm thấy thông báo!" });
+            if(noti == null) return RedirectToAction("Notification", "Home", new { id = user.Id, error = "Không tìm thấy thông báo!" });
 
             noti.IsSeen = true;
             db.SaveChanges();
@@ -155,6 +161,100 @@ namespace FE_JobWeb.Controllers
             }
             else return RedirectToAction("CompanyHome", "Home", new { error = "Không tìm thấy các công ty!" });
         }
+        public async Task<IActionResult> CandidateHome(string? error, string? success, int page = 1)
+        {
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+
+            if (error != null) ViewBag.ErrorMessage = error;
+            if (success != null) ViewBag.SuccessMessage = success;
+
+            List<JobSeekerJobPosting> ljobpost = await GetListPostJob();
+            List<JobSeekerEnterprise> lenterprise = await GetListEnterprise();
+            JobSeekerRecruiterProfile recruiter = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == user.Id);
+            if(recruiter == null)
+            {
+                return RedirectToAction("CandidateHome", "Home", new { error = "Không tìm thấy thông tin nhà tuyển dụng!" });
+            }
+            JobSeekerEnterprise enterprise = lenterprise.FirstOrDefault(p => p.EnterpriseId == recruiter.EnterpriseId);
+            if (recruiter == null)
+            {
+                return RedirectToAction("CandidateHome", "Home", new { error = "Không tìm thấy thông tin công ty!" });
+            }
+            ViewBag.JobPost = ljobpost.Where(p => p.EnterpriseId == enterprise.EnterpriseId);
+            ViewBag.City = await GetCity();
+
+            if (TempData.ContainsKey("candidatehomes"))
+            {
+                string jobPostingsJson = TempData["candidatehomes"] as string;
+                List<JobSeekerCandidateProfile> data = JsonConvert.DeserializeObject<List<JobSeekerCandidateProfile>>(jobPostingsJson);
+
+                if (!data.Any())
+                {
+                    data = await GetListCandidate();
+
+                    data = data.Where(p => p.RoleId == 3).ToList();
+
+                    PaginatedList<JobSeekerCandidateProfile> paginatedJobs2 = PaginatedList<JobSeekerCandidateProfile>.Create(data, page, pageSize);
+
+                    return View(paginatedJobs2);
+                }
+
+                PaginatedList<JobSeekerCandidateProfile> paginatedJobs1 = PaginatedList<JobSeekerCandidateProfile>.Create(data, page, pageSize);
+
+                return View(paginatedJobs1);
+            }
+
+            List<JobSeekerCandidateProfile> candidate = await GetListCandidate();
+            candidate = candidate.Where(p => p.RoleId == 3).ToList();
+
+            PaginatedList<JobSeekerCandidateProfile> paginatedJobs = PaginatedList<JobSeekerCandidateProfile>.Create(candidate, page, pageSize);
+
+            return View(paginatedJobs);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CandidateHome(string search, string jobpost, string city)
+        {
+            #region validate
+            if (string.IsNullOrEmpty(jobpost) || string.IsNullOrEmpty(city)) return RedirectToAction("CandidateHome", "Home", new { error = "Vui lòng nhập đầy đủ!" });
+            #endregion
+
+            List<JobSeekerCandidateProfile> a = await GetListCandidate();
+            a = a.Where(p => p.RoleId == 3).ToList();
+            if (search != null) a = a.Where(p => p.Fullname.Contains(search)).ToList();
+
+            //if (jobpost != "all") a = a.Where(p => p.JobFieldId == int.Parse(jobfield)).ToList();
+
+            if (city != "all") a = a.Where(p => p.Province == city).ToList();
+
+            if (a.Any())
+            {
+                TempData["candidatehomes"] = JsonConvert.SerializeObject(a);
+                return RedirectToAction("CandidateHome", "Home");
+            }
+            else return RedirectToAction("CandidateHome", "Home", new { error = "Không tìm thấy các ứng viên!" });
+        }
+        public IActionResult CandidateDetailHome(Guid id)
+        {
+            JobSeekerCandidateProfile can = db.JobSeekerCandidateProfiles.FirstOrDefault(p => p.CandidateId == id);
+            if (can == null) return RedirectToAction("CandidateHome", "Home", new { error = "Không tìm thấy thông tin ứng viên!" });
+
+            List<JobSeekerEducationDetail> ledu = db.JobSeekerEducationDetails.Where(p => p.CandidateId == id).ToList();
+            List<JobSeekerWorkingExperience> lexp = db.JobSeekerWorkingExperiences.Where(p => p.CandidateId == id).ToList();
+            List<JobSeekerCertificate> lcer = db.JobSeekerCertificates.Where(p => p.CandidateId == id).ToList();
+
+            //if (idjob != null) NotificationCandidate(idjob);
+
+            ViewBag.Education = ledu;
+            ViewBag.Experience = lexp;
+            ViewBag.Certificate = lcer;
+
+            return View(can);
+        }
         public async Task<IActionResult> CompanyDetailHome(Guid id, string? error, string? success)
         {
             if (id == Guid.Empty) return View("Error");
@@ -207,20 +307,27 @@ namespace FE_JobWeb.Controllers
         }
         public async Task<IActionResult> CompanyHomeFollow(int type, Guid id)
         {
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+
             if (type == 1)
             {
                 #region validate
                 if (id == Guid.Empty) return RedirectToAction("CompanyDetailHome", "Home", new { id = id, error = "Không tìm thấy id company!" });
                 #endregion
 
-                if (user.User == null) return RedirectToAction("CompanyDetailHome", "Home", new { id = id, error = "Vui lòng đăng nhập để thực hiện chức năng này!" });
+                if (user == null) return RedirectToAction("CompanyDetailHome", "Home", new { id = id, error = "Vui lòng đăng nhập để thực hiện chức năng này!" });
 
                 HttpClient client = new HttpClient();
                 //Call api
                 var apiUrl = "http://localhost:5281/api/company/addcompanfollow";
 
                 JobSeekerEnterpriseFollowed o = new JobSeekerEnterpriseFollowed();
-                o.CandidateId = user.User.Id;
+                o.CandidateId = user.Id;
                 o.EnterpriseId = id;
                 o.IsCreatedAt = DateTime.Now;
                 o.IsUpdatedAt = DateTime.Now;
@@ -276,9 +383,9 @@ namespace FE_JobWeb.Controllers
                 #region validate
                 if (id == Guid.Empty) return RedirectToAction("CompanyDetailHome", "Home", new { id = id, error = "Không tìm thấy id company!" });
                 #endregion
-                if (user.User == null) return RedirectToAction("CompanyDetailHome", "Home", new { id = id, error = "Vui lòng đăng nhập để thực hiện chức năng này!" });
+                if (user == null) return RedirectToAction("CompanyDetailHome", "Home", new { id = id, error = "Vui lòng đăng nhập để thực hiện chức năng này!" });
 
-                JobSeekerEnterpriseFollowed check = db.JobSeekerEnterpriseFolloweds.FirstOrDefault(p => p.EnterpriseId == id && p.CandidateId == user.User.Id);
+                JobSeekerEnterpriseFollowed check = db.JobSeekerEnterpriseFolloweds.FirstOrDefault(p => p.EnterpriseId == id && p.CandidateId == user.Id);
                 if (check == null) return RedirectToAction("CompanyDetailHome", "Home", new { id = id, error = "Không tìm thấy công ty đã theo dõi!" });
 
                 HttpClient client = new HttpClient();
@@ -391,20 +498,27 @@ namespace FE_JobWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> JobHomeSaveJob(int type, Guid id)
         {
-            if(type == 1)
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+
+            if (type == 1)
             {
                 #region validate
                 if (id == Guid.Empty) return RedirectToAction("JobHome", "Home", new { error = "Không tìm thấy id post!" });
                 #endregion
 
-                if (user.User == null) return RedirectToAction("JobHome", "Home", new { error = "Vui lòng đăng nhập để thực hiện chức năng này!" });
+                if (user == null) return RedirectToAction("JobHome", "Home", new { error = "Vui lòng đăng nhập để thực hiện chức năng này!" });
 
                 HttpClient client = new HttpClient();
                 //Call api
                 var apiUrl = "http://localhost:5281/api/company/addsavejobpost";
 
                 JobSeekerSavedJobPosting o = new JobSeekerSavedJobPosting();
-                o.CandidateId = user.User.Id;
+                o.CandidateId = user.Id;
                 o.JobPostingId = id;
                 o.SavedAt = DateTime.Now;
 
@@ -459,9 +573,9 @@ namespace FE_JobWeb.Controllers
                 #region validate
                 if (id == Guid.Empty) return RedirectToAction("JobHome", "Home", new { error = "Không tìm thấy id post!" });
                 #endregion
-                if (user.User == null) return RedirectToAction("JobHome", "Home", new { error = "Vui lòng đăng nhập để thực hiện chức năng này!" });
+                if (user == null) return RedirectToAction("JobHome", "Home", new { error = "Vui lòng đăng nhập để thực hiện chức năng này!" });
 
-                JobSeekerSavedJobPosting check = db.JobSeekerSavedJobPostings.FirstOrDefault(p => p.JobPostingId == id && p.CandidateId == user.User.Id);
+                JobSeekerSavedJobPosting check = db.JobSeekerSavedJobPostings.FirstOrDefault(p => p.JobPostingId == id && p.CandidateId == user.Id);
                 if (check == null) return RedirectToAction("JobHome", "Home", new { error = "Không tìm thấy bài đăng đã lưu!" });
 
                 HttpClient client = new HttpClient();
@@ -501,12 +615,19 @@ namespace FE_JobWeb.Controllers
         }
         public async Task<IActionResult> JobDetailHome(Guid id, string? error, string? success)
         {
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+
             if (id == Guid.Empty) return View("Error");
 
             if (error != null) ViewBag.ErrorMessage = error;
             if (success != null) ViewBag.SuccessMessage = success;
 
-            if (user.User == null) return RedirectToAction("Login", "Account", new { error = "Vui lòng đăng nhập để thực hiện chức năng này!" });
+            if (user == null) return RedirectToAction("Login", "Account", new { error = "Vui lòng đăng nhập để thực hiện chức năng này!" });
 
             HttpClient client = new HttpClient();
             //Call api
@@ -554,14 +675,21 @@ namespace FE_JobWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> JobDetailHome(Guid id, string name, string cvurl, string coverletter)
         {
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Vui lòng đăng nhập để thực hiện chức năng này!!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+
             #region validate
-            if (user.User == null) return RedirectToAction("JobDetailHome", "Home", new { id = id, error = "Vui lòng đăng nhập để thực hiện chức năng này!" });
+            if (user == null) return RedirectToAction("JobDetailHome", "Home", new { id = id, error = "Vui lòng đăng nhập để thực hiện chức năng này!" });
             if (string.IsNullOrEmpty(cvurl)) return RedirectToAction("JobDetailHome", "Home", new { id = id, error = "Vui lòng thêm cv của bạn từ profile để thực hiện chức năng này!" });
 
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(cvurl) || id == Guid.Empty) return RedirectToAction("JobDetailHome", "Home", new { id = id, error = "Vui lòng nhập đầy đủ!" });
             #endregion
 
-            JobSeekerJobPostingApply check = db.JobSeekerJobPostingApplies.FirstOrDefault(p => p.CandidateId == user.User.Id && p.JobPostingId == id);
+            JobSeekerJobPostingApply check = db.JobSeekerJobPostingApplies.FirstOrDefault(p => p.CandidateId == user.Id && p.JobPostingId == id);
             if (check != null) return RedirectToAction("JobDetailHome", "Home", new { id = id, error = "Bạn đã ứng tuyển bài đăng này rồi!" });
 
             HttpClient client = new HttpClient();
@@ -569,7 +697,7 @@ namespace FE_JobWeb.Controllers
             var apiUrl = "http://localhost:5281/api/company/addjobapply";
 
             JobSeekerJobPostingApply o = new JobSeekerJobPostingApply();
-            o.CandidateId = user.User.Id;
+            o.CandidateId = user.Id;
             o.JobPostingId = id;
             o.ApplyTime = DateTime.Now;
             o.StatusCode = "SC7";
@@ -627,25 +755,39 @@ namespace FE_JobWeb.Controllers
         //candidate
         public IActionResult IndexCandidate()
         {
-            JobSeekerUserLoginDatum u = db.JobSeekerUserLoginData.FirstOrDefault(x => x.Id == user.User.Id);
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+
+            JobSeekerUserLoginDatum u = db.JobSeekerUserLoginData.FirstOrDefault(x => x.Id == user.Id);
             if (u == null) View("Error");
 
-            ViewBag.Totalapply = db.JobSeekerJobPostingApplies.Where(p => p.CandidateId == user.User.Id).Count();
+            ViewBag.Totalapply = db.JobSeekerJobPostingApplies.Where(p => p.CandidateId == user.Id).Count();
 
-            ViewBag.Totalsave = db.JobSeekerSavedJobPostings.Where(p => p.CandidateId == user.User.Id).Count();
+            ViewBag.Totalsave = db.JobSeekerSavedJobPostings.Where(p => p.CandidateId == user.Id).Count();
 
-            ViewBag.Totalnotification = db.JobSeekerNotifications.OrderByDescending(p => p.IsCreatedAt).Where(p => p.IdUserReceive == user.User.Id && p.IsSeen == false).Count();
+            ViewBag.Totalnotification = db.JobSeekerNotifications.OrderByDescending(p => p.IsCreatedAt).Where(p => p.IdUserReceive == user.Id && p.IsSeen == false).Count();
 
-            ViewBag.Notification = db.JobSeekerNotifications.OrderByDescending(p => p.IsCreatedAt).Where(p => p.IdUserReceive == user.User.Id && p.IsSeen == false).Take(5).ToList();
+            ViewBag.Notification = db.JobSeekerNotifications.OrderByDescending(p => p.IsCreatedAt).Where(p => p.IdUserReceive == user.Id && p.IsSeen == false).Take(5).ToList();
 
-            ViewBag.Jobapply = db.JobSeekerJobPostingApplies.OrderByDescending(p => p.ApplyTime).Where(p => p.CandidateId == user.User.Id).Take(5).ToList();
+            ViewBag.Jobapply = db.JobSeekerJobPostingApplies.OrderByDescending(p => p.ApplyTime).Where(p => p.CandidateId == user.Id).Take(5).ToList();
 
-            ViewBag.Jobsave = db.JobSeekerSavedJobPostings.OrderByDescending(p => p.SavedAt).Where(p => p.CandidateId == user.User.Id).Take(5).ToList();
+            ViewBag.Jobsave = db.JobSeekerSavedJobPostings.OrderByDescending(p => p.SavedAt).Where(p => p.CandidateId == user.Id).Take(5).ToList();
 
             return View();
         }
         public IActionResult JobApplyCandidate(string? error, string? success, int page = 1)
         {
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+
             if (error != null) ViewBag.ErrorMessage = error;
             if (success != null) ViewBag.SuccessMessage = success;
 
@@ -656,7 +798,7 @@ namespace FE_JobWeb.Controllers
 
                 if (!data.Any())
                 {
-                    data = db.JobSeekerJobPostingApplies.Where(p => p.CandidateId == user.User.Id).ToList();
+                    data = db.JobSeekerJobPostingApplies.Where(p => p.CandidateId == user.Id).ToList();
 
                     PaginatedList<JobSeekerJobPostingApply> paginatedJobs2 = PaginatedList<JobSeekerJobPostingApply>.Create(data, page, pageSize);
 
@@ -668,7 +810,7 @@ namespace FE_JobWeb.Controllers
                 return View(paginatedJobs1);
             }
 
-            List<JobSeekerJobPostingApply> jobapply = db.JobSeekerJobPostingApplies.OrderByDescending(p => p.ApplyTime).Where(p => p.CandidateId == user.User.Id).ToList();
+            List<JobSeekerJobPostingApply> jobapply = db.JobSeekerJobPostingApplies.OrderByDescending(p => p.ApplyTime).Where(p => p.CandidateId == user.Id).ToList();
 
             PaginatedList<JobSeekerJobPostingApply> paginatedJobs = PaginatedList<JobSeekerJobPostingApply>.Create(jobapply, page, pageSize);
 
@@ -677,11 +819,18 @@ namespace FE_JobWeb.Controllers
         [HttpPost]
         public IActionResult JobApplyCandidate(string status)
         {
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+
             #region validate
             if (string.IsNullOrEmpty(status)) return RedirectToAction("JobApplyCandidate", "Home", new { error = "Vui lòng nhập đầy đủ!" });
             #endregion
 
-            List<JobSeekerJobPostingApply> a = db.JobSeekerJobPostingApplies.Where(p => p.CandidateId == user.User.Id).ToList();
+            List<JobSeekerJobPostingApply> a = db.JobSeekerJobPostingApplies.Where(p => p.CandidateId == user.Id).ToList();
 
             if (status != "") a = a.Where(p => p.StatusCode == status).ToList();
 
@@ -694,10 +843,17 @@ namespace FE_JobWeb.Controllers
         }
         public IActionResult JobSaveCandidate(string? error, string? success, int page = 1)
         {
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+
             if (error != null) ViewBag.ErrorMessage = error;
             if (success != null) ViewBag.SuccessMessage = success;
 
-            List<JobSeekerSavedJobPosting> jobapply = db.JobSeekerSavedJobPostings.OrderByDescending(p => p.SavedAt).Where(p => p.CandidateId == user.User.Id).ToList();
+            List<JobSeekerSavedJobPosting> jobapply = db.JobSeekerSavedJobPostings.OrderByDescending(p => p.SavedAt).Where(p => p.CandidateId == user.Id).ToList();
 
             PaginatedList<JobSeekerSavedJobPosting> paginatedJobs = PaginatedList<JobSeekerSavedJobPosting>.Create(jobapply, page, pageSize);
 
@@ -722,10 +878,17 @@ namespace FE_JobWeb.Controllers
         //recruiter
         public async Task<IActionResult> IndexRecruiter()
         {
-            JobSeekerUserLoginDatum u = db.JobSeekerUserLoginData.FirstOrDefault(x => x.Id == user.User.Id);
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+
+            JobSeekerUserLoginDatum u = db.JobSeekerUserLoginData.FirstOrDefault(x => x.Id == user.Id);
             if (u == null) View("Error");
 
-            JobSeekerRecruiterProfile re = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == user.User.Id);
+            JobSeekerRecruiterProfile re = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == user.Id);
             if (re == null) return View("Error");
 
             List<JobSeekerJobPosting> ljob = db.JobSeekerJobPostings.Where(p => p.EnterpriseId == re.EnterpriseId).ToList();
@@ -750,9 +913,9 @@ namespace FE_JobWeb.Controllers
             }
             ViewBag.Totalcandidate = d;
 
-            ViewBag.Totalnotification = db.JobSeekerNotifications.OrderByDescending(p => p.IsCreatedAt).Where(p => p.IdUserReceive == user.User.Id && p.IsSeen == false).Count();
+            ViewBag.Totalnotification = db.JobSeekerNotifications.OrderByDescending(p => p.IsCreatedAt).Where(p => p.IdUserReceive == user.Id && p.IsSeen == false).Count();
 
-            ViewBag.Notification = db.JobSeekerNotifications.OrderByDescending(p => p.IsCreatedAt).Where(p => p.IdUserReceive == user.User.Id && p.IsSeen == false).Take(5).ToList();
+            ViewBag.Notification = db.JobSeekerNotifications.OrderByDescending(p => p.IsCreatedAt).Where(p => p.IdUserReceive == user.Id && p.IsSeen == false).Take(5).ToList();
 
             ViewBag.JobApply = db.JobSeekerJobPostingApplies.ToList();
             ViewBag.Jobcategory = db.JobSeekerJobCategories.ToList();
@@ -768,6 +931,13 @@ namespace FE_JobWeb.Controllers
         }
         public IActionResult CandidateApplyRecruiter(string? error, string? success, int page = 1)
         {
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+
             if (error != null) ViewBag.ErrorMessage = error;
             if (success != null) ViewBag.SuccessMessage = success;
 
@@ -778,7 +948,7 @@ namespace FE_JobWeb.Controllers
 
                 if (!data.Any())
                 {
-                    JobSeekerRecruiterProfile rec1 = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == user.User.Id);
+                    JobSeekerRecruiterProfile rec1 = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == user.Id);
                     if (rec1 == null) rec1 = new JobSeekerRecruiterProfile();
 
                     JobSeekerEnterprise enter1 = db.JobSeekerEnterprises.FirstOrDefault(p => p.EnterpriseId == rec1.EnterpriseId);
@@ -806,7 +976,7 @@ namespace FE_JobWeb.Controllers
                     return View(paginatedJobs2);
                 }
 
-                JobSeekerRecruiterProfile rec11 = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == user.User.Id);
+                JobSeekerRecruiterProfile rec11 = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == user.Id);
                 if (rec11 == null) rec11 = new JobSeekerRecruiterProfile();
 
                 JobSeekerEnterprise enter11 = db.JobSeekerEnterprises.FirstOrDefault(p => p.EnterpriseId == rec11.EnterpriseId);
@@ -823,7 +993,7 @@ namespace FE_JobWeb.Controllers
 
             List<JobSeekerJobPostingApply> jobapply = new List<JobSeekerJobPostingApply>();
 
-            JobSeekerRecruiterProfile rec = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == user.User.Id);
+            JobSeekerRecruiterProfile rec = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == user.Id);
             if (rec == null) rec = new JobSeekerRecruiterProfile();
 
             JobSeekerEnterprise enter = db.JobSeekerEnterprises.FirstOrDefault(p => p.EnterpriseId == rec.EnterpriseId);
@@ -853,13 +1023,20 @@ namespace FE_JobWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> CandidateApplyRecruiter(int type, string search, string job, string status, int idedit, string statusedit, int iddelete)
         {
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+
             if (type == 1)
             {
                 #region validate
                 if (string.IsNullOrEmpty(status) || string.IsNullOrEmpty(job)) return RedirectToAction("CandidateApplyRecruiter", "Home", new { error = "Vui lòng nhập đầy đủ!" });
                 #endregion
 
-                JobSeekerRecruiterProfile rec = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == user.User.Id);
+                JobSeekerRecruiterProfile rec = db.JobSeekerRecruiterProfiles.FirstOrDefault(p => p.RecruiterId == user.Id);
                 if (rec == null) rec = new JobSeekerRecruiterProfile();
 
                 JobSeekerEnterprise enter = db.JobSeekerEnterprises.FirstOrDefault(p => p.EnterpriseId == rec.EnterpriseId);
@@ -2178,6 +2355,36 @@ namespace FE_JobWeb.Controllers
                 Console.WriteLine("Chi tiet loi API: " + errorDetails);
                 ViewBag.ErrorMessage = "Có 1 vấn đề nào đó xả ra, vui lòng kết nối tới chúng tôi để được giúp đỡ!";
                 return new List<JobSeekerUserLoginDatum>();
+            }
+        }
+        //Lấy danh sách candidate profile
+        public async Task<List<JobSeekerCandidateProfile>> GetListCandidate()
+        {
+            HttpClient client = new HttpClient();
+            //Call api
+            var apiUrl = "http://localhost:5281/api/candidate/getlistcandidate";
+            HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+            List<JobSeekerCandidateProfile> j = new List<JobSeekerCandidateProfile>();
+
+            if (response.IsSuccessStatusCode)
+            {
+                string responseData = await response.Content.ReadAsStringAsync();
+                // Deserialization từ JSON sang danh sách đối tượng jobfield
+                j = JsonConvert.DeserializeObject<List<JobSeekerCandidateProfile>>(responseData);
+
+                //ViewBag.Jobfield = j;
+                Console.WriteLine("GetListCandidate thanh cong");
+                return j;
+            }
+            else
+            {
+                // Ghi log lỗi chi tiết từ API
+                string errorDetails = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("GetListCandidate: lay GetListCandidate that bai: " + response.StatusCode);
+                Console.WriteLine("Chi tiet loi API: " + errorDetails);
+                ViewBag.ErrorMessage = "Có 1 vấn đề nào đó xả ra, vui lòng kết nối tới chúng tôi để được giúp đỡ!";
+                return new List<JobSeekerCandidateProfile>();
             }
         }
         //Lấy danh sách danh mục

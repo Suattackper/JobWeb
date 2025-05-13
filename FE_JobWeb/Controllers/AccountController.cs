@@ -22,11 +22,11 @@ namespace FE_JobWeb.Controllers
     public class AccountController : Controller
     {
         private JobSeekerContext db = new JobSeekerContext();
-        private ApplicationUser user;
-        public AccountController(ApplicationUser user)
-        {
-            this.user = user;
-        }
+        //private ApplicationUser user;
+        //public AccountController(ApplicationUser user)
+        //{
+        //    this = user;
+        //}
         public IActionResult Login(string? error, string? success, string? x)
         {
             if (error != null) ViewBag.ErrorMessage = error;
@@ -37,6 +37,8 @@ namespace FE_JobWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
+
+            //HttpContext.Session.SetString("UserId", "sss");
             #region validate
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
@@ -70,8 +72,10 @@ namespace FE_JobWeb.Controllers
 
                 if (data != null)
                 {
-                    // Lưu thông tin tài khoản singleton
-                    user.User = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(data);
+                    // Lưu thông tin tài khoản
+                    JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(data);
+                    user.Password = "";
+                    HttpContext.Session.SetString("User", JsonConvert.SerializeObject(user));
 
                     //lưu token vào web
                     CookieOptions options = new CookieOptions
@@ -83,9 +87,9 @@ namespace FE_JobWeb.Controllers
                     Response.Cookies.Append("jwtToken", token, options);
 
                     Console.WriteLine("login thanh cong");
-                    string chaomung = $"Xin chào {user.User.FullName}, chào mừng bạn đến với GrabWork!";
-                    if (user.User.RoleId == 3) return RedirectToAction("Index", "Home", new { success = chaomung});
-                    else if(user.User.RoleId == 2) return RedirectToAction("IndexRecruiter", "Home", new { success = chaomung });
+                    string chaomung = $"Xin chào {user.FullName}, chào mừng bạn đến với GrabWork!";
+                    if (user.RoleId == 3) return RedirectToAction("Index", "Home", new { success = chaomung});
+                    else if(user.RoleId == 2) return RedirectToAction("IndexRecruiter", "Home", new { success = chaomung });
                     else return RedirectToAction("IndexAdmin", "Home", new { success = chaomung });
                 }
                 else
@@ -107,14 +111,22 @@ namespace FE_JobWeb.Controllers
         public async Task<IActionResult> Logout()
         {
             HttpClient client = new HttpClient();
+
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new {error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+
             //Call api
-            var apiUrl = $"http://localhost:5281/api/account/logout/{user.User.Id}";
+            var apiUrl = $"http://localhost:5281/api/account/logout/{user.Id}";
             HttpResponseMessage response = await client.GetAsync(apiUrl);
 
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("logout thanh cong");
-                user.User = null;
+                HttpContext.Session.Remove("User");
                 // Xóa token 
                 Response.Cookies.Delete("jwtToken");
 
@@ -462,6 +474,12 @@ namespace FE_JobWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> MyProfile(string fullname, string email, IFormFile image)
         {
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
             #region validate
             if (string.IsNullOrEmpty(fullname) || string.IsNullOrEmpty(email))
             {
@@ -469,7 +487,7 @@ namespace FE_JobWeb.Controllers
                 return View();
             }
             JobSeekerUserLoginDatum u = db.JobSeekerUserLoginData.FirstOrDefault(p => p.Email == email);
-            if (email != user.User.Email)
+            if (email != user.Email)
             {
                 if(u != null)
                 {
@@ -478,13 +496,13 @@ namespace FE_JobWeb.Controllers
                 }
             }
             #endregion
-            JobSeekerUserLoginDatum c = db.JobSeekerUserLoginData.FirstOrDefault(p => p.Id == user.User.Id);
+            JobSeekerUserLoginDatum c = db.JobSeekerUserLoginData.FirstOrDefault(p => p.Id == user.Id);
 
             if (image != null)
             {
                 FirebaseService firebase = new FirebaseService();
                 //// Xóa ảnh cũ từ firebase storage
-                //if (user.User.AvartarUrl != null || user.User.AvartarUrl != "https://firebasestorage.googleapis.com/v0/b/movieapp-2f052.appspot.com/o/JobWeb%2FImageUsers%2Fprofile_1.png?alt=media")
+                //if (user.AvartarUrl != null || user.AvartarUrl != "https://firebasestorage.googleapis.com/v0/b/movieapp-2f052.appspot.com/o/JobWeb%2FImageUsers%2Fprofile_1.png?alt=media")
                 //{
                 //    if (await firebase.DeleteImageFromFirebaseAsync(firebase.ExtractFileNameFromUrl("https://firebasestorage.googleapis.com/v0/b/movieapp-2f052.appspot.com/o/JobWeb%2FImageUsers%2Fcv.jpg?alt=media"))) Console.WriteLine("xoa anh cu tu firebase thanh cong");
                 //    else Console.WriteLine("xoa anh cu tu firebase that bai");
@@ -493,7 +511,7 @@ namespace FE_JobWeb.Controllers
                 // Đẩy ảnh lên firebase storage
                 using var stream = image.OpenReadStream();
                 var fileName = Path.GetFileName(image.FileName);
-                var imageUrl = await firebase.UploadImageToFirebaseAsync(stream, fileName, user.User.Id.ToString(), "user");
+                var imageUrl = await firebase.UploadImageToFirebaseAsync(stream, fileName, user.Id.ToString(), "user");
 
 
                 if (imageUrl == "error")
@@ -524,7 +542,7 @@ namespace FE_JobWeb.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                user.User = c;
+                user = c;
                 ViewBag.SuccessMessage = $"Cật nhật thông tin tài khoản thành công!";
                 Console.WriteLine("cat nhat thong tin tai khoan thanh cong thanh cong");
                 return View();
@@ -553,13 +571,19 @@ namespace FE_JobWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangePassword(string oldpassword, string newpassword, string confirmnewpassword)
         {
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
             #region validate
             if (string.IsNullOrEmpty(oldpassword) || string.IsNullOrEmpty(newpassword) || string.IsNullOrEmpty(oldpassword))
             {
                 ViewBag.ErrorMessage = "Vui lòng nhập đầy đủ!";
                 return View("MyProfile");
             }
-            JobSeekerUserLoginDatum u = db.JobSeekerUserLoginData.FirstOrDefault(p => p.Id == user.User.Id);
+            JobSeekerUserLoginDatum u = db.JobSeekerUserLoginData.FirstOrDefault(p => p.Id == user.Id);
             Hasher h = new Hasher();
             if (u != null && !h.VerifyPassword(u.Password, oldpassword))
             {
@@ -586,7 +610,7 @@ namespace FE_JobWeb.Controllers
             //Call api
             var apiUrl = "http://localhost:5281/api/account/changepassword";
             JobSeekerUserLoginDatum c = new JobSeekerUserLoginDatum();
-            c.Id = user.User.Id;
+            c.Id = user.Id;
             c.Password = newpassword;
             // Convert đối tượng thành JSON
             var content = new StringContent(JsonConvert.SerializeObject(c), Encoding.UTF8, "application/json");
@@ -613,7 +637,14 @@ namespace FE_JobWeb.Controllers
         [HttpPost]
         public IActionResult NotificationSettingCandidate(string keyword)
         {
-            if(string.IsNullOrEmpty(keyword))
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+
+            if (string.IsNullOrEmpty(keyword))
             {
                 ViewBag.ErrorMessage = "Vui lòng nhập đầy đủ!";
                 return View("MyProfile");
@@ -621,7 +652,7 @@ namespace FE_JobWeb.Controllers
 
             JobSeekerNotificationType o = new JobSeekerNotificationType();
             o.Id = Guid.NewGuid().ToString();
-            o.IdUser = user.User.Id;
+            o.IdUser = user.Id;
             o.TypeName = "signupnotification";
             o.Description = keyword;
             db.JobSeekerNotificationTypes.Add(o);
@@ -631,16 +662,23 @@ namespace FE_JobWeb.Controllers
         }
         public IActionResult CandidateProfile(string? error, string? success)
         {
-            JobSeekerCandidateProfile j = db.JobSeekerCandidateProfiles.FirstOrDefault(p => p.CandidateId == user.User.Id);
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+
+            JobSeekerCandidateProfile j = db.JobSeekerCandidateProfiles.FirstOrDefault(p => p.CandidateId == user.Id);
             if (j == null) return RedirectToAction("CandidateProfile", "Account", new { error = "Không tìm thấy profile candidate!" });
 
-            List<JobSeekerWorkingExperience> k = db.JobSeekerWorkingExperiences.Where(p => p.CandidateId == user.User.Id).ToList();
+            List<JobSeekerWorkingExperience> k = db.JobSeekerWorkingExperiences.Where(p => p.CandidateId == user.Id).ToList();
             ViewBag.Experience = k;
 
-            List<JobSeekerEducationDetail> l = db.JobSeekerEducationDetails.Where(p => p.CandidateId == user.User.Id).ToList();
+            List<JobSeekerEducationDetail> l = db.JobSeekerEducationDetails.Where(p => p.CandidateId == user.Id).ToList();
             ViewBag.Education = l;
 
-            List<JobSeekerCertificate> m = db.JobSeekerCertificates.Where(p => p.CandidateId == user.User.Id).ToList();
+            List<JobSeekerCertificate> m = db.JobSeekerCertificates.Where(p => p.CandidateId == user.Id).ToList();
             ViewBag.Certificate = m;
 
             if (error != null) ViewBag.ErrorMessage = error;
@@ -650,6 +688,13 @@ namespace FE_JobWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> CandidateProfile(int type, IFormFile image, string fullname, string email, string gender, DateTime dob, string phone, string city, string district, string ward, string address, IFormFile profile, string facebookurl, string linkedinurl, string portfoliourl, string twitterurl, string githuburl)
         {
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+
             if (type == 1)
             {
                 #region validate
@@ -659,7 +704,7 @@ namespace FE_JobWeb.Controllers
 
                 if (!IsValidPhoneNumber(phone)) return RedirectToAction("CandidateProfile", "Account", new { error = "Số điện thoại không hợp lệ!" });
 
-                JobSeekerCandidateProfile r = db.JobSeekerCandidateProfiles.FirstOrDefault(p => p.CandidateId == user.User.Id);
+                JobSeekerCandidateProfile r = db.JobSeekerCandidateProfiles.FirstOrDefault(p => p.CandidateId == user.Id);
                 if (r != null)
                 {
                     if (email != r.Email)
@@ -681,7 +726,7 @@ namespace FE_JobWeb.Controllers
                 //Call api
                 var apiUrl = "http://localhost:5281/api/account/updatecandidateprofile";
 
-                JobSeekerCandidateProfile o = db.JobSeekerCandidateProfiles.FirstOrDefault(p => p.CandidateId == user.User.Id);
+                JobSeekerCandidateProfile o = db.JobSeekerCandidateProfiles.FirstOrDefault(p => p.CandidateId == user.Id);
                 if (o != null)
                 {
                     o.Fullname = fullname;
@@ -699,7 +744,7 @@ namespace FE_JobWeb.Controllers
                         // Đẩy ảnh lên firebase storage
                         using var stream = image.OpenReadStream();
                         var fileName = Path.GetFileName(image.FileName);
-                        var imageUrl = await firebase.UploadImageToFirebaseAsync(stream, fileName, user.User.Id.ToString(), "user");
+                        var imageUrl = await firebase.UploadImageToFirebaseAsync(stream, fileName, user.Id.ToString(), "user");
 
                         if (imageUrl == "error")
                         {
@@ -732,7 +777,7 @@ namespace FE_JobWeb.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    user.User.AvartarUrl = o.AvartarUrl;
+                    user.AvartarUrl = o.AvartarUrl;
                     Console.WriteLine("cat nhat thong tin ho so thanh cong");
                     return RedirectToAction("CandidateProfile", "Account", new { success = "Cật nhật thông tin hồ sơ thành công!" });
                 }
@@ -764,14 +809,14 @@ namespace FE_JobWeb.Controllers
                 //Call api
                 var apiUrl = "http://localhost:5281/api/account/updatecandidateprofile";
 
-                JobSeekerCandidateProfile o = db.JobSeekerCandidateProfiles.FirstOrDefault(p => p.CandidateId == user.User.Id);
+                JobSeekerCandidateProfile o = db.JobSeekerCandidateProfiles.FirstOrDefault(p => p.CandidateId == user.Id);
                 if (o != null)
                 {
                     FirebaseService firebase = new FirebaseService();
                     // Đẩy ảnh lên firebase storage
                     using var stream = profile.OpenReadStream();
                     var fileName = Path.GetFileName(profile.FileName);
-                    var imageUrl = await firebase.UploadImageToFirebaseAsync(stream, fileName, user.User.Id.ToString() + "cv", "resume");
+                    var imageUrl = await firebase.UploadImageToFirebaseAsync(stream, fileName, user.Id.ToString() + "cv", "resume");
 
                     if (imageUrl == "error")
                     {
@@ -803,7 +848,7 @@ namespace FE_JobWeb.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    user.User.AvartarUrl = o.AvartarUrl;
+                    user.AvartarUrl = o.AvartarUrl;
                     Console.WriteLine("cat nhat thong tin ho so thanh cong");
                     return RedirectToAction("CandidateProfile", "Account", new { success = "Cật nhật thông tin hồ sơ thành công!" });
                 }
@@ -832,7 +877,7 @@ namespace FE_JobWeb.Controllers
                 //Call api
                 var apiUrl = "http://localhost:5281/api/account/updatecandidateprofile";
 
-                JobSeekerCandidateProfile o = db.JobSeekerCandidateProfiles.FirstOrDefault(p => p.CandidateId == user.User.Id);
+                JobSeekerCandidateProfile o = db.JobSeekerCandidateProfiles.FirstOrDefault(p => p.CandidateId == user.Id);
                 if (o != null)
                 {
                     if(facebookurl != null) o.FacbookLink = facebookurl;
@@ -888,6 +933,13 @@ namespace FE_JobWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCandidateProfileExperience(string jobtitle, string companyname, DateTime startday, DateTime endday, string description)
         {
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+
             #region validate
             if (string.IsNullOrEmpty(jobtitle) || string.IsNullOrEmpty(companyname) || string.IsNullOrEmpty(description) || startday == null) return RedirectToAction("CandidateProfile", "Account", new { error = "Vui lòng nhập đầy đủ!" });
 
@@ -909,7 +961,7 @@ namespace FE_JobWeb.Controllers
             c.Description = description;
             c.StartDate = DateOnly.FromDateTime(startday);
             c.EndDate = endday != null && endday != DateTime.MinValue ? DateOnly.FromDateTime(endday) : null;
-            c.CandidateId = user.User.Id;
+            c.CandidateId = user.Id;
             // Convert đối tượng thành JSON
             var content = new StringContent(JsonConvert.SerializeObject(c, new JsonSerializerSettings
             {
@@ -954,6 +1006,13 @@ namespace FE_JobWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateCandidateProfileExperience(Guid id, string jobtitle, string companyname, DateTime startday, DateTime endday, string description)
         {
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+
             #region validate
             if (string.IsNullOrEmpty(jobtitle) || string.IsNullOrEmpty(companyname) || string.IsNullOrEmpty(description) || startday == null) return RedirectToAction("CandidateProfile", "Account", new { error = "Vui lòng nhập đầy đủ!" });
 
@@ -975,7 +1034,7 @@ namespace FE_JobWeb.Controllers
             c.Description = description;
             c.StartDate = DateOnly.FromDateTime(startday);
             c.EndDate = endday != null && endday != DateTime.MinValue ? DateOnly.FromDateTime(endday) : null;
-            c.CandidateId = user.User.Id;
+            c.CandidateId = user.Id;
             // Convert đối tượng thành JSON
             var content = new StringContent(JsonConvert.SerializeObject(c, new JsonSerializerSettings
             {
@@ -1058,6 +1117,13 @@ namespace FE_JobWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCandidateProfileEducation(string name, string major, string degree, DateTime startday, DateTime endday, string description)
         {
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+
             #region validate
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(major) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(degree) || startday == null) return RedirectToAction("CandidateProfile", "Account", new { error = "Vui lòng nhập đầy đủ!" });
 
@@ -1080,7 +1146,7 @@ namespace FE_JobWeb.Controllers
             c.Description = description;
             c.StartDate = DateOnly.FromDateTime(startday);
             c.EndDate = endday != null && endday != DateTime.MinValue ? DateOnly.FromDateTime(endday) : null;
-            c.CandidateId = user.User.Id;
+            c.CandidateId = user.Id;
             // Convert đối tượng thành JSON
             var content = new StringContent(JsonConvert.SerializeObject(c, new JsonSerializerSettings
             {
@@ -1125,6 +1191,13 @@ namespace FE_JobWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateCandidateProfileEducation(Guid id, string name, string major, string degree, DateTime startday, DateTime endday, string description)
         {
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+
             #region validate
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(major) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(degree) || startday == null) return RedirectToAction("CandidateProfile", "Account", new { error = "Vui lòng nhập đầy đủ!" });
 
@@ -1147,7 +1220,7 @@ namespace FE_JobWeb.Controllers
             c.Description = description;
             c.StartDate = DateOnly.FromDateTime(startday);
             c.EndDate = endday != null && endday != DateTime.MinValue ? DateOnly.FromDateTime(endday) : null;
-            c.CandidateId = user.User.Id;
+            c.CandidateId = user.Id;
             // Convert đối tượng thành JSON
             var content = new StringContent(JsonConvert.SerializeObject(c, new JsonSerializerSettings
             {
@@ -1230,6 +1303,13 @@ namespace FE_JobWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCandidateProfileCertificate(string name, string organization, string link, string description)
         {
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+
             #region validate
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(organization) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(link)) return RedirectToAction("CandidateProfile", "Account", new { error = "Vui lòng nhập đầy đủ!" });
             #endregion
@@ -1243,7 +1323,7 @@ namespace FE_JobWeb.Controllers
             c.Organization = organization;
             c.CertificateLink = link;
             c.Description = description;
-            c.CandidateId = user.User.Id;
+            c.CandidateId = user.Id;
             // Convert đối tượng thành JSON
             var content = new StringContent(JsonConvert.SerializeObject(c, new JsonSerializerSettings
             {
@@ -1288,6 +1368,13 @@ namespace FE_JobWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateCandidateProfileCertificate(Guid id, string name, string organization, string link, string description)
         {
+            string json = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(json))
+            {
+                return RedirectToAction("Login", "Account", new { error = "Đăng nhập hết hạn!" });
+            }
+            JobSeekerUserLoginDatum user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+
             #region validate
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(organization) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(link)) return RedirectToAction("CandidateProfile", "Account", new { error = "Vui lòng nhập đầy đủ!" });
             #endregion
@@ -1301,7 +1388,7 @@ namespace FE_JobWeb.Controllers
             c.Organization = organization;
             c.CertificateLink = link;
             c.Description = description;
-            c.CandidateId = user.User.Id;
+            c.CandidateId = user.Id;
             // Convert đối tượng thành JSON
             var content = new StringContent(JsonConvert.SerializeObject(c, new JsonSerializerSettings
             {

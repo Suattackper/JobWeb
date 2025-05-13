@@ -11,7 +11,7 @@
         <div class="wt-admin-right-page-header clearfix">
             <h3>Admin - Danh sách tài khoản</h3>
             <div class="breadcrumbs">
-                <a href="index.html">Trang chủ</a><a href="admin-dashboard.html">Dashboard</a><span>
+                <a href="index.html">Trang chủ</a><a href="admin-dashboard.html"> Dashboard</a><span>
                     Danh
                     sách tài khoản
                 </span>
@@ -138,10 +138,14 @@
                                             var dateString = r.Dob.HasValue ? r.Dob.Value.ToString("dd/MM/yyyy") : "N/A";
                                             var dateString1 = i.IsCreatedAt.HasValue ? i.IsCreatedAt.Value.ToString("dd/MM/yyyy") : "N/A";
 
-                                            int maskLength = r.PhoneNumb.Length - 3; // Số ký tự cần che.
-                                            string maskedPart = new string('*', maskLength); // Tạo chuỗi dấu '*'.
-                                            string lastThreeChars = r.PhoneNumb.Substring(r.PhoneNumb.Length - 3); // Lấy 3 ký tự cuối.
-                                            string phone = maskedPart + lastThreeChars;
+                                            string phone = "";
+                                            if (r.PhoneNumb != null && r.PhoneNumb.Length > 5)
+                                            {
+                                                int maskLength = r.PhoneNumb.Length - 3; // Số ký tự cần che.
+                                                string maskedPart = new string('*', maskLength); // Tạo chuỗi dấu '*'.
+                                                string lastThreeChars = r.PhoneNumb.Substring(r.PhoneNumb.Length - 3); // Lấy 3 ký tự cuối.
+                                                phone = maskedPart + lastThreeChars;
+                                            }
 
                                             <td>
                                                 <a data-bs-toggle="modal" href="#CandidateAccountModal" onclick="loadFormCandidate('@Html.Raw(i.FullName)', '@Html.Raw(email)', '@Html.Raw(phone)', '@Html.Raw(r.Gender)', '@Html.Raw(dateString)', '@Html.Raw(dateString1)', '@Html.Raw(r.LinkedinLink)', '@Html.Raw(r.PortfolioUrl)')"

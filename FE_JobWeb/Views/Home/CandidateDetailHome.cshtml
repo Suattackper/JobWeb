@@ -1,0 +1,235 @@
+﻿@using Data_JobWeb.Entity;
+@model JobSeekerCandidateProfile
+@{
+    ViewData["Title"] = "CandidateDetailHome";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-content">
+    <div class="wt-bnr-inr overlay-wraper bg-center" style="background-image:url(/Content/images/banner/1.jpg);">
+        <div class="overlay-main site-bg-white opacity-01"></div>
+        <div class="container">
+            <div class="wt-bnr-inr-entry">
+                <div class="banner-title-outer">
+                    <div class="banner-title-name">
+                        <h2 class="wt-title">Thông tin công ty</h2>
+                    </div>
+                </div>
+
+                <div>
+                    <ul class="wt-breadcrumb breadcrumb-style-2">
+                        <li><a href="@Url.Action("Index","Home")">Trang chủ</a></li>
+                        <li>Thông tin ứng viên</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-full  p-t120 p-b90 bg-white">
+        <div class="container">
+            <div class="section-content">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-8 col-md-12">
+                        <div class="cabdidate-de-info">
+                            <div class="twm-candi-self-wrap overlay-wraper"
+                                 style="background-image:url(/Content/images/candidates/candidate-bg.jpg);">
+                                <div class="overlay-main site-bg-primary opacity-01"></div>
+                                <div class="twm-candi-self-info">
+                                    <div class="twm-candi-self-top">
+                                        <div class="twm-media">
+                                            <img src="@Model.AvartarUrl" alt="#">
+                                        </div>
+                                        <div class="twm-mid-content">
+                                            <h4 class="twm-job-title candidate-name">
+                                                @Model.Fullname
+                                            </h4>
+                                            @* <p class="candidate-job-position mb-0">
+                                            Lập trình
+                                            viên Frontend
+                                            </p> *@
+                                            <p class="twm-candidate-address">
+                                                <i class="feather-map-pin"></i> @Model.Province
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="twm-candi-self-bottom">
+                                        <a href="@Model.CvUrl" title="CV" target="blank" data-bs-toggle="tooltip" data-bs-placement="top" class="site-button secondry m-r10">
+                                            <i class="feather-eye"></i> Xem CV
+                                        </a>
+                                        @* <a href="@Model.CvUrl"
+                                        class="site-button secondry m-r10">
+                                        <i class="feather-eye"></i> Xem
+                                        CV
+                                        </a> *@
+                                        @* <a href="#"
+                                        class="site-button secondry">
+                                        <i class="feather-heart"></i>Lưu
+                                        </a> *@
+                                    </div>
+                                </div>
+                            </div>
+                            @* <h4 class="twm-s-title">Giới thiệu</h4>
+
+                            <p>
+                            Ut enim ad minima veniam, quis nostrum exercitationem ullam
+                            corporis suscipit laboriosam, nisi ut aliquid ex ea commodi
+                            consequatur? Quis autem vel eum iure reprehenderit qui in ea
+                            voluptate velit esse quam nihil molestiae consequatur, vel illum
+                            qui dolorem eum fugiat quo voluptas nulla pariatur?
+                            </p>
+
+                            <p>
+                            At vero eos et accusamus et iusto odio dignissimos ducimus qui
+                            blanditiis praesentium voluptatum deleniti atque corrupti quos
+                            dolores et quas molestias excepturi sint occaecati cupiditate
+                            non provident, similique sunt in culpa qui officia deserunt
+                            mollitia animi.
+                            </p> *@
+
+                            @if (ViewBag.Education != null && ViewBag.Education.Count > 0)
+                            {
+                                <h4 class="twm-s-title">Học vấn</h4>
+                                foreach (JobSeekerEducationDetail i in ViewBag.Education)
+                                {
+                                    <div class="twm-timing-list-wrap">
+
+                                        <div class="twm-timing-list">
+                                            <div class="twm-time-list-date">@(i.StartDate.HasValue ? i.StartDate.Value.ToString("dd/MM/yyyy") : "Error") - @(i.EndDate.HasValue ? i.EndDate.Value.ToString("dd/MM/yyyy") : "Error")</div>
+                                            <div class="twm-time-list-title">@i.Degree - @i.Major</div>
+                                            <div class="twm-time-list-position">
+                                                @i.SchoolName
+                                            </div>
+                                            <div class="twm-time-list-discription">
+                                                <p>
+                                                    @i.Description
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+                            @if (ViewBag.Experience != null && ViewBag.Experience.Count > 0)
+                            {
+                                <h4 class="twm-s-title">Kinh nghiệm làm việc</h4>
+                                foreach (JobSeekerWorkingExperience i in ViewBag.Experience)
+                                {
+                                    <div class="twm-timing-list-wrap">
+
+                                        <div class="twm-timing-list">
+                                            <div class="twm-time-list-date">@(i.StartDate.HasValue ? i.StartDate.Value.ToString("dd/MM/yyyy") : "Error") - @(i.EndDate.HasValue ? i.EndDate.Value.ToString("dd/MM/yyyy") : "Hiện tại")</div>
+                                            <div class="twm-time-list-title">@i.CompanyName</div>
+                                            <div class="twm-time-list-position">
+                                                @i.JobTitle
+                                            </div>
+                                            <div class="twm-time-list-discription">
+                                                <p>
+                                                    @i.Description
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+                            @if (ViewBag.Certificate != null && ViewBag.Certificate.Count > 0)
+                            {
+                                <h4 class="twm-s-title">Chứng chỉ</h4>
+                                foreach (JobSeekerCertificate i in ViewBag.Certificate)
+                                {
+                                    <div class="twm-timing-list-wrap">
+
+                                        <div class="twm-timing-list">
+                                            <div class="twm-time-list-title">@i.CertificateName</div>
+                                            <div class="twm-time-list-position">
+                                                @i.Organization
+                                            </div>
+                                            <div class="twm-time-list-discription">
+                                                <p>
+                                                    @i.Description
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-12 rightSidebar">
+                        <div class="side-bar-2">
+                            <div class="twm-s-info-wrap mb-5">
+                                <h4 class="section-head-small mb-4">Thông tin cơ bản</h4>
+                                <div class="twm-s-info">
+                                    <ul>
+                                        @* <li>
+                                        <div class="twm-s-info-inner">
+                                        <i class="fas fa-clock"></i>
+                                        <span class="twm-title">Kinh nghiệm</span>
+                                        <div class="twm-s-info-discription">3 năm</div>
+                                        </div>
+                                        </li> *@
+                                        <li>
+                                            <div class="twm-s-info-inner">
+                                                <i class="fas fa-venus-mars"></i>
+                                                <span class="twm-title">Giới tính</span>
+                                                @if (Model.Gender == "male")
+                                                {
+                                                    <div class="twm-s-info-discription">Nam</div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="twm-s-info-discription">Nữ</div>
+                                                }
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="twm-s-info-inner">
+                                                <i class="fas fa-mobile-alt"></i>
+                                                <span class="twm-title">Số điện thoại</span>
+                                                <div class="twm-s-info-discription">
+                                                    @Model.PhoneNumb
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="twm-s-info-inner">
+                                                <i class="fas fa-at"></i>
+                                                <span class="twm-title">Email</span>
+                                                <div class="twm-s-info-discription">
+                                                    @Model.Email
+                                                </div>
+                                            </div>
+                                        </li>
+                                        @* <li>
+                                        <div class="twm-s-info-inner">
+                                        <i class="fas fa-book-reader"></i>
+                                        <span class="twm-title">Học vấn</span>
+                                        <div class="twm-s-info-discription">
+                                        Đại học
+                                        </div>
+                                        </div>
+                                        </li> *@
+                                        <li>
+                                            <div class="twm-s-info-inner">
+
+                                                <i class="fas fa-map-marker-alt"></i>
+                                                <span class="twm-title">Địa chỉ</span>
+                                                <div class="twm-s-info-discription">
+                                                    @Model.AddressDetail, @Model.Ward, @Model.District, @Model.Province
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

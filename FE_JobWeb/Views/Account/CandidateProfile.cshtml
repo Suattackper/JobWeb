@@ -10,7 +10,7 @@
         <div class="wt-admin-right-page-header clearfix">
             <h2>Thông tin hồ sơ</h2>
             <div class="breadcrumbs">
-                <a href="@Url.Action("Index","Home")">Trang chủ</a><a href="@Url.Action("IndexCandidate","Home")">Dasboard</a><span>
+                <a href="@Url.Action("Index","Home")">Trang chủ</a><a href="@Url.Action("IndexCandidate","Home")"> Dasboard</a><span>
                     Hồ sơ của
                     tôi
                 </span>
@@ -275,20 +275,20 @@
                                             @if (Model.CvUrl != null)
                                             {
                                                 <iframe id="cviframe" style="align-items: center; justify-content: center; margin-top: 5px"
-                                                        src="@Model.CvUrl#toolbar=0&view=FitH" width="212px" height="300px"
+                                                        src="@Model.CvUrl#toolbar=0&view=FitH" width="212px" height="273px"
                                                         frameborder="0">
                                                 </iframe>
                                                 <a id="cvlink" href="@Model.CvUrl" target="_blank">
-                                                    <i class="feather-download job-tag-urgent" style="margin: 10px"></i>
+                                                    <i class="feather-eye job-tag-urgent" style="margin: 10px"></i>
                                                 </a>
                                             }
                                             else
                                             {
                                                 <iframe id="cviframe" style="display: none; align-items: center; justify-content: center; margin-top: 5px"
-                                                         width="212px" height="300px" frameborder="0">
+                                                        width="212px" height="273px" frameborder="0">
                                                 </iframe>
                                                 <a id="cvlink" href="#" target="_blank" style="display: none;">
-                                                    <i class="feather-download job-tag-urgent" style="margin: 10px"></i>
+                                                    <i class="feather-eye job-tag-urgent" style="margin: 10px"></i>
                                                 </a>
                                             }
 

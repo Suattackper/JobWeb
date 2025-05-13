@@ -13,7 +13,7 @@ namespace BE_JobWeb.Controllers
         [HttpPost("addexperience")]
         //[Authorize(Roles = "3,1")] nhiu quyen
         [Authorize(Roles = "1,3")]
-        public IActionResult AddỄprience(JobSeekerWorkingExperience e)
+        public IActionResult AddExperience(JobSeekerWorkingExperience e)
         {
             db.JobSeekerWorkingExperiences.Add(e);
             db.SaveChanges();
@@ -22,7 +22,7 @@ namespace BE_JobWeb.Controllers
         }
         [HttpPost("updateexperience")]
         [Authorize(Roles = "1,3")]
-        public IActionResult UpdateỄprience(JobSeekerWorkingExperience e)
+        public IActionResult UpdateExperience(JobSeekerWorkingExperience e)
         {
             JobSeekerWorkingExperience c = db.JobSeekerWorkingExperiences.FirstOrDefault(p => p.WorkingExpId == e.WorkingExpId);
             if(c == null) return BadRequest("Không tìm thấy thấy thông tin kinh nghiệm!");
@@ -31,6 +31,7 @@ namespace BE_JobWeb.Controllers
             c.CompanyName = e.CompanyName;
             c.StartDate = e.StartDate;
             c.EndDate = e.EndDate;
+            c.Description = e.Description;
             c.CandidateId = e.CandidateId;
             // Cập nhật thời gian chỉnh sửa
             c.IsUpdatedAt = DateTime.Now;

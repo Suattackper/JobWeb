@@ -89,6 +89,7 @@ namespace BE_JobWeb.Controllers
             c.Fullname = p.FullName;
             c.Email = p.Email;
             c.RoleId = p.RoleId;
+            c.AvartarUrl = p.AvartarUrl;
             db.JobSeekerCandidateProfiles.Add(c);
             db.SaveChanges();
 
@@ -165,7 +166,7 @@ namespace BE_JobWeb.Controllers
             JobSeekerNotification notification = new JobSeekerNotification();
             notification.Id = Guid.NewGuid().ToString();
             notification.Type = "admin_newrecruiter";
-            notification.Description = $"Vừa có 1 nhà tuyển mới tham gia website Grabwork!";
+            notification.Description = $"Vừa có 1 nhà tuyển dụng mới tham gia website Grabwork!";
             notification.IsSeen = false;
             notification.IsCreatedAt = DateTime.Now;
             notification.IdConcern = c.RecruiterId;
@@ -175,7 +176,7 @@ namespace BE_JobWeb.Controllers
             db.SaveChanges();
 
             EmailService e = new EmailService();
-            string title = $"Vừa có 1 ứng viên mới tham gia website!";
+            string title = $"Vừa có 1 nhà tuyển dụng mới tham gia website!";
             string url = $"http://localhost:5080/Home/Notification/{admin.Id}";
             string message = $"<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <title>{title}</title>\r\n</head>\r\n<body>\r\n    <h2>Chào {admin.FullName},</h2>\r\n    <p>Kiểm tra các thông báo của bạn tại đây:</p>\r\n    <a href=\"{url}\" style=\"background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; display: inline-block;\">Thông báo</a>\r\n    <p>Cảm ơn bạn,</p>\r\n    <p>Đội ngũ JobWeb</p>\r\n</body>\r\n</html>";
 

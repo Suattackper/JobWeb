@@ -6,11 +6,19 @@ using Google.Apis.Auth.OAuth2;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(60); // thời gian hết hạn session
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 // Đăng ký singleton
-builder.Services.AddSingleton<ApplicationUser>();
+//builder.Services.AddSingleton<ApplicationUser>();
 
 var app = builder.Build();
 
@@ -19,6 +27,10 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
+
+// Sử dụng Session
+app.UseSession();
+
 app.UseStaticFiles();
 
 app.UseRouting();

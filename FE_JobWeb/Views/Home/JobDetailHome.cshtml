@@ -1,6 +1,14 @@
 ﻿@using Data_JobWeb.Entity
 @using FE_JobWeb.Others
-@inject ApplicationUser user
+@using Newtonsoft.Json
+@{
+    string json = Context.Session.GetString("User");
+    JobSeekerUserLoginDatum user = null;
+    if (!string.IsNullOrEmpty(json))
+    {
+        user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+    }
+}
 @model JobSeekerJobPosting
 @{
     ViewData["Title"] = "JobDetailHome";
@@ -212,16 +220,11 @@
 
 
                             <h4 class="twm-s-title">Yêu cầu:</h4>
-                            <ul class="description-list-2">
-                                <li>@Model.JobRequirement</li>
-
-                            </ul>
+                            <p>@Model.JobRequirement</p>
+                            
 
                             <h4 class="twm-s-title">Quyền lợi:</h4>
-                            <ul class="description-list-2">
-                                <li>@Model.BenefitEnjoyed</li>
-
-                            </ul>
+                            <p>@Model.BenefitEnjoyed</p>
 
                             <h4 class="twm-s-title">Địa điểm</h4>
                             <div class="twm-m-map mb-5">
@@ -332,19 +335,19 @@
                                             <label for="cvOption" class="twm-title">
                                                 CV ứng tuyển <span class="required">*</span>
                                             </label>
-                                            <div>
-                                                @if (user.User != null)
+                                            <div class="container-cv">
+                                                @if (user != null)
                                                 {
-                                                    JobSeekerCandidateProfile c = db.JobSeekerCandidateProfiles.FirstOrDefault(p => p.CandidateId == user.User.Id);
+                                                    JobSeekerCandidateProfile c = db.JobSeekerCandidateProfiles.FirstOrDefault(p => p.CandidateId == user.Id);
                                                     if (c == null) c = new JobSeekerCandidateProfile();
                                                     if (c.CvUrl != null)
                                                     {
                                                         <iframe id="cviframe" style="align-items: center; justify-content: center; margin-top: 5px"
-                                                                src="@c.CvUrl#toolbar=0&view=FitH" width="212px" height="300px"
+                                                                src="@c.CvUrl#toolbar=0&view=FitH" width="212px" height="273px"
                                                                 frameborder="0">
                                                         </iframe>
                                                         <a id="cvlink" href="@c.CvUrl" target="_blank">
-                                                            <i class="feather-download job-tag-urgent" style="margin: 10px"></i>
+                                                            <i class="feather-eye job-tag-urgent" style="margin: 10px"></i>
                                                         </a>
                                                         <input type="hidden" name="cvurl" value="@c.CvUrl" required>
                                                     }

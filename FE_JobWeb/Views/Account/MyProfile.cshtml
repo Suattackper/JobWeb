@@ -1,6 +1,16 @@
-﻿@using FE_JobWeb.Others
-@inject ApplicationUser user
+﻿@using Data_JobWeb.Entity
+@using FE_JobWeb.Others
+@using Newtonsoft.Json
 @{
+    string json = Context.Session.GetString("User");
+    JobSeekerUserLoginDatum user = null;
+    if (!string.IsNullOrEmpty(json))
+    {
+        user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+    }
+}
+@{
+
     ViewData["Title"] = "MyProfile";
     Layout = "~/Views/Shared/_LayoutRecuiter.cshtml";
 }
@@ -8,30 +18,30 @@
 <div id="content">
     <div class="content-admin-main">
 
-        @if (user.User.RoleId == 3)
+        @if (user.RoleId == 3)
         {
             <div class="wt-admin-right-page-header clearfix">
                 <h2>Thông tin tài khoản</h2>
                 <div class="breadcrumbs">
-                    <a href="@Url.Action("Index","Home")">Trang chủ</a><a href="@Url.Action("IndexCandidate","Home")">Dasboard</a><span>Tài khoản</span>
+                    <a href="@Url.Action("Index","Home")">Trang chủ</a><a href="@Url.Action("IndexCandidate","Home")"> Dasboard</a><span> Tài khoản</span>
                 </div>
             </div>
         }
-        @if (user.User.RoleId == 2)
+        @if (user.RoleId == 2)
         {
             <div class="wt-admin-right-page-header clearfix">
                 <h2>Thông tin tài khoản</h2>
                 <div class="breadcrumbs">
-                    <a href="@Url.Action("Index","Home")">Trang chủ</a><a href="@Url.Action("IndexRecruiter","Home")">Dasboard</a><span>Tài khoản</span>
+                    <a href="@Url.Action("Index","Home")">Trang chủ</a><a href="@Url.Action("IndexRecruiter","Home")"> Dasboard</a><span> Tài khoản</span>
                 </div>
             </div>
         }
-        @if (user.User.RoleId == 1)
+        @if (user.RoleId == 1)
         {
             <div class="wt-admin-right-page-header clearfix">
                 <h2>Thông tin tài khoản</h2>
                 <div class="breadcrumbs">
-                    <a href="@Url.Action("Index","Home")">Trang chủ</a><a href="@Url.Action("IndexAdmin","Home")">Dasboard</a><span>Tài khoản</span>
+                    <a href="@Url.Action("Index","Home")">Trang chủ</a><a href="@Url.Action("IndexAdmin","Home")"> Dasboard</a><span> Tài khoản</span>
                 </div>
             </div>
         }
@@ -52,7 +62,7 @@
                                 Thay đổi mật khẩu
                             </button>
                         </li>
-                        @if (user.User.RoleId == 3)
+                        @if (user.RoleId == 3)
                         {
                             <li class="nav-item">
                                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#Settings"
@@ -71,7 +81,7 @@
                                         <div class="form-group">
                                             <div class="dashboard-profile-pic">
                                                 <div class="dashboard-profile-photo">
-                                                    <img src="@user.User.AvartarUrl" alt="" />
+                                                    <img src="@user.AvartarUrl" alt="" />
                                                     <div class="upload-btn-wrapper">
                                                         <div id="upload-image-grid"></div>
                                                         <button class="site-button button-sm">Upload Photo</button>
@@ -90,7 +100,7 @@
                                             </label>
                                             <div class="ls-inputicon-box">
                                                 <input class="form-control" name="fullname" type="text"
-                                                       placeholder="Your name" id="fullName" value="@user.User.FullName" />
+                                                       placeholder="Your name" id="fullName" value="@user.FullName" />
                                                 <i class="fs-input-icon fa fa-user"></i>
                                             </div>
                                         </div>
@@ -102,7 +112,7 @@
                                                 Email <span class="required">*</span>
                                             </label>
                                             <div class="ls-inputicon-box">
-                                                <input class="form-control" name="email" type="email" value="@user.User.Email"
+                                                <input class="form-control" name="email" type="email" value="@user.Email"
                                                        placeholder="Your Email" id="email" />
                                                 <i class="fs-input-icon fas feather-mail"></i>
                                             </div>
@@ -115,7 +125,7 @@
                                     Mật khẩu <span class="required">*</span>
                                     </label>
                                     <div class="ls-inputicon-box">
-                                    <input class="form-control" name="password" type="password" value="@user.User.p"
+                                    <input class="form-control" name="password" type="password" value="@user.p"
                                     id="passwordAccount" disabled />
                                     <i class="fs-input-icon fa fa-key"></i>
                                     </div>
@@ -183,7 +193,7 @@
                                 </div>
                             </form>
                         </div>
-                        @if (user.User.RoleId == 3)
+                        @if (user.RoleId == 3)
                         {
                             <!-- Cai dat thong bao goi y viec lam -->
                             <div class="tab-pane fade" id="Settings">
@@ -197,7 +207,7 @@
                                                 <div class="ls-inputicon-box">
                                                     <input class="form-control" name="keyword" type="text" required
                                                            placeholder="Your keyword" id="keyword" />
-                                                    @* <i class="fs-input-icon fas feather-mail"></i *@>
+                                                    @* <i class="fs-input-icon fas feather-mail"></i> *@
                                                 </div>
                                             </div>
                                         </div>

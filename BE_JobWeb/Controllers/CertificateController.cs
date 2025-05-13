@@ -13,7 +13,7 @@ namespace BE_JobWeb.Controllers
         [HttpPost("addcertificate")]
         //[Authorize(Roles = "3,1")] nhiu quyen
         [Authorize(Roles = "1,3")]
-        public IActionResult AddỄprience(JobSeekerCertificate e)
+        public IActionResult AddCertificate(JobSeekerCertificate e)
         {
             db.JobSeekerCertificates.Add(e);
             db.SaveChanges();
@@ -22,7 +22,7 @@ namespace BE_JobWeb.Controllers
         }
         [HttpPost("updatecertificate")]
         [Authorize(Roles = "1,3")]
-        public IActionResult UpdateỄprience(JobSeekerCertificate e)
+        public IActionResult UpdateCertificate(JobSeekerCertificate e)
         {
             JobSeekerCertificate c = db.JobSeekerCertificates.FirstOrDefault(p => p.CertificateId == e.CertificateId);
             if (c == null) return BadRequest("Không tìm thấy thấy thông tin chứng chỉ!");
@@ -40,7 +40,7 @@ namespace BE_JobWeb.Controllers
         }
         [HttpDelete("deletecertificate/{id}")]
         [Authorize(Roles = "1,3")]
-        public IActionResult DeleteExperience(Guid id)
+        public IActionResult DeleteCertificate(Guid id)
         {
             JobSeekerCertificate e = db.JobSeekerCertificates.FirstOrDefault(p => p.CertificateId == id);
             if (e == null) return BadRequest("Không tìm thấy thấy thông tin chứng chỉ!");

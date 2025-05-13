@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "aFNz8sf1FfuasaB0jVLiV+iZ6kYdFmv4+cOB+y/CbT4=",
+  "Hash": "67Zti6CZY3KaqPIwTPplMkEuUxDkmPrnPFVChQgTVv0=",
   "Source": "FE_JobWeb",
   "BasePath": "_content/FE_JobWeb",
   "Mode": "Default",
@@ -122,6 +122,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Content\\css\\bootstrap-slider.min.css"
+    },
+    {
+      "Identity": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\chatbot.css",
+      "SourceId": "FE_JobWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\",
+      "BasePath": "_content/FE_JobWeb",
+      "RelativePath": "Content/css/chatbot.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Content\\css\\chatbot.css"
     },
     {
       "Identity": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\dataTables.bootstrap5.min.css",
@@ -428,6 +447,25 @@
       "OriginalItemSpec": "wwwroot\\Content\\css\\switcher.css"
     },
     {
+      "Identity": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\images\\bot.jpg",
+      "SourceId": "FE_JobWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\",
+      "BasePath": "_content/FE_JobWeb",
+      "RelativePath": "Content/images/bot.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Content\\images\\bot.jpg"
+    },
+    {
       "Identity": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\images\\featured-cities\\dananghome.jpg",
       "SourceId": "FE_JobWeb",
       "SourceType": "Discovered",
@@ -483,6 +521,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Content\\images\\featured-cities\\hochiminhhome.jpg"
+    },
+    {
+      "Identity": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\images\\user.jpg",
+      "SourceId": "FE_JobWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\",
+      "BasePath": "_content/FE_JobWeb",
+      "RelativePath": "Content/images/user.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Content\\images\\user.jpg"
     },
     {
       "Identity": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\anm.js",
@@ -597,6 +654,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Content\\js\\chart.js"
+    },
+    {
+      "Identity": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\chatbot.js",
+      "SourceId": "FE_JobWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\",
+      "BasePath": "_content/FE_JobWeb",
+      "RelativePath": "Content/js/chatbot.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Content\\js\\chatbot.js"
     },
     {
       "Identity": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\counterup.min.js",

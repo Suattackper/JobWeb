@@ -1,15 +1,23 @@
 ﻿@using FE_JobWeb.Others
 @using Data_JobWeb.Entity;
-@inject ApplicationUser user
+@using Newtonsoft.Json
+@{
+    string json = Context.Session.GetString("User");
+    JobSeekerUserLoginDatum user = null;
+    if (!string.IsNullOrEmpty(json))
+    {
+        user = JsonConvert.DeserializeObject<JobSeekerUserLoginDatum>(json);
+    }
+}
 @{
     string notification = "";
     List<JobSeekerNotification> lnoti = new List<JobSeekerNotification>();
-    if (user.User != null)
+    if (user != null)
     {
         JobSeekerContext db = new JobSeekerContext();
 
 
-        JobSeekerUserLoginDatum u = db.JobSeekerUserLoginData.FirstOrDefault(x => x.Id == user.User.Id);
+        JobSeekerUserLoginDatum u = db.JobSeekerUserLoginData.FirstOrDefault(x => x.Id == user.Id);
         if (u == null) notification = "Error";
         else if (u.RoleId == 1)
         {
@@ -18,8 +26,8 @@
         }
         else
         {
-            notification += db.JobSeekerNotifications.Where(p => p.IdUserReceive == user.User.Id && p.IsSeen == false).ToList().Count();
-            lnoti = db.JobSeekerNotifications.OrderByDescending(p => p.IsCreatedAt).Where(p => p.IdUserReceive == user.User.Id && p.IsSeen == false).Take(5).ToList();
+            notification += db.JobSeekerNotifications.Where(p => p.IdUserReceive == user.Id && p.IsSeen == false).ToList().Count();
+            lnoti = db.JobSeekerNotifications.OrderByDescending(p => p.IsCreatedAt).Where(p => p.IdUserReceive == user.Id && p.IsSeen == false).Take(5).ToList();
         }
     }
 }
@@ -61,6 +69,7 @@
     <link rel="stylesheet" type="text/css" href="~/Content/css/flaticon.css"> <!-- Flaticon -->
     <link rel="stylesheet" type="text/css" href="~/Content/css/swiper-bundle.min.css"><!-- Swiper Slider -->
     <link rel="stylesheet" type="text/css" href="~/Content/css/style.css"><!-- MAIN STYLE SHEET -->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/chatbot.css">
     <!-- THEME COLOR CHANGE STYLE SHEET -->
     @* <link rel="stylesheet" class="skin" type="text/css" href="~/Content/css/skins-type/skin-6.css"> *@
     <!-- SIDE SWITCHER STYLE SHEET -->
@@ -92,7 +101,7 @@
     <!-- LOADING AREA  END ====== -->
 
     <div class="page-wraper">
-        @if(user.User.RoleId == 3)
+        @if(user.RoleId == 3)
         {
             <header id="header-admin-wrap" class="header-admin-fixed">
                 <!-- Header Start -->
@@ -214,7 +223,7 @@
                                                 </ul>
 
                                                 <div class="noti-view-all">
-                                                    <a href="@Url.Action("Notification","Home", new{ id = user.User.Id})">View All</a>
+                                                    <a href="@Url.Action("Notification","Home", new{ id = user.Id})">View All</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -229,8 +238,8 @@
                                                    data-bs-toggle="dropdown">
                                                     <div class="user-name text-black">
                                                         <span>
-                                                            <img src="@user.User.AvartarUrl" alt="">
-                                                        </span>@user.User.FullName
+                                                            <img src="@user.AvartarUrl" alt="">
+                                                        </span>@user.FullName
                                                     </div>
                                                 </a>
                                                 <div class="dropdown-menu" aria-labelledby="ID-ACCOUNT_dropdown">
@@ -241,7 +250,7 @@
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a href="@Url.Action("Notification","Home", new {id = user.User.Id})">
+                                                            <a href="@Url.Action("Notification","Home", new {id = user.Id})">
                                                                 <i class="feather-mail"></i>
                                                                 Thông báo
                                                             </a>
@@ -325,7 +334,7 @@
                             </a>
                     </li> *@
                         <li @((Context.Request.Path.Value.Contains("Notification")) ? "class=active" : "")>
-                            <a href="@Url.Action("Notification","Home", new{ id = user.User.Id})">
+                            <a href="@Url.Action("Notification","Home", new{ id = user.Id})">
                                 <i class="feather-bell"></i><span class="admin-nav-text">
                                     Thông
                                     báo
@@ -349,7 +358,7 @@
                 </div>
             </nav>
         }
-        @if(user.User.RoleId == 2)
+        @if(user.RoleId == 2)
         {
             <header id="header-admin-wrap" class="header-admin-fixed">
                 <!-- Header Start -->
@@ -471,7 +480,7 @@
                                                 </ul>
 
                                                 <div class="noti-view-all">
-                                                    <a href="@Url.Action("Notification","Home", new{ id = user.User.Id})">View All</a>
+                                                    <a href="@Url.Action("Notification","Home", new{ id = user.Id})">View All</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -486,8 +495,8 @@
                                                    data-bs-toggle="dropdown">
                                                     <div class="user-name text-black">
                                                         <span>
-                                                            <img src="@user.User.AvartarUrl" alt="">
-                                                        </span>@user.User.FullName
+                                                            <img src="@user.AvartarUrl" alt="">
+                                                        </span>@user.FullName
                                                     </div>
                                                 </a>
                                                 <div class="dropdown-menu" aria-labelledby="ID-ACCOUNT_dropdown">
@@ -498,7 +507,7 @@
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a href="@Url.Action("Notification","Home", new {id = user.User.Id})">
+                                                            <a href="@Url.Action("Notification","Home", new {id = user.Id})">
                                                                 <i class="feather-mail"></i>
                                                                 Thông báo
                                                             </a>
@@ -606,7 +615,7 @@
                             </a>
                         </li> *@
                         <li @((Context.Request.Path.Value.Contains("Notification")) ? "class=active" : "")>
-                            <a href="@Url.Action("Notification","Home", new{ id = user.User.Id})">
+                            <a href="@Url.Action("Notification","Home", new{ id = user.Id})">
                                 <i class="feather-bell"></i><span class="admin-nav-text">
                                     Thông
                                     báo
@@ -631,7 +640,7 @@
                 </div>
             </nav>
         }
-        @if(user.User.RoleId == 1)
+        @if(user.RoleId == 1)
         {
             <header id="header-admin-wrap" class="header-admin-fixed">
                 <!-- Header Start -->
@@ -753,7 +762,7 @@
                                                 </ul>
 
                                                 <div class="noti-view-all">
-                                                    <a href="@Url.Action("Notification","Home", new{ id = user.User.Id})">View All</a>
+                                                    <a href="@Url.Action("Notification","Home", new{ id = user.Id})">View All</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -768,8 +777,8 @@
                                                    data-bs-toggle="dropdown">
                                                     <div class="user-name text-black">
                                                         <span>
-                                                            <img src="@user.User.AvartarUrl" alt="">
-                                                        </span>@user.User.FullName
+                                                            <img src="@user.AvartarUrl" alt="">
+                                                        </span>@user.FullName
                                                     </div>
                                                 </a>
                                                 <div class="dropdown-menu" aria-labelledby="ID-ACCOUNT_dropdown">
@@ -780,7 +789,7 @@
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a href="@Url.Action("Notification","Home", new {id = user.User.Id})">
+                                                            <a href="@Url.Action("Notification","Home", new {id = user.Id})">
                                                                 <i class="feather-mail"></i>
                                                                 Thông báo
                                                             </a>
@@ -823,7 +832,7 @@
                             </a>
                         </li>
                         <li @((Context.Request.Path.Value.Contains("Notification")) ? "class=active" : "")>
-                            <a href="@Url.Action("Notification","Home", new{ id = user.User.Id})">
+                            <a href="@Url.Action("Notification","Home", new{ id = user.Id})">
                                 <i class="feather-bell"></i><span class="admin-nav-text">
                                     Thông
                                     báo
@@ -925,6 +934,24 @@
                 </div>
             </div>
         </div>
+        <!-- Icon mở chatbot -->
+        <div id="chat-icon" class="chat-icon">
+            <img src="~/Content/images/bot.jpg" alt="Chat Icon">
+        </div>
+
+        <!-- Chatbot container -->
+        <div class="chat-container" id="chat-container">
+            <div class="chat-header">
+                <img src="~/Content/images/bot.jpg" alt="bot" class="bot-icon" />
+                <span>AI Consulting Assistant</span>
+                <button onclick="toggleChat()">×</button>
+            </div>
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="chat-input-container">
+                <textarea id="user-input" placeholder="Type your message..." rows="1"></textarea>
+                <button id="send-button">Send</button>
+            </div>
+        </div>
     </div>
 
 
@@ -956,6 +983,7 @@
     <script src="~/Content/js/script.js"></script>
     <script src="~/Content/js/notification.js"></script>
     <script src="~/Content/js/nice-select.min.js"></script>
+    <script src="~/Content/js/chatbot.js"></script>
 
     
 
@@ -985,4 +1013,3 @@
         });
     </script>
 }
-

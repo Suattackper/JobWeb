@@ -170,8 +170,18 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "BE_JobWeb.Controllers.CandidateController",
+    "Method": "GetListCandidate",
+    "RelativePath": "api/Candidate/getlistcandidate",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "BE_JobWeb.Controllers.CertificateController",
-    "Method": "Add\u1EC4prience",
+    "Method": "AddCertificate",
     "RelativePath": "api/Certificate/addcertificate",
     "HttpMethod": "POST",
     "IsController": true,
@@ -187,7 +197,7 @@
   },
   {
     "ContainingType": "BE_JobWeb.Controllers.CertificateController",
-    "Method": "DeleteExperience",
+    "Method": "DeleteCertificate",
     "RelativePath": "api/Certificate/deletecertificate/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -203,7 +213,7 @@
   },
   {
     "ContainingType": "BE_JobWeb.Controllers.CertificateController",
-    "Method": "Update\u1EC4prience",
+    "Method": "UpdateCertificate",
     "RelativePath": "api/Certificate/updatecertificate",
     "HttpMethod": "POST",
     "IsController": true,
@@ -521,7 +531,7 @@
   },
   {
     "ContainingType": "BE_JobWeb.Controllers.ExperienceController",
-    "Method": "Add\u1EC4prience",
+    "Method": "AddExperience",
     "RelativePath": "api/Experience/addexperience",
     "HttpMethod": "POST",
     "IsController": true,
@@ -553,7 +563,7 @@
   },
   {
     "ContainingType": "BE_JobWeb.Controllers.ExperienceController",
-    "Method": "Update\u1EC4prience",
+    "Method": "UpdateExperience",
     "RelativePath": "api/Experience/updateexperience",
     "HttpMethod": "POST",
     "IsController": true,

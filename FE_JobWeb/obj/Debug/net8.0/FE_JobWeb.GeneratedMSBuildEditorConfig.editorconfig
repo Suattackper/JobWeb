@@ -70,8 +70,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDYW5kaWRhdGVBcHBseVJlY3J1aXRlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/c\#/JobWeb/JobWeb/FE_JobWeb/Views/Home/CandidateDetailHome.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDYW5kaWRhdGVEZXRhaWxIb21lLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/c\#/JobWeb/JobWeb/FE_JobWeb/Views/Home/CandidateDetailRecruiter.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDYW5kaWRhdGVEZXRhaWxSZWNydWl0ZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/c\#/JobWeb/JobWeb/FE_JobWeb/Views/Home/CandidateHome.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDYW5kaWRhdGVIb21lLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/c\#/JobWeb/JobWeb/FE_JobWeb/Views/Home/CompanyDetailHome.cshtml]

@@ -17,6 +17,10 @@
       "PackagePath": "staticwebassets\\Content\\css\\bootstrap.min.css"
     },
     {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\chatbot.css",
+      "PackagePath": "staticwebassets\\Content\\css\\chatbot.css"
+    },
+    {
       "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\css\\dataTables.bootstrap5.min.css",
       "PackagePath": "staticwebassets\\Content\\css\\dataTables.bootstrap5.min.css"
     },
@@ -81,6 +85,10 @@
       "PackagePath": "staticwebassets\\Content\\css\\switcher.css"
     },
     {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\images\\bot.jpg",
+      "PackagePath": "staticwebassets\\Content\\images\\bot.jpg"
+    },
+    {
       "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\images\\featured-cities\\dananghome.jpg",
       "PackagePath": "staticwebassets\\Content\\images\\featured-cities\\dananghome.jpg"
     },
@@ -91,6 +99,10 @@
     {
       "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\images\\featured-cities\\hochiminhhome.jpg",
       "PackagePath": "staticwebassets\\Content\\images\\featured-cities\\hochiminhhome.jpg"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\images\\user.jpg",
+      "PackagePath": "staticwebassets\\Content\\images\\user.jpg"
     },
     {
       "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\anm.js",
@@ -115,6 +127,10 @@
     {
       "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\chart.js",
       "PackagePath": "staticwebassets\\Content\\js\\chart.js"
+    },
+    {
+      "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\chatbot.js",
+      "PackagePath": "staticwebassets\\Content\\js\\chatbot.js"
     },
     {
       "Id": "D:\\c#\\JobWeb\\JobWeb\\FE_JobWeb\\wwwroot\\Content\\js\\counterup.min.js",
